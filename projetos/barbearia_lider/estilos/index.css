@@ -24,6 +24,31 @@ header {
 header > aside {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    color: var(--cor3);
+    padding: 10px;
+}
+
+header > aside > h1 {
+    text-align: center;
+    margin: auto;
+}
+
+header > aside > h1 > span {
+  color: var(--cor3);
+}
+
+
+.base1 {
+    justify-content: flex-start;
+}
+
+
+nav > ul {
+    display: flex;
+    justify-content: flex-end;
+}
+
+nav > ul li {
+    padding: 7px;
+    list-style-type: none;
+    
 }
