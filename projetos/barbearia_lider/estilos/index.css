@@ -1,0 +1,29 @@
+@charset "UTF-8";
+
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+:root {
+    --cor0: #f1f1f1;
+    --cor1: #0F0E0E;
+    --cor3: #DC851F;
+
+}
+
+body {
+    background-color: var(--cor0);
+}
+
+header {
+    background-color: var(--cor1);
+    color: var(--cor0);
+}
+
+header > aside {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    color: var(--cor3);
+}

@@ -1,0 +1,47 @@
+@charset "UFT_8";
+
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+body {
+    background-color: aqua;
+}
+
+main {
+    background-color: beige;
+    max-width: 500px;
+    padding: 30px;
+    margin: 30px;
+}
+
+main > section {
+    background: tomato;
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+    
+}
+
+
+main > section > aside {
+    background-color: blueviolet;
+}
+
+main > section > div#limpar {
+    background-color: aquamarine;
+}
+
+main > section > div#numeros {
+    background-color: blue;
+    display: flex;
+}
+
+main > section > div#numeros input {
+    flex: 1 1 200px;
+}
+
+main > section > div#sinais {
+    background-color: black;
+}

@@ -1,0 +1,60 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+    font: normal normal 15pt Arial, sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+
+}
+
+h1 {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 30pt;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+header {
+    background-color: rgb(0, 102, 255);
+    display: flex; /*Deixa o Display um do lado do outro*/
+    flex-wrap: wrap; /*Quando a tela diminuir nav vai para baixo da logo*/
+    justify-content: space-between; /*para jogar os dois diplays para o canto da tela*/
+    align-items: center; /*para alinhar os itens*/
+    padding: 20px;
+}
+
+ul {
+    display: flex;
+}
+
+ul li {
+    margin: 10px;
+}
+
+ul li a { /*Usado para aumentar a área de clique do link*/
+    display: block;
+    padding: 10px;
+}
+
+
+/*CSS Flexbox*/
+
+section {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+section > div {
+    flex: 1 1 200px;
+    margin: 10px;
+}
