@@ -3,6 +3,7 @@
 * {
     padding: 0px;
     margin: 0px;
+<<<<<<< HEAD
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -34,10 +35,32 @@ main > section {
     padding: 20px;
     border-radius: 20px;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.486);
+=======
+}
+
+body {
+    background-color: aqua;
+}
+
+main {
+    background-color: beige;
+    max-width: 500px;
+    padding: 30px;
+    margin: 30px;
+}
+
+main > section {
+    background: tomato;
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+    
+>>>>>>> parent of fd5e7ae (calculadora_1.0)
 }
 
 
 main > section > aside {
+<<<<<<< HEAD
     background-color: var(--cor0);
     display: grid;
     padding: 5px;
@@ -75,4 +98,24 @@ main > section > div.sinais {
     grid-template-rows: repeat(5, auto) 70px;
     
 
+=======
+    background-color: blueviolet;
+}
+
+main > section > div#limpar {
+    background-color: aquamarine;
+}
+
+main > section > div#numeros {
+    background-color: blue;
+    display: flex;
+}
+
+main > section > div#numeros input {
+    flex: 1 1 200px;
+}
+
+main > section > div#sinais {
+    background-color: black;
+>>>>>>> parent of fd5e7ae (calculadora_1.0)
 }
