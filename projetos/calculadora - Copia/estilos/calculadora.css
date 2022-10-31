@@ -47,8 +47,18 @@ main > section > aside {
 
 main > section > aside > div.resultado {
     background-color: var(--cor0);
+    color: var(--cor2);
+    display: flex;
+    flex-direction: column-reverse;
+    flex-grow: 1;
+    max-width: 100%;
+    align-items: flex-end;
+    padding: 5px;
     border-radius: 5px;
     border: 2px solid var(--cor2);
+    font: normal bold 25pt Arial, sans-serif;
+  
+  
 }
 
 main > section > div.limpar {
@@ -65,7 +75,7 @@ main > section > div.numeros {
     grid-template-rows: 65px 65px 65px 60px;
 }
 
-.zero {
+.num0 {
     grid-area: 4 / 1 / 4 / 3;
 }
 
