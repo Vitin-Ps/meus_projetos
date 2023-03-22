@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        section {
+            background-image: linear-gradient(to bottom, #4769ff85, #354ec085, #24358185);
+            width: 300px;
+            margin: auto;
+            text-align: center;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.445);
+        }
+
+        h1 {
+            margin: 30px;
+            text-align: center;
+        }
+
+        #res {
+            background-color: aliceblue;
+            color: #16204d;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 1.2em;
+            width: 55%;
+            margin: auto;
+            padding: 10px;
+            border-radius: 10px;
+            list-style-type: none;
+            display: flex;
+            flex-direction: column-reverse; /* inverte a direção dos itens */
+        }
+
+        button {
+            background-color: #aab9fc;
+            border: solid 1px white;
+            border-radius: 3px;
+            padding: 10px;
+        }
+    </style>
+    <title>Lógica da Calculadora</title>
+</head>
+<body>
+    <h1>Lógica da Calculadora</h1>
+    <section>
+        <h1>Calculadora</h1>
+        <input type="text" name="campoTexto" id="campoTexto">
+        <br>
+        <br>
+        <div>
+            <h3>Resultado</h3>
+            <div id="res"></div>
+        </div>
+        <br>
+        <br>
+        <button name="operacoes" value="soma"id="soma">+</button>
+        <button name="operacoes" value="subtracao" id="subtracao">-</button>
+        <br>
+        <br>
+        <button id="igual">=</button>
+        <button id="limpar">C</button>
+    </section>
+    <script>
+        // --------------- Variáveis ------------------
+
+// Obtenha as referências aos elementos HTML que serão usados pelo script
+let soma = document.getElementById("soma");
+let subtracao = document.getElementById("subtracao");
+let igual = document.getElementById("igual");
+let limpar = document.getElementById("limpar");
+let res = document.getElementById("res");
+let text = document.getElementById("campoTexto");
+let operacoes = document.querySelectorAll('button[name="operacoes"]');
+
+let btnAnterior;
+let valor = 0;
+let valorAnterior = 0;
+let valorTotal = [];
+
+
+
+// essa parte está salvando o valor um no valor anterior para que o próximo valor possa ser computado
+operacoes.forEach(operacao/*uma nova variavel criada*/ => {
+    operacao.addEventListener("click", function() {
+    valor = Number(text.value);
+    valorAnterior = valor;
+    valor = 0;
+    text.value = "";
+    })
+});
+
+        soma.addEventListener("click", function() {
+        btnAnterior = 'soma';
+        })
+        subtracao.addEventListener("click", function() {
+        btnAnterior = 'subtracao';
+        })
+
+        igual.addEventListener("click", function() {
+            switch (btnAnterior) {
+            case 'soma':
+                valor = Number(text.value);
+                valorAnterior = Number(valorAnterior);
+                valorAnterior = valorAnterior + valor;
+                break;
+            case 'subtracao':
+                valor = Number(text.value);
+                valorAnterior = Number(valorAnterior);
+                valorAnterior = valorAnterior - valor;
+                break;
+            break;
+            default:
+            window.alert("ERRO!!!");
+            }
+            valorTotal.push(valorAnterior);
+            text.value = `${valorAnterior}`;
+            res.innerHTML = `<ul>`
+            for (i = 0; i < valorTotal.length; i++) {
+                res.innerHTML += `<li>${valorTotal[i]}</li>`;
+            }
+            
+        })
+
+        limpar.addEventListener("click", function(){
+            let btnAnterior = "";
+            let valor = 0;
+            let valorAnterior = 0;
+            let resultado = 0;
+            res.innerHTML = "";
+            text.value = "0";
+        })
+
+        text.addEventListener("click", function(){
+            text.value = "";
+            res.innerHTML = "";
+        })
+
+    </script>
+        
+</body>
+</html>

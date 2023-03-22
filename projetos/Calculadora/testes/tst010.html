@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="tstEstilo.css">
+    <style>
+        *{
+            padding: 0px;
+            margin: 0px;
+        }
+
+        :root {
+            --cor01: #262626;
+            --cor02: #3F3F3F;
+            --cor03: #607338;
+            --cor04: #54ACBF;
+
+            --tst01: #00aeff;
+            --tst02: #005075;
+        }
+
+        div {
+            width: 100px;
+            height: 30px;
+            padding: 20px;
+            color: white;
+            margin: 30px;
+        }
+
+        .cor01{
+            background-color: var(--cor01);
+        }
+        .cor02{
+            background-color: var(--cor02);
+        }
+        .cor03{
+            background-color: var(--cor03);
+        }
+        .cor04{
+            background-color: var(--cor04);
+        }
+
+        section div.testbtn button{
+            background-color: var(--tst01);
+            border: 5px solid var(--tst02);
+            font-size: 2em;
+            color: #f3faff;
+            margin: 30px;
+            padding: 20px;
+        }
+
+
+    </style>
+    <title>teste estilos</title>
+</head>
+<body>
+    <section>
+        <aside>
+            <h1>Mexendo com eventos em js</h1>
+            <p>Aqui vamos mexer com os eventos mousedown e mouseup, para que os botões mudem de cor após o clique.</p>
+            <p>veja que usamos o this como parametro do evento, ou seja ele vai está referenciando ele mesmo como o indice de um array.</p>
+            <p>também mexemos com :root - usado para jogar cores em variaveis</p>
+        </aside>
+        <div class="cor01">CORES</div>
+        <div class="cor02">CORES</div>
+        <div class="cor03">CORES</div>
+        <div class="cor04">CORES</div>
+        <div class="testbtn">
+            <button class="btn" onmousedown="apertar(this)" onmouseup="soltar(this)">Btn01</button>
+            <button  onmousedown="apertar(this)" onmouseup="soltar(this)"class="btn">Btn02</button>
+        </div>
+    </section>
+    <script>
+        function apertar(botao) {
+            botao.style.backgroundColor = "var(--tst02)";
+            botao.style.borderColor = "var(--tst01)"; // está usando o this que referencia ele mesmo
+        }
+
+        function soltar(botao) {
+            botao.style.backgroundColor = "var(--tst01)";
+            botao.style.borderColor = "var(--tst02)"; // está usando o this que referencia ele mesmo
+        }
+    </script>
+</body>
+</html>

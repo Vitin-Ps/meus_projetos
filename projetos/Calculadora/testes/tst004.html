@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="tstEstilo.css">
+    <title>Teste byName</title>
+</head>
+<body>
+    <aside>
+        <h1>Guardando valores em um array</h1>
+        <p>Aqui criamos um input text e um botão pra enviar as informações, cada vez que o botão é clicado, o código (var.push(input)) é chamado, o que foi digitado no input é computado no array.</p>
+        <p>Depois é mostrado tudo na tela</p>
+        <p>Aqui vão alguns comandos para um numArray:</p>
+        <ul style="text-align: left;">
+            <li>variavel.push(valor); - adiciona um valor a variável</li>
+            <li>variavel.length - mostra a quatidade de valores dentro do array</li>
+        </ul>
+    </aside>
+    <input type="text" name="textocampo" id="textoCampo">
+    <button name="botoes" value="btn01" id="btn01">btn01</button>
+    <br>
+    <br>
+    <button id="igual">=</button>
+    <div id="res"></div>
+    <script>
+        let igual = document.getElementById("igual");
+        let res = document.getElementById("res");
+        let txt = document.getElementById("textoCampo");
+        let btn = document.getElementById("btn01");
+
+        let numArray = [];
+        let soma = 0;
+        btn.addEventListener("click", function() {
+            numArray.push(Number(txt.value));
+            txt.value = "";
+        })
+
+        igual.addEventListener("click", function() {
+            res.innerHTML = `Indices: ${numArray.length} <br>`;
+            for (i = 0; i < numArray.length; i++) {
+                soma += numArray[i];
+                res.innerHTML += `${i}: ${numArray[i]}<br>`;
+            }
+            res.innerHTML += `soma: ${soma}<br>`;
+        })
+
+    </script>
+</body>
+</html>

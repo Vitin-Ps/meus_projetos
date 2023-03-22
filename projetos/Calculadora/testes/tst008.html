@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="tstEstilo.css">
+    <title>Funcionalidade dos Botões Nums</title>
+</head>
+<body>
+    <aside>
+        <h1>Funcionalidade dos Botões Nums</h1>
+        <p>Aqui criamos os botões qua vão adicionar números no input, simulando uma calculadora de verdade.</p>
+    </aside>
+    <div id="res"></div>
+    <input type="text" name="" id="text">
+    <br>
+    <br>
+    <button id="btn01">1</button>
+    <button id="btn02">2</button>
+    <br>
+    <button name="operacoes" id="soma">+</button>
+    <button name="operacoes" id="subtracao">-</button>
+    <br>
+    <button id="igual">=</button>
+    <button id="limpar">C</button>
+
+    <script>
+        let btn01 = document.getElementById("btn01");
+        let btn02 = document.getElementById("btn02");
+        let soma = document.getElementById("soma");
+        let subtracao = document.getElementById("subtracao");
+        let igual = document.getElementById("igual");
+        let res = document.getElementById("res");
+        let text = document.getElementById("text");
+        let operacoes = document.querySelectorAll('button[name="operacoes"]');
+
+        let btnNumValor;
+        let btnAnterior;
+        let valor = 0;
+        let valorAnterior = 0;
+        let valorTotal = [];
+
+        btn01.addEventListener("click", function() {
+            btnNumValor = "1";
+            text.value += `${Number(btnNumValor)}`;
+        })
+        btn02.addEventListener("click", function() {
+            btnNumValor = "2";
+            text.value += `${Number(btnNumValor)}`;
+            
+        })
+
+
+
+    
+
+
+        operacoes.forEach(operacao/*uma nova variavel criada*/ => {
+            operacao.addEventListener("click", function() {
+            valor = Number(text.value);
+            valorAnterior = valor;
+            valor = 0;
+            text.value = "";
+        })
+    });
+
+        soma.addEventListener("click", function() {
+        btnAnterior = 'soma';
+        })
+        subtracao.addEventListener("click", function() {
+        btnAnterior = 'subtracao';
+        })
+
+        igual.addEventListener("click", function() {
+            switch (btnAnterior) {
+            case 'soma':
+                valor = Number(text.value);
+                valorAnterior = Number(valorAnterior);
+                valorAnterior = valorAnterior + valor;
+                break;
+            case 'subtracao':
+                valor = Number(text.value);
+                valorAnterior = Number(valorAnterior);
+                valorAnterior = valorAnterior - valor;
+                break;
+            break;
+            default:
+            window.alert("ERRO!!!");
+            }
+            valorTotal.push(valorAnterior);
+            text.value = `${valorAnterior}`;
+            res.innerHTML = `<ul>`
+            for (i = 0; i < valorTotal.length; i++) {
+                res.innerHTML += `<li>${valorTotal[i]}</li>`;
+            }
+            
+        })
+
+        limpar.addEventListener("click", function(){
+            let btnAnterior = "";
+            let valor = 0;
+            let valorAnterior = 0;
+            let resultado = 0;
+            res.innerHTML = "";
+            text.value = "0";
+        })
+
+        text.addEventListener("click", function(){
+            text.value = "";
+            res.innerHTML = "";
+        })
+
+
+
+    </script>
+
+</body>
+</html>

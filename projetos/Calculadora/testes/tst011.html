@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="tstEstilo.css">
+    <title>teste estilos</title>
+</head>
+<body>
+    <section>
+        <aside>
+            <h1>Atulização de algumas funcionalidades</h1>
+            <p>imprimindo números e escolhendo operações através do onclick</p>
+        </aside>
+        <div id="res"></div>
+        <br>
+        <br>
+        <button onclick="clicar('1')">btn01</button>
+        <button onclick="clicar('2')">btn02</button>
+        <br><br>
+        <button onclick="operacao('soma')">+</button>
+        <button onclick="operacao('subtracao')">-</button>
+       
+    </section>
+    <script>
+        let res = document.getElementById("res");
+    
+        function clicar(botao) {
+            res.innerHTML += `${Number(botao)}`;
+        }
+
+        function operacao(botao) {
+            switch (botao) {
+                case 'soma': 
+                    res.innerHTML = "Soma";
+                    break;
+                case 'subtracao': 
+                    res.innerHTML = "Subtração";
+                    break;
+                default: 
+                window.alert("Erro!!!")
+            }
+        }
+    </script>
+    
+</body>
+</html>

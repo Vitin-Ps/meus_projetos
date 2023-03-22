@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../imagens/Calc.ico" type="image/x-icon">
+    <link rel="stylesheet" href="calc.css">
+    <title>Calculadora</title>
+</head>
+<body>
+    <aside>
+        <h1>Calculadora</h1>
+    </aside>
+    <main>
+        <div id="res"></div>
+        <section>
+            <div id="campoTexto">
+                <input type="text" id="textInput" onclick="funInput()">
+            </div>
+            <div id="teclado">
+                <button class="limparTotal" onmousedown="apertar(this)" onmouseup="soltar(this)" onclick="btnFuncional('limparTotal')"><p id="limpar"></p></button>
+                    <button class="limparParcial" onmousedown="apertar(this)" onmouseup="soltar(this)" onclick="operacoes('porcentagem')">%</button>
+                <div id="botoes">
+                    <div class="linhas">
+                        <button onmousedown="apertar(this)" onmouseup="soltar(this)" id="7" onclick="mostrarNum('7')">7</button>
+                        <button onmousedown="apertar(this)" onmouseup="soltar(this)" id="8" onclick="mostrarNum('8')">8</button>
+                        <button onmousedown="apertar(this)" onmouseup="soltar(this)" id="9" onclick="mostrarNum('9')">9</button>
+                    </div>
+                    <div class="linhas">
+                        <button onmousedown="apertar(this)" onmouseup="soltar(this)" id="4" onclick="mostrarNum('4')">4</button>
+                        <button onmousedown="apertar(this)" onmouseup="soltar(this)" id="5" onclick="mostrarNum('5')">5</button>
+                        <button onmousedown="apertar(this)" onmouseup="soltar(this)" id="6" onclick="mostrarNum('6')">6</button>                        
+                    </div>
+                    <div class="linhas">
+                        <button onmousedown="apertar(this)" onmouseup="soltar(this)" id="1" onclick="mostrarNum('1')">1</button>
+                        <button onmousedown="apertar(this)" onmouseup="soltar(this)" id="2" onclick="mostrarNum('2')">2</button>
+                        <button onmousedown="apertar(this)" onmouseup="soltar(this)" id="3" onclick="mostrarNum('3')">3</button>    
+                    </div>
+                    <div class="linhas">
+                        <button class="zero" onmousedown="apertar(this)" onmouseup="soltar(this)" id="0" onclick="mostrarNum('0')">0</button>
+                        <button onmousedown="apertar(this)" onmouseup="soltar(this)" id="." onclick="mostrarNum('.')">.</button>
+                    </div>
+                </div>
+                <div id="sinais">
+                    <button onmousedown="apertar(this)" onmouseup="soltar(this)" id="soma" onclick="operacoes('soma')">+</button>
+                    <button onmousedown="apertar(this)" onmouseup="soltar(this)" id="subtracao" onclick="operacoes('subtracao')">-</button>
+                    <button onmousedown="apertar(this)" onmouseup="soltar(this)" id="divisao" onclick="operacoes('divisao')">/</button>
+                    <button onmousedown="apertar(this)" onmouseup="soltar(this)" id="multiplicacao" onclick="operacoes('multiplicacao')">x</button>
+                    <button onmousedown="apertar(this)" onmouseup="soltar(this)" id="igual" onclick="btnFuncional('igual')">=</button>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer><h2>Mailto Desenvolper</h2></footer>
+</body>
+<script src="calc.js"></script>
+</html>
