@@ -14,13 +14,11 @@
         :root {
             --cor01: #262626;
             --cor02: #3F3F3F;
-            --cor03: #607338;
+            --cor03: #788f45;
             --cor04: #54ACBF;
-
-            --tst01: #00aeff;
-            --tst02: #005075;
+            --cor05: #141414;
+            --cor06: #e6e6e6;
         }
-
         div {
             width: 100px;
             height: 30px;
@@ -29,22 +27,10 @@
             margin: 30px;
         }
 
-        .cor01{
-            background-color: var(--cor01);
-        }
-        .cor02{
-            background-color: var(--cor02);
-        }
-        .cor03{
-            background-color: var(--cor03);
-        }
-        .cor04{
-            background-color: var(--cor04);
-        }
-
         section div.testbtn button{
-            background-color: var(--tst01);
-            border: 5px solid var(--tst02);
+            background-color: var(--cor01);
+            border: 5px solid var(--cor05);
+            color: var(--cor06);
             font-size: 2em;
             color: #f3faff;
             margin: 30px;
@@ -63,22 +49,32 @@
             <p>veja que usamos o this como parametro do evento, ou seja ele vai está referenciando ele mesmo como o indice de um array.</p>
             <p>também mexemos com :root - usado para jogar cores em variaveis</p>
         </aside>
-        <di
         <div class="testbtn">
-            <button class="btn" onmousedown="apertar(this)" onmouseup="soltar(this)">Btn01</button>
-            <button  onmousedown="apertar(this)" onmouseup="soltar(this)"class="btn">Btn02</button>
+            <button name="btn" onmousedown="apertar(this)">Btn01</button>
+            <button onmousedown="apertar(this)" name="btn">Btn02</button>
         </div>
     </section>
     <script>
+
+    let botoes = document.querySelectorAll('button[name="btn"]');
+
+    
         function apertar(botao) {
-            botao.style.backgroundColor = "var(--tst02)";
-            botao.style.borderColor = "var(--tst01)"; // está usando o this que referencia ele mesmo
+
+            if(botao)
+            botoes.forEach(botaos => {
+                botaos.style.backgroundColor = "var(--cor01)";
+                botaos.style.borderColor = "var(--cor05)";
+                botaos.style.color = "var(--cor06)";
+
+                
+            })
+
+            botao.style.backgroundColor = "var(--cor06)";
+            botao.style.borderColor = "var(--cor01)";
+            botao.style.color = "var(--cor05)";
         }
 
-        function soltar(botao) {
-            botao.style.backgroundColor = "var(--tst01)";
-            botao.style.borderColor = "var(--tst02)"; // está usando o this que referencia ele mesmo
-        }
     </script>
 </body>
 </html>

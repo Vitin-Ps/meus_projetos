@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="tstEstilo.css">
+    <title>Array Test</title>
+</head>
+<body>
+    <div id="res"></div>
+    <script>
+        let valor01 = [1, 2, 3, 4, 5];
+        let valor02 = [1, 2, 3];
+
+        let res = document.getElementById("res");
+
+        for (let i = 0; i < valor01.length; i++) {
+            res.innerHTML += `${valor01[i]} - `;
+            if (i < valor02.length) {
+                res.innerHTML += `${valor02[i]}<br>`;
+            } else {
+                res.innerHTML += `${valor02[valor02.length - 1]}<br>`;
+            }
+        }
+    </script>
+</body>
+</html>
