@@ -83,6 +83,7 @@ function calculo(valorCalc) {
             break;
         case '%':
             valorTotal = (valorTotal / 100) * valor;
+            break;
         default:
             window.alert("Erro!!! Erro das Operações.")
     }
