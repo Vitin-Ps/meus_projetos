@@ -1,85 +1,193 @@
 let text = document.getElementById("textInput");
 let res = document.getElementById("res");
+let limpar = document.getElementById("limpar");
+let botoes = document.querySelectorAll('button[name="botoes"]');
+let btnRes = document.getElementById("btnRes");
+let btnOperacoes = document.querySelectorAll('button[name="btnOperacoes"]')
+let resPrimitivo = document.getElementById("resPrimitivo")
 
-let valorAnterior = [];
 let valorTotal = 0;
 let valor = 0;
-let btnAnterior;
+let btnAnterior = "";
+let btnIgual = false;
+let btnCE = "CE";
+let tipoOperacao = "";
+let valor01 = 0;
 
-function apertar(botao) {
-    botao.style.backgroundColor = "var(--cor05)";
-    botao.style.borderColor = "var(--cor01)"; // está usando o this que referencia ele mesmo
+text.value = "0"; // adiciona 0 ao input
+
+// -------------- funções do botão CE -------------------
+// ao digitar no input, ele muda o botão
+text.addEventListener("input", () => {
+    let txtInput = Number(text.value);
+    if(txtInput !== 0) { // se o conteúdo do input for diferente de 0
+      btnRes.innerHTML = "C";
+      btnCE = "C";
+    } else {
+      btnRes.innerHTML = "CE";
+      btnCE = "CE";
+    }
+  })
+
+// mesma função, mas é usafda quando se aciona o click dos botões 
+// obs: foi usado querry all para cria uma variavel para todos os botões
+botoes.forEach(botao => { // usado para passar por todos os botões, funciona como um array e seus indices
+    botao.addEventListener("click", () => {
+    let txtInput = Number(text.value);
+    if(txtInput !== 0) {
+      btnRes.innerHTML = "C";
+      btnCE = "C";
+    } else {
+      btnRes.innerHTML = "CE";
+      btnCE = "CE";
+    }
+  })
+  })
+// ----------------- cores dos botões ---------------------
+
+function CorClara(btnVar) { 
+    btnVar.style.backgroundColor = "var(--cor07)";
+    btnVar.style.borderColor = "var(--cor01)"; 
+    btnVar.style.color = "var(--cor5)";
 }
 
-function soltar(botao) {
-    botao.style.backgroundColor = "var(--cor01)";
-    botao.style.borderColor = "var(--cor05)"; // está usando o this que referencia ele mesmo
+function CorPadrao(btnVar) {
+    btnVar.style.backgroundColor = "var(--cor01)";
+    btnVar.style.borderColor = "var(--cor05)";
+    btnVar.style.color = "var(--cor06)";
 }
 
-function mostrarNum(numero) {
-    text.value += `${numero}`;
+function CorEscura(btnVar) {
+    btnVar.style.backgroundColor = "var(--cor05)";
+    btnVar.style.borderColor = "var(--cor01)";
+    btnVar.style.color = "var(--cor06)";
 }
 
-function operacoes(operacao) {
-    valor = Number(text.value);
-    valorTotal = valor;
-    valor = 0;
-    text.value = "";
-
-    btnAnterior = operacao;
-    text.focus();
+function funForEach(btnVar) { // função usada pra trazer a cor original das operções que tambem estão usando querry selector all
+    btnVar.forEach(btn => {
+        CorPadrao(btn);
+    })
 }
+//----------------- operações matemáticas ----------------------
 
-function btnFuncional(func) {
-    switch (func) {
-        case 'limpar':
-            valorTotal = [];
-            valorAnterior = 0;
-            valor = 0;
-            btnAnterior = "";
-            text.value = "";
-            res.innerHTML = "";
+function calculo(valorCalc) {
+    
+    switch (valorCalc) {
+        case '+':
+            valorTotal += valor;
             break;
-        case 'igual':
-            switch (btnAnterior) {
-                case 'soma':
-                    valor = Number(text.value);
-                    valorAnterior = Number(valorAnterior);
-                    valorAnterior = valorAnterior + valor;
-                    break;
-                case 'subtracao': 
-                    valor = Number(text.value);
-                    valorAnterior = Number(valorAnterior);
-                    valorAnterior = valorAnterior - valor;
-                    break;
-                case 'divisao':
-                    valor = Number(text.value);
-                    valorAnterior = Number(valorAnterior);
-                    valorAnterior = valorAnterior / valor;
-                    break;
-                case 'multiplicacao':
-                    valor = Number(text.value);
-                    valorAnterior = Number(valorAnterior);
-                    valorAnterior = valorAnterior * valor;
-                    break;
-                default:
-                    window.alert("Erro!!! Clique em uma Operação válida");
-            }
-            text.value = `${valorAnterior}`;
-            valorTotal.push(valorAnterior);
-            text.value = `${valorAnterior}`;
-            res.innerHTML = `<ul>`
-            for (i = 0; i < valorTotal.length; i++) {
-                res.innerHTML += `<li>${valorTotal[i]}</li>`;
-            }
+        case 'x':
+            valorTotal = valorTotal * valor;
+            break;
+        case '-':
+            valorTotal -= valor;
+            break;
+        case '/':
+            valorTotal = valorTotal / valor;
+            break;
+        case '%':
+            valorTotal = (valorTotal / 100) * valor;
             break;
         default:
-            window.alert("Erro!!! Clique em Algum Botão da Calculadora.")
+            window.alert("Erro!!! Erro das Operações.")
+    }
+    res.innerHTML += `<div><p>${valor01} ${tipoOperacao}  ${valor}</p><p>=</p><p>${valorTotal}</p></div>`; 
+
+    resPrimitivo.innerHTML = `<div><p>${valor01} ${tipoOperacao}  ${valor}</p><p>=</p><p>${valorTotal}</p></div>`;
+
+}
+
+
+
+function apertar(botao) { // função usada nos botões para mudar a cor, usando o onmousedown
+    CorEscura(botao);// está usando o this que referencia ele mesmo
+}
+
+function soltar(botao) { // mesma coisa usando o onmouseup
+    CorPadrao(botao);
+}
+
+function mostrarNum(numero) { // ao clicar no botão, mostra seu número correspondente
+    if (text.value == "0"){ // se for 0 ele substituira o 0 pelo numero apertado
+        text.value = `${numero}`;
+        text.focus(); // da foco ao input
+    } else {
+        text.value += `${numero}`;
+        text.focus();
+    }
+}
+
+
+function operacoes(operacao) {
+    if(valorTotal == 0) { // se o valorTotal for igual a 0
+        valorTotal = Number(text.value);
+        valor = 1;
+        valor01 = valorTotal;
+    } else if (btnIgual == true){ // usado para quando se apertar o igual e depois uma operação, não realizar a função calculo 2 vezez
+        valor = Number(text.value);
+        valor01 = valorTotal;
+
+    } else {
+        valor = Number(text.value);
+        valor01 = valorAnterior
+        calculo(btnAnterior);
+    }
+        tipoOperacao = operacao; // varivel recebe o tipo da operação para mostrar no res
+        valor01 = valorTotal;
+        btnAnterior = operacao;
+        btnIgual = false;
+        text.value = "0";
+    }
+
+function apertarOperacoes(botao) { // função para muda cor das operações
+    funForEach(btnOperacoes);
+    CorClara(botao);
+}
+
+
+function btnFuncional(func) { // botões funcionais da calculadora
+    switch (func) {
+        case 'limpar':
+            switch(btnCE) {
+                case 'C': // limpa somente o input
+                    text.value = "0";
+                    btnRes.innerHTML = "CE";
+                    btnCE = "CE";
+
+                    CorClara(btnRes);
+                    break;
+                case 'CE': //zera a calcularora
+                    valorTotal = 0;
+                    valor = 0;
+                    btnAnterior = "";
+                    btnIgual = false;
+                    text.value = "0";
+                    res.innerHTML = "";
+                    resPrimitivo.innerHTML = "";
+
+                    funForEach(btnOperacoes);
+                    // CorPadrao(btnRes);
+                    break;
+                default:
+                    window.alert("ERRO!!! Selecione Algum botão.")
+            }
+            break;
+        case 'igual':
+            if (text.value !== "0" && btnIgual == false) {
+                valor = Number(text.value);
+                btnIgual = true;
+            } else {
+                btnOperacao = btnAnterior;
+            }
+            valor01 = valorTotal;
+            calculo(btnAnterior);
+            text.value = `${valorTotal}`;
+            break;
+        default:
     }
 }
 
 function funInput() {
-    text.value = "";
+    text.value = "0";
     res.innerHTML = "";
 }
-
