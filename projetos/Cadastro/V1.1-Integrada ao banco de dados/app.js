@@ -10,7 +10,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Tabelas do BD
 const vendas = require('./models/vendas');
 
-app.engine('handlebars', engine({defaultLayout: 'main'}));
+app.engine('handlebars', engine({
+    defaultLayout: 'main',
+    runtimeOptions: {
+        allowProtoMethodsByDefault: true,
+        allowProtoPropertiesByDefault: true
+    },
+    
+}));
 app.set('view engine', 'handlebars');
 app.set('views', './views');
 
