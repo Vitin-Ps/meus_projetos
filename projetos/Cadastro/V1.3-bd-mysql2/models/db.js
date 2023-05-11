@@ -1,10 +1,11 @@
-const Sequelize = require('sequelize');
-const sequelize = new Sequelize('cadVendas', 'MailtoDesenvolper', '1234', {
-    host: 'localhost',
-    dialect: 'mysql'
+const mysql = require('mysql2');
+const conexao = mysql.createConnection({ // cria a conexão com o banco de dados
+    host:'localhost',
+    user: 'MailtoDesenvolper',
+    password: '1234',
+    database: 'vendasBd'
 });
 
 module.exports = {
-    Sequelize: Sequelize,
-    sequelize: sequelize
-}
+    conexao: conexao
+}; // prepara o código para que possa ser chamado em outro arquivo através do require
