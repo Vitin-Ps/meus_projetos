@@ -1,0 +1,308 @@
+resolva esse erro: 
+
+
+Error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ':idFunc' at line 3
+    at Packet.asError (/home/vittin/Documentos/GitHub/meus_projetos/projetos/Cadastro/teste/node_modules/mysql2/lib/packets/packet.js:728:17)
+    at Query.execute (/home/vittin/Documentos/GitHub/meus_projetos/projetos/Cadastro/teste/node_modules/mysql2/lib/commands/command.js:29:26)
+    at Connection.handlePacket (/home/vittin/Documentos/GitHub/meus_projetos/projetos/Cadastro/teste/node_modules/mysql2/lib/connection.js:489:32)
+    at PacketParser.onPacket (/home/vittin/Documentos/GitHub/meus_projetos/projetos/Cadastro/teste/node_modules/mysql2/lib/connection.js:94:12)
+    at PacketParser.executeStart (/home/vittin/Documentos/GitHub/meus_projetos/projetos/Cadastro/teste/node_modules/mysql2/lib/packet_parser.js:75:16)
+    at Socket.<anonymous> (/home/vittin/Documentos/GitHub/meus_projetos/projetos/Cadastro/teste/node_modules/mysql2/lib/connection.js:101:25)
+    at Socket.emit (node:events:513:28)
+    at addChunk (node:internal/streams/readable:324:12)
+    at readableAddChunk (node:internal/streams/readable:297:9)
+    at Readable.push (node:internal/streams/readable:234:10)
+Emitted 'error' event on Query instance at:
+    at Query.execute (/home/vittin/Documentos/GitHub/meus_projetos/projetos/Cadastro/teste/node_modules/mysql2/lib/commands/command.js:39:14)
+    at Connection.handlePacket (/home/vittin/Documentos/GitHub/meus_projetos/projetos/Cadastro/teste/node_modules/mysql2/lib/connection.js:489:32)
+    [... lines matching original stack trace ...]
+    at Readable.push (node:internal/streams/readable:234:10)
+    at TCP.onStreamRead (node:internal/stream_base_commons:190:23) {
+  code: 'ER_PARSE_ERROR',
+  errno: 1064,
+  sqlState: '42000',
+  sqlMessage: "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ':idFunc' at line 3",
+  sql: '\n' +
+    '      UPDATE vendas\n' +
+    "      SET nomeFunc = 'higor', valorVenda = 120.00\n" +
+    '      WHERE idFunc = :idFunc'
+}
+
+Node.js v18.16.0
+
+
+app.js:
+
+// // Conexão
+
+// const express = require('express');
+// const { engine } = require('express-handlebars');
+// const bodyParser = require('body-parser');
+// const moment = require('moment');
+// const numeral = require('numeral');
+
+// //App
+// const app = express();
+// // Define a pasta onde estão os arquivos estáticos
+// app.use('/public', express.static(__dirname + '/public'));
+// app.use(bodyParser.urlencoded({ extended: true }));
+// // Tabelas do BD
+// const Vendas = require('./models/vendas');
+
+// app.engine('handlebars', engine({
+//     defaultLayout: 'main',
+//     runtimeOptions: {
+//         allowProtoMethodsByDefault: true,
+//         allowProtoPropertiesByDefault: true
+//     },
+//     helpers: {
+//         formatDate: (date) => {
+//             return moment(date).format('DD/MM/YYYY');
+//         },
+//     }
+    
+// }));
+// app.set('view engine', 'handlebars');
+// app.set('views', './views');
+
+// numeral.defaultFormat('0,0.00');
+
+// // ------------------------- Rotas --------------------
+
+// app.get('/cadastro-vendas', (req, res) => {
+//     Vendas.findAll().then((vendas) => {
+//         res.render('cadastro-vendas', {vendas: vendas});
+//     })
+// })
+
+// app.post('/add-venda', (req, res) => {
+//     const valorVenda = parseFloat(req.body.valorVenda);
+//     // const desconto = valorVenda * 0.1;
+//     const desconto = numeral(valorVenda + 0.1).format();
+
+//     Vendas.create({
+//         nomeFunc: req.body.nomeFunc,
+//         valorVenda: valorVenda,
+//         desconto: desconto
+//     }).then(function(){
+//         res.redirect("/cadastro-vendas");
+//     }).catch(function(erro){
+//         res.send("Erro ao enviar as informações " + erro);
+//     });
+// });
+
+// app.get('/del-venda/:idFunc', (req, res) => {
+//     Vendas.destroy({
+//         where: {'idFunc': req.params.idFunc}
+//     }).then(() => {
+//         res.redirect("/cadastro-vendas");
+//     }).catch((erro) => {
+//         ("Não Apagado " + erro);
+//     });
+// });
+
+// app.get('/editar-venda/:idFunc', (req, res) => {
+//     Vendas.findByPk(req.params.idFunc).then((vendas) => {
+//         res.render('editar-venda', {idFunc: vendas.idFunc, nomeFunc: vendas.nomeFunc, valorVenda: vendas.valorVenda, desconto: vendas.desconto});
+//     }).catch((erro) => {
+//         res.send("Dado não encontrado " + erro);
+//     });
+// });
+
+// app.post('/alt-venda/:idFunc', (req, res) => {
+//     const valorVenda = parseFloat(req.body.valorVenda);
+//     // const desconto = valorVenda * 0.1;
+//     const desconto = numeral(valorVenda + 0.1).format();
+
+   
+//     Vendas.update({
+//         nomeFunc: req.body.nomeFunc,
+//         valorVenda: valorVenda,
+//         desconto: desconto
+//     },
+//     {
+//         where: {'idFunc': req.body.idFunc}
+//     }).then(() => {
+//         res.redirect("/cadastro-vendas");
+//     }).catch((erro) => {
+//         res.send("Não Alterado " + erro);
+//     });
+// })
+
+// app.get('/limpar-tabela-vendas', (req, res) => {
+//     Vendas.destroy({ where: {} }).then(() => {
+//         res.redirect('/cadastro-vendas');
+//       }).catch((erro) => {
+//         res.send('Erro ao excluir registros:', erro);
+//       });
+//   });
+  
+
+// app.listen(8081);
+
+
+//express
+const express = require('express');
+const app = express();
+
+//bodyParser
+const bodyParser = require('body-parser'); // usado para que as informações do cliente(dados que o usuario digitar no formulario) sejão processadas e enviadas para o banco de dados através do Sequelize ou mysql2
+app.use(bodyParser.urlencoded({extended: true})); // o método urlencoded é usado para transformar as informações do formulario em um objeto Js para que possa ser trabalhado no node.js. para chamar o dado é usado (req.body.namedoInput)
+
+//Para aceitar arquivos estaticos
+app.use('/public', express.static(__dirname + '/public'));
+
+//handlebars
+const {engine} = require('express-handlebars');
+app.engine('handlebars', engine({
+    defaultLayout: 'main', // acessa a pasta /views/layouts e pega o arquivo main.handlebars como html principal, oque for colocado la dentro aplicará para os arquivos do views, basta colocar {{{body}}} dentro do main
+    runtimeOptions: { // serve para o handlebars ler os atributos da tabela no bd
+        allowProtoMethodsByDefault: true,
+        allowProtoMethodsByDefault: true
+    }
+}));
+app.set('view engine', 'handlebars'); // meio que sincronisa o express para que ele possa usar os modelos do handlebars para visualizações em html
+app.set('views', './views'); // ativa o handlebars para buscar na pasta /views os arquivos que vão ser usados como html
+
+const Vendas = require('./models/vendas');
+//Vendas.criarVendas(); //usado para criar a tabela(use somente na primeira aplicação)
+
+//rotas
+app.get('/cadastro-vendas', async (req, res) => { // aqui abre uma rota no express que cria uma aba no url 
+    const vendas = await Vendas.listarVendas();
+    res.render('cadastro-vendas', {vendas: vendas}); // renderiza uma página html presente na pasta /views
+    console.log(vendas);
+    
+});
+
+app.post('/add-venda', (req, res) => {
+    Vendas.addVendas(req.body.nomeFunc, req.body.valorVenda, res);
+    res.redirect('/cadastro-vendas');
+});
+
+app.get('/editar-venda/:idFunc', async (req, res) => {
+    const vendas = await Vendas.editarVendas(req.params.idFunc);
+    const venda = vendas[0]; // obtenha o primeiro elemento do array
+    res.render('editar-venda', {idFunc: venda.idFunc, nomeFunc: venda.nomeFunc, valorVenda: venda.valorVenda, desconto: venda.desconto});
+});
+
+app.post('/alt-venda/:idFunc', (req, res) => {
+    let idFunc = req.params.idFunc
+    Vendas.altVendas(req.body.nomeFunc,req.body.valorVenda, idFunc, res);
+    res.redirect('/cadastro-vendas');
+});
+
+app.listen(8080);
+
+
+
+vendas.js:
+
+//Tabela vendas
+
+//criando tabela 
+const mysql = require('mysql2');
+const conexao = mysql.createConnection({ // cria a conexão com o banco de dados
+    host:'localhost',
+    user: 'MailtoDesenvolper',
+    password: '1234',
+    database: 'vendasBd'
+});
+
+// const conexao = require('./db');
+
+
+function criarVendas() {
+    conexao.query(`
+    create table vendas(
+    idFunc int primary key auto_increment,
+    nomeFunc varchar(80) not null,
+    valorVenda decimal(10,2) not null,
+    desconto decimal(10,2)
+    );
+    `);
+}
+
+function excluirVendas() {
+    conexao.query(`
+    drop table vendas;
+    `).then(() => {
+        console.log("Tabela Excluida");
+    }).catch((erro) => {
+        console.log("Erro ao Excluir Tabela! " + erro);
+    });
+}
+
+async function editarVendas(idFunc) {
+    const [rows, fields] = await conexao.promise().query(`
+        select * 
+        from vendas 
+        where idFunc = ${idFunc};
+    `);
+    return rows;
+}
+
+
+function addVendas(nomeFunc, valorVenda, res) {
+    let desconto = (valorVenda * 0.1).toFixed(2);
+    try {
+        conexao.query(`
+        insert into vendas (
+            nomeFunc,
+            valorVenda,
+            desconto
+        )values (
+            '${nomeFunc}',
+            ${valorVenda},
+            ${desconto}
+        );
+        `);
+        console.log("Venda adicionada com sucesso!");
+      } catch (erro) {
+        res.send("Ocorreu um erro ao adicionar a venda:", erro);
+      }
+}
+
+
+async function listarVendas(){
+    const [rows, fields] = await conexao.promise().query(`select * from vendas`); 
+    return rows;
+}
+
+function delVendas(idFunc) {
+    conexao.query(`
+    delete from vendas where idFunc = ${idFunc}
+    `).then(() => {
+        console.log("Dados Deletados");
+    }).catch((erro) => {
+        console.log("Erro ao Deletar Dados! " + erro);
+    });
+}
+
+function altVendas(nomeFunc, valorVenda, idFunc) {
+    let desconto = (valorVenda * 0.1).toFixed(2);
+    conexao.query(`
+      UPDATE vendas
+      SET nomeFunc = '${nomeFunc}', valorVenda = ${valorVenda}
+      WHERE idFunc = ${idFunc}`
+    );
+  }
+  
+  
+
+module.exports = {
+    criarVendas: criarVendas,
+    excluirVendas: excluirVendas,
+    listarVendas: listarVendas,
+    addVendas: addVendas,
+    delVendas: delVendas,
+    editarVendas: editarVendas,
+    altVendas: altVendas
+}
+
+
+
+
+
+
+

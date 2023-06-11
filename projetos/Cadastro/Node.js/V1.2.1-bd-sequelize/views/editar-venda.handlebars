@@ -1,0 +1,19 @@
+<h1>Alteração de vendas</h1>
+    <div class="formulario">
+        <table>
+            <form action="/alt-venda/:idFunc" method="post">
+            <input type="hidden" name="idFunc" value="{{idFunc}}">
+            <tr>
+                <td><label>Nome Vendedor: </label></td>
+                <td><input type="text" name="nomeFunc" id="nomeFunc" value="{{nomeFunc}}"></td>
+            </tr>
+            <tr>
+                <td><label>Valor da Venda: </label></td>
+                <td><input type="text" name="valorVenda" id="valorVenda" value="{{valorVenda}}"></td>
+            </tr>
+            <tr><td colspan="2"><button class="btn" onclick="adicionar()">Alterar</button></td></tr>
+        </form>
+        </table>
+
+        <script src="/public/script/cadastro-vendas.js"></script>
+    </div>

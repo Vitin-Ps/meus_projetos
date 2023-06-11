@@ -1,0 +1,33 @@
+Requisitos da Minha Loja a primeiro instante 
+
+1- Anunciante: No site precisamos de um login para pessoas que queiram anunciar seu produto --> (
+    a- página de login --> (
+        . nome,
+        . cpf,
+        . Endereco,
+        . cep,
+        . data de nascimento (com base nesse dado, criar um forma de mostrar a idade)
+        . disponibilidade,
+        . numero
+    )
+    b- página home --> (
+        . Criar Anuncios
+        . Ver anuncios postados 
+        . formas de compartilhar o anuncio
+    )
+)
+
+2- Cliente: precisamos de uma página de login a primeiro instante --> (
+     a- página de login --> (
+        . nome,
+        . cpf,
+        . Endereco,
+        . cep,
+        . data de nascimento (com base nesse dado, criar um forma de mostrar a idade)
+)
+
+3- Catalogo: uma página que receba os anuncios dos Anunciantes e uma avaliação em estrelas para cada Serviço ou produto --> (
+    a. uma página para o  desenvolverdor que receba todos os anuncios postados
+    b. uma página de Catalogo para os clientes escolherem seus produtos 
+    c. uma forma de avalição para que os melhores sejão mais recomendados 
+)
