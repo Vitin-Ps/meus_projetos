@@ -1,0 +1,21 @@
+<div th:fragment="ListVendas">
+    <table>
+        <thead>
+            <tr>
+                <th>Funcionario</th>
+                <th>Valor Venda</th>
+                <th>Desconto</th>
+                <th colspan="2">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="lista : ${vendas}">
+                <td th:text="${lista.funcionario}"></td>
+                <td th:text="${lista.valorVenda}"></td>
+                <td th:text="${lista.descontoVenda}"></td>
+                <td><a th:href="@{/vendas?idVenda={id}(id=${lista.idVenda})}"><button>Alterar</button></a></td>
+                <td><a th:href="@{/delVenda?idVenda={id}(id=${lista.idVenda})}"><button>Deletar</button></a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

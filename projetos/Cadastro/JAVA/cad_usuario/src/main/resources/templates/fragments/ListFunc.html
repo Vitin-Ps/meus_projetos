@@ -1,0 +1,25 @@
+<div th:fragment="ListFunc">
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Matrícula</th>
+                <th>Número</th>
+                <th>Email</th>
+                <th>Desconto de Funcionário</th>
+                <th colspan="2">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="lista : ${funcionarios}">
+                <td th:text="${lista.nomeFunc}"></td>
+                <td th:text="${lista.matricula}"></td>
+                <td th:text="${lista.numero}"></td>
+                <td th:text="${lista.email}"></td>
+                <td th:text="${lista.descontoFunc}"></td>
+                <td><a th:href="@{/funcionarios?idFunc={id}(id=${lista.idFunc})}"><button>Alterar</button></a></td>
+                <td><a th:href="@{/delFunc?idFunc={id}(id=${lista.idFunc})}"><button>Deletar</buteton></a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

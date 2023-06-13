@@ -5,24 +5,24 @@ CREATE DATABASE IF NOT EXISTS cad_vendas;
 USE cad_vendas;
 
 CREATE TABLE funcionarios (
-    idFunc BIGINT PRIMARY KEY AUTO_INCREMENT,
-    nomeFunc VARCHAR(80) NOT NULL,
+    id_func BIGINT PRIMARY KEY AUTO_INCREMENT,
+    nome_func VARCHAR(80) NOT NULL,
     matricula VARCHAR(80) NOT NULL UNIQUE,
     numero VARCHAR(20) NOT NULL,
     email VARCHAR(80) NOT NULL,
-    descontoFunc INT NOT NULL
+    desconto_func INT NOT NULL
 );
 
 
 CREATE TABLE vendas (
-    idVenda BIGINT PRIMARY KEY AUTO_INCREMENT,
-    nomeVenda VARCHAR(80) NOT NULL,
-    valorVenda DOUBLE(10,2) NOT NULL,
-    descontoVenda DOUBLE(10,2)
+    id_venda BIGINT PRIMARY KEY AUTO_INCREMENT,
+    funcionario VARCHAR(80) NOT NULL,
+    valor_venda DOUBLE(10,2) NOT NULL,
+    desconto_venda DOUBLE(10,2)
 );
 
 
--- SET @porcentagemDesconto = 10;
+-- SET @porcentagemDesconto = ?;
 -- SET @desconto = @porcentagemDesconto * 0.01;
 
 -- SELECT @desconto;
@@ -34,7 +34,7 @@ CREATE TRIGGER inserir_desconto
 BEFORE INSERT ON vendas
 FOR EACH ROW
 BEGIN
-    SET NEW.descontoVenda = NEW.valorVenda * (@porcentagemDesconto * 0.01);
+    SET NEW.desconto_venda = NEW.valor_venda * (@porcentagemDesconto * 0.01);
 END //
 
 DELIMITER ;

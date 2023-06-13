@@ -1,0 +1,29 @@
+<div th:fragment="FormVendas">
+    <form action="/cadVenda" method="post">
+        <table>
+            <thead>
+                <tr>
+                    <th>Vendas</th>
+                </tr>
+            </thead>
+            <tbody>
+                <input type="hidden" name="_method" value="PUT" th:if="${venda != null}">
+                <input type="hidden" name="idVenda" th:value="${venda?.idVenda}">
+                <tr>
+                    <td><label for="funcionario">Funcionario:</label></td>
+                    <td>
+                        <select name="funcionario" id="selectFunc">
+                            <option th:value="${venda?.funcionario}" th:text="${venda?.funcionario}"selected></option>
+                            <option th:each="lista : ${funcionarios}" th:value="${lista.nomeFunc}" th:text="${lista.nomeFunc}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="valorVenda">Valor Venda:</label></td>
+                    <td><input type="text" name="valorVenda" id="valorVenda" th:value="${venda?.valorVenda}"></td>
+                </tr>
+                <tr><td colspan="2"><button type="submit" onclick="teste()">Enviar</button></td></tr>
+            </tbody>
+        </table>
+    </form>
+</div>

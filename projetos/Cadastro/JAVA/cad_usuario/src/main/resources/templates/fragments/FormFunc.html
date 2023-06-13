@@ -1,5 +1,5 @@
 <div th:fragment="FormFunc">
-    <form action="/cadastrar" method="post">
+    <form action="/cadFunc" method="post">
         <table>
             <thead>
                 <tr>
@@ -7,32 +7,34 @@
                 </tr>
             </thead>
             <tbody>
+                <input type="hidden" name="_method" value="PUT" th:if="${funcionario != null}">
+                <input type="hidden" name="idFunc" th:value="${funcionario?.idFunc}">
                 <tr>
                     <td><label for="nomeFunc">Nome:</label></td>
-                    <td><input type="text" name="nomeFunc" id="nomeFunc"></td>
+                    <td><input type="text" name="nomeFunc" id="nomeFunc" th:value="${funcionario?.nomeFunc}"></td>
                 </tr>
                 <tr>
                     <td><label for="matricula">Matrícula:</label></td>
-                    <td><input type="text" name="matricula" id="matricula"></td>
+                    <td><input type="text" name="matricula" id="matricula" th:value="${funcionario?.matricula}"></td>
                 </tr>
                 <tr>
                     <td><label for="numero">Número:</label></td>
-                    <td><input type="text" name="numero" id="numero"></td>
+                    <td><input type="text" name="numero" id="numero" th:value="${funcionario?.numero}"></td>
                 </tr>
                 <tr>
                     <td><label for="email">Email:</label></td>
-                    <td><input type="text" name="email" id="email"></td>
+                    <td><input type="text" name="email" id="email" th:value="${funcionario?.email}"></td>
                 </tr>
                 <tr>
                     <td><label for="descontoFunc">Desconto:</label></td>
                     <td>
-                        <select name="descontoFunc" id="descontoFunc">
+                        <select name="descontoFunc" id="descontoFunc" th:value="${funcionario?.descontoFunc}">
+                            <option th:value="${funcionario?.descontoFunc}" th:text="${funcionario?.descontoFunc}"selected disabled></option>
                             <option th:each="i : ${#numbers.sequence(5, 100, 5)}" th:value="${i}" th:text="${i + '%'}"></option>
                         </select>
                     </td>
                 </tr>                
                 <tr><td colspan="2"><button type="submit">Enviar</button></td></tr>
-                
             </tbody>
         </table>
     </form>
