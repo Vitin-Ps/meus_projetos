@@ -1,4 +1,4 @@
-<div th:fragment="FormFunc">
+<div th:fragment="FormFunc" id="form">
     <form action="/cadFunc" method="post">
         <table>
             <thead>
@@ -29,7 +29,7 @@
                     <td><label for="descontoFunc">Desconto:</label></td>
                     <td>
                         <select name="descontoFunc" id="descontoFunc" th:value="${funcionario?.descontoFunc}">
-                            <option th:value="${funcionario?.descontoFunc}" th:text="${funcionario?.descontoFunc}"selected disabled></option>
+                            <option th:value="${funcionario?.descontoFunc}" th:text="${funcionario?.descontoFunc}"selected></option>
                             <option th:each="i : ${#numbers.sequence(5, 100, 5)}" th:value="${i}" th:text="${i + '%'}"></option>
                         </select>
                     </td>

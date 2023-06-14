@@ -1,0 +1,53 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+body {
+    background-color: rgba(230, 123, 0, 0.151);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+div#form {
+    background-color: rgba(255, 255, 255, 0.466);
+    max-width: 400px;
+    padding: 30px;
+    margin: 30px auto;
+    border: 1px solid rgb(116, 62, 0);
+    border-radius: 10px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.329);
+}
+
+div#form table {
+    width: 100%;
+    font-size: 1.3em;
+}
+
+
+div#form table td, th {
+    width: 50%;
+    text-align: center;
+    
+}
+
+div#form table tr {
+    height: 40px;
+}
+
+div#form table input, select {
+    background-color: rgba(255, 136, 0, 0.11);
+    border: 1px solid rgba(122, 73, 0, 0.623);
+    border-radius: 5px;
+    width: 80%;
+    padding: 6px;
+}
+
+button {
+    background-color: rgba(255, 136, 0, 0.692);
+    color: rgb(255, 255, 255);
+    border: 1px solid rgb(122, 73, 0);
+    font-size: 1em;
+    margin: 30px;
+    padding: 10px;
+    width: 100px;
+    border-radius: 10px;
+}
