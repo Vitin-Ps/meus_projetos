@@ -1,0 +1,44 @@
+nav {
+    background-color: rgb(170, 68, 0);
+    height: 30px;
+    margin-top: 15px;
+    padding: 7px;
+    
+}
+
+#menuIco{
+    font-size: 2em;
+}
+
+/*----------- MENU -------------*/
+
+ul#menu:hover ul#subMenu{
+    display: block;
+} 
+
+ul#subMenu {
+    display: none;
+    background-color: rgba(167, 89, 0, 0.527);
+    position: absolute;
+    padding: 30px;
+    border-radius: 0px 0px 10px 10px;
+}
+
+ul#subMenu li {
+    list-style-type: none;
+}
+
+ul#subMenu li a{
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+}
+
+ul#subMenu li a:hover {
+    background-color: white;
+    color: rgb(99, 45, 0);
+    padding: 10px;
+    border-radius: 5px;
+    transition-duration: 0.5s;
+    font-size: 1.2em;
+}

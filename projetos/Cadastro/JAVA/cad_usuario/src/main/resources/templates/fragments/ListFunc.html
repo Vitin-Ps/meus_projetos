@@ -1,13 +1,13 @@
-<div th:fragment="ListFunc">
+<div th:fragment="ListFunc" id="list">
     <table>
         <thead>
             <tr>
                 <th>Nome</th>
                 <th>Matrícula</th>
                 <th>Número</th>
-                <th>Email</th>
+                <th class="tam01">Email</th>
                 <th>Desconto de Funcionário</th>
-                <th colspan="2">Ações</th>
+                <th colspan="2" class="tam01">Ações</th>
             </tr>
         </thead>
         <tbody>
@@ -17,8 +17,8 @@
                 <td th:text="${lista.numero}"></td>
                 <td th:text="${lista.email}"></td>
                 <td th:text="${lista.descontoFunc}"></td>
-                <td><a th:href="@{/funcionarios?idFunc={id}(id=${lista.idFunc})}"><button>Alterar</button></a></td>
-                <td><a th:href="@{/delFunc?idFunc={id}(id=${lista.idFunc})}"><button>Deletar</buteton></a></td>
+                <td><a th:href="@{/funcionarios?idFunc={id}(id=${lista.idFunc})}"><button class="btnForms" onclick="checkMudancas()">Alterar</button></a></td>
+                <td><a th:href="@{/delFunc?idFunc={id}(id=${lista.idFunc})}"><button class="btnForms" onclick="checkMudancas()">Deletar</buteton></a></td>
             </tr>
         </tbody>
     </table>

@@ -1,0 +1,43 @@
+i.icons {
+    font-size: 150px;
+    color: rgb(255, 94, 0);
+}
+
+
+button.btn{
+    background-color: rgba(245, 78, 0, 0.815);
+    color: rgb(255, 255, 255);
+    border: 2px solid rgba(197, 118, 0, 0.664);
+    border-radius: 10px;
+    display: block;
+    width: 170px;
+    padding: 20px;
+    margin: 30px auto;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+button.btn:hover{
+    background-color: rgb(117, 66, 0);
+    width: 190px;
+    padding: 25px;
+    margin: 10px auto;
+    font-weight: bold;
+    font-size: 1.3em;
+    transition-duration: 0.3s;
+}
+
+div#funcionalidades {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    flex-wrap: wrap;
+    width: 60%;
+    margin: auto;
+}
+
+div#funcionalidades div {
+    margin: 5px;
+    width: 175px;
+    text-align: center;
+}

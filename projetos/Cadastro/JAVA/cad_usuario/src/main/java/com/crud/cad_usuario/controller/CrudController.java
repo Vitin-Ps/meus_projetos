@@ -141,5 +141,9 @@ public class CrudController {
     }
     // ao clicar em enviar ele recebe a fincomação do input e guarda na string funcionario
 
+    @GetMapping("/sobre")
+    public String paginaSobre () {
+        return "subpage/sobre";
+    }
 
 }

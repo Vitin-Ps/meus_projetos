@@ -6,12 +6,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="static/css/principal.css" th:href="@{/css/principal.css}">
+    <link rel="stylesheet" href="static/css/menu.css" th:href="@{/css/menu.css}">
+    <link rel="stylesheet" href="../static/css/index.css" th:href="@{/css/index.css}">
     <link rel="stylesheet" href="../../static/css/formularios.css" th:href="@{/css/formularios.css}">
-    <script th:src="@{/script/modelo.js}"></script>
+    <script  th:src="@{/script/modelo.js}"></script>
     <title>Vendas</title>
 </head>
 <body>
-    <a href="/"><button>Home</button></a>
-    <div layout:fragment="conteudo"></div>
+    <header>
+        <aside>
+            <i class="fas fa-box boxIco"></i>
+            <h1>Vendas dos Funcionários</h1>
+            <a href="/"><button class="btnForms">Home</button></a>
+        </aside>
+        <nav>
+            <ul id="menu">
+                <li><i class="fas fa-bars" id="menuIco"></i>
+                
+                <ul id="subMenu">
+                    <li><a href="/sobre">Sobre</a></li>
+                </ul>
+                
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+          <div layout:fragment="conteudo"></div>
+    </main>
+    <footer>
+        <div>
+            <p>Cadastro de Funcionários e Vendas:</p>
+
+            <ul>
+                <li>Os funcionários são cadastrados com informações como nome, matrícula, número de contato, e-mail e desconto aplicável.</li>
+                <li>As vendas são registradas com detalhes como o funcionário responsável, valor da venda e desconto aplicado. O desconto pode ser calculado automaticamente se não for fornecido.</li>
+            </ul>
+        </div>
+        <div>
+            <p>Atualização de Funcionários e Vendas:</p>
+
+            <ul>
+                <li>Quando um funcionário é atualizado, as vendas associadas a ele são atualizadas automaticamente, modificando o nome do funcionário responsável e recalculando o desconto com base na nova porcentagem aplicável.</li>
+            </ul>
+        </div>
+    </footer>
+    
 </body>
 </html>

@@ -1,4 +1,4 @@
-<div th:fragment="ListVendas">
+<div th:fragment="ListVendas" id="list">
     <table>
         <thead>
             <tr>
@@ -13,8 +13,8 @@
                 <td th:text="${lista.funcionario}"></td>
                 <td th:text="${lista.valorVenda}"></td>
                 <td th:text="${lista.descontoVenda}"></td>
-                <td><a th:href="@{/vendas?idVenda={id}(id=${lista.idVenda})}"><button>Alterar</button></a></td>
-                <td><a th:href="@{/delVenda?idVenda={id}(id=${lista.idVenda})}"><button>Deletar</button></a></td>
+                <td><a th:href="@{/vendas?idVenda={id}(id=${lista.idVenda})}"><button class="btnForms" onclick="checkMudancas()">Alterar</button></a></td>
+                <td><a th:href="@{/delVenda?idVenda={id}(id=${lista.idVenda})}"><button class="btnForms" onclick="checkMudancas()">Deletar</button></a></td>
             </tr>
         </tbody>
     </table>

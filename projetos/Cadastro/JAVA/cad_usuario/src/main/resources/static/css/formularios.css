@@ -1,11 +1,4 @@
-* {
-    padding: 0;
-    margin: 0;
-}
-body {
-    background-color: rgba(230, 123, 0, 0.151);
-    font-family: Arial, Helvetica, sans-serif;
-}
+
 
 div#form {
     background-color: rgba(255, 255, 255, 0.466);
@@ -41,13 +34,77 @@ div#form table input, select {
     padding: 6px;
 }
 
-button {
-    background-color: rgba(255, 136, 0, 0.692);
+button.btnForms {
+    background-color: rgba(245, 78, 0, 0.815);
     color: rgb(255, 255, 255);
-    border: 1px solid rgb(122, 73, 0);
-    font-size: 1em;
-    margin: 30px;
-    padding: 10px;
-    width: 100px;
+    border: 2px solid rgba(197, 118, 0, 0.664);
     border-radius: 10px;
+    font-size: 1em;
+    margin: 10px;
+    height: 35px;
+    width: 100px;
+    
+}
+
+button.btnForms:hover {
+    background-color: rgb(255, 196, 0);
+    color: rgb(255, 255, 255);
+    border: 2px solid rgba(245, 78, 0, 0.815);
+    height: 40px;
+    width: 110px;
+    transition-duration: 0.2s;
+}
+
+div#list {
+    max-height: 400px;
+    margin: auto;
+    overflow: scroll;
+}
+
+    /* Estilizando a barra de rolagem */
+div#list::-webkit-scrollbar {
+    width: 5px; /* Largura da barra de rolagem */
+}
+
+div#list::-webkit-scrollbar-thumb {
+    display: block;
+    background-color: rgba(218, 98, 0, 0.253); /* Cor do polegar da barra de rolagem */
+}
+
+div#list::-webkit-scrollbar-track {
+    display: none;
+}
+
+
+div#list table {
+    border-collapse: collapse;
+    text-align: center;
+    width: 100%;
+}
+
+
+div#list table th {
+    background-color: rgb(255, 94, 0);
+    color: white;
+    padding: 5px;
+}
+
+
+div#list table tr:nth-child(odd) {
+    background-color: rgba(237, 247, 255, 0.301);
+    box-shadow: 0px 2px 7px rgba(0, 0, 0, 0.185);
+    }
+    
+
+div#list table tr:nth-child(even) {
+    background-color: rgba(253, 155, 7, 0.123);
+    box-shadow: 0px 2px 7px rgba(0, 0, 0, 0.185);
+}
+
+div#list table th {
+    width: 15%;
+}
+
+div#list table th.tam01 {
+    width: 20%;
 }
