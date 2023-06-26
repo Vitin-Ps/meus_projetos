@@ -2,24 +2,27 @@ package br.com.mailtoDesenvolper.myBank.model.DAO;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 
 public class Conexao {
 	
-	public Connection recuperarConexao() {
-		String driver = "com.mysql.cj.jdbc.Driver";
-		String url = "jdbc:mysql//localhost:3306/cad_us";
-		String user = "root";
-		String pass = "";
+	public Connection getConexao() {
+		Connection conn = null;
 		
 		try {
-			Class.forName(driver);
-			Connection conn = DriverManager.getConnection(url, user, pass);
-			return conn;
+			Class.forName("com.mysql.jdbc.Driver");
 			
-		} catch (Exception ex) {
-			throw new RuntimeException(ex);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		try {
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/cad_us", "root", "");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		return conn;
 	}
 
 }

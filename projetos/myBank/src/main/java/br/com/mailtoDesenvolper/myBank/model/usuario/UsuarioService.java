@@ -13,7 +13,7 @@ public class UsuarioService {
 	}
 	
 	public void salvarDados(DadosCadastroUsuario dados) {
-		Connection conn = conexao.recuperarConexao();
+		Connection conn = conexao.getConexao();
 		new UsuarioDAO(conn).salvar(dados);
 	}
 }
