@@ -1,4 +1,4 @@
 package com.projetos.login.model.usuario;
 
-public record DadosAberturaLogin() {
+public record DadosAberturaLogin(String login, String senha) {
 }
