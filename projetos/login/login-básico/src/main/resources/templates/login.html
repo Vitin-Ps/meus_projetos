@@ -1,0 +1,86 @@
+<div layout:decorate="~{layouts/principal.html}" layout:fragment="conteudo" id="main">
+
+
+    <p th:text="${selAcao}"></p>
+
+    <div th:switch="${selAcao}">
+        <div th:case="'cadLogin'">
+            <form action="/cadUsuario" method="post">
+                <table>
+                    <tr>
+                        <th colspan="2"><h2>Cadastro Usuário</h2></th>
+                    </tr>
+                    <tr>
+                        <td><label for="login">Login: </label></td>
+                        <td><input type="text" name="login" id=""></td>
+                    </tr>
+                    <tr>
+                        <td><label for="senha">Senha: </label></td>
+                        <td><input type="password" name="senha" id=""></td>
+                    </tr>
+                    <tr>
+                        <td><label for="tipoUsuario">Tipo Usuario</label></td>
+                        <td>
+                            <select name="tipoUsuario" id="">
+                                <option value="Selecone" disabled selected>Selecione</option>
+                                <option value="comum">Comum</option>
+                                <option value="adm">Administrador</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2"><button type="submit">Enviar</button></td></tr>
+                </table>
+            </form>
+        </div>
+        <div th:case="'logar'">
+            <form action="/logar" method="post">
+                <table>
+                    <tr>
+                        <th colspan="2"><h2>Logar</h2></th>
+                    </tr>
+                    <tr>
+                        <td><label for="login">Login: </label></td>
+                        <td><input type="text" name="login" id=""></td>
+                    </tr>
+                    <tr>
+                        <td><label for="senha">Senha: </label></td>
+                        <td><input type="password" name="senha" id=""></td>
+                    </tr>
+                    <tr><td colspan="2"><button type="submit">Enviar</button></td></tr>
+                </table>
+            </form>
+        </div>
+        <div th:case="'selUsuario'">
+            <form action="/altUsuario" method="post">
+                <table>
+                    <tr>
+                        <th colspan="2"><h2>Alterar Usuário</h2></th>
+                    </tr>
+                    <tr>
+                        <td><label for="login">Login: </label></td>
+                        <td><input type="text" name="login" id="" th:value="${usuario?.login}"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="senha">Senha: </label></td>
+                        <td><input type="password" name="senha" id="" th:value="${usuario?.senha}"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="tipoUsuario">Tipo Usuario</label></td>
+                        <td>
+                            <select name="tipoUsuario" id="">
+                                <option th:value="${usuario?.tipoUsuario}" selected th:text="${usuario?.tipoUsuario}"></option>
+                                <option value="comum">Comum</option>
+                                <option value="adm">Administrador</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2"><button type="submit">Enviar</button></td></tr>
+                </table>
+            </form>
+        </div>
+        <div th:case="*">
+            <h2>Escolha a opção correta!!!</h2>
+        </div>
+    </div>
+
+</div>

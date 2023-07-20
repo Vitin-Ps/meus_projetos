@@ -1,0 +1,12 @@
+DROP DATABASE IF EXISTS projeto_login;
+
+CREATE DATABASE IF NOT EXISTS projeto_login;
+
+USE projeto_login;
+
+CREATE TABLE users (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    login VARCHAR(80) NOT NULL UNIQUE,
+    password VARCHAR(80) NOT NULL,
+    role VARCHAR(80) NOT NULL
+);
