@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-br"
+    xmlns:th="http://thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/principal.css" th:href="@{/css/principal.css}">
+    <title>Deluxe</title>
+</head>
+<body>
+    <header>
+      <a href="/"><button>Home</button></a>
+      <a href="#"><button>Sair</button></a>
+    </header>
+    <main>
+          <div layout:fragment="conteudo"></div>
+    </main>
+    <footer>
+        <p>Deluxe</p>
+    </footer>
+    
+</body>
+</html>

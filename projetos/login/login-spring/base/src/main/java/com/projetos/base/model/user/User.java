@@ -1,4 +1,4 @@
-package com.projetos.base.model.users;
+package com.projetos.base.model.user;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,13 +12,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@Entity
-@Table(name="users")
+@Table(name = "users")
+@Entity(name = "users")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Users implements UserDetails {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,25 +26,26 @@ public class Users implements UserDetails {
     private String password;
     private UserRole role;
 
+    public User(CadastroUser dados){
+        this.login = dados.login();
+        this.password = dados.password();
+        this.role = dados.role();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if(this.role == UserRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
         else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
- 
-    @Override
-    public String getPassword() {
-        return this.password;
-    }
 
     @Override
     public String getUsername() {
-        return this.login;
+        return login;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
@@ -60,5 +61,11 @@ public class Users implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void atualizaDados(AlteracaoUser dados) {
+        this.login = dados.login();
+        this.password = dados.password();
+        this.role = dados.role();
     }
 }

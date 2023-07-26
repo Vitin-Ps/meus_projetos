@@ -1,4 +1,4 @@
-package com.projetos.base.model.users;
+package com.projetos.base.model.user;
 
 public enum UserRole {
     ADMIN("admin"),
@@ -6,14 +6,11 @@ public enum UserRole {
 
     private String role;
 
-    UserRole(String role) {
+    UserRole(String role){
         this.role = role;
     }
 
-    public String getRole() {
-        return this.role;
+    public String getRole(){
+        return role;
     }
-
-
-
 }
