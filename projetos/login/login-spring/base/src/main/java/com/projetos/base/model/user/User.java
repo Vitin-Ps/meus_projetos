@@ -24,12 +24,13 @@ public class User implements UserDetails {
     private Long id;
     private String login;
     private String password;
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    public User(CadastroUser dados){
-        this.login = dados.login();
-        this.password = dados.password();
-        this.role = dados.role();
+    public  User(String login, String password, UserRole role){
+        this.login = login;
+        this.password = password;
+        this.role = role;
     }
 
     @Override
