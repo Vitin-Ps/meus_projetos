@@ -1,0 +1,212 @@
+estou querendo criar um site para barbearias, onde sera uma aplicação central onde as barbearias vão se cadastrar, cadastar seus funcionarios, produtos e servicos. haverá também o agendamento de atendimento e um carrinho onde os produtos e serviçoes se somarão e seram cobrados no caixa do estabelecimentos. uma tabela contendo informações do funcionario tambem tera que ser criada, tipo uma tabela freservada para ele contendo os produtos e serviços do mes/ semana e o valor total de faturamento ja com os descontos do estabelecimento, tipo (60% pro estabelecimento, 40% pro funcionario). 
+os cliente teram uma tela que mostrara os funcionarios cadastrados na barbearia, os serviçoes que eles realizam e os produtos que vendem, será contabilizado o numero de vezes que o cliente foi atendido oferecendo formas de desconto para ele, os funconarios teram acesso ao clientes cadastrados na barbearia.
+
+
+
+Página Inicial:
+
+    Visão geral do site e seus recursos.
+    Botões para login e cadastro.
+
+Cadastro e Autenticação:
+
+    Opção para barbearias se cadastrarem como parceiros.
+    Autenticação de usuários (barbearias, funcionários e clientes) por meio de login e senha.
+
+Painel da Barbearia:
+
+    Visão geral do perfil da barbearia.
+    Opção para cadastrar funcionários, produtos e serviços.
+    Gerenciamento de horários e agendamentos.
+    Acesso ao carrinho de compras e faturamento.
+
+Cadastro de Funcionários:
+
+    Informações pessoais dos funcionários.
+    Serviços que cada funcionário realiza.
+    Percentual de comissão que o funcionário recebe.
+    Acesso à agenda pessoal e faturamento.
+
+Cadastro de Produtos e Serviços:
+
+    Listagem de produtos (produtos de cuidado capilar, produtos para barba, etc.).
+    Serviços oferecidos (corte de cabelo, barba, tratamentos, etc.).
+    Preços individuais para produtos e serviços.
+
+Agendamento de Atendimento:
+
+    Calendário interativo para selecionar datas e horários disponíveis.
+    Escolha do funcionário e serviço desejado.
+    Confirmação por e-mail ou mensagem.
+
+Carrinho de Compras:
+
+    Adição de produtos e serviços ao carrinho.
+    Visualização do total a ser cobrado.
+    Opção para remover itens do carrinho.
+
+Tabela de Faturamento do Funcionário:
+
+    Registros mensais/semanais das atividades do funcionário.
+    Serviços e produtos realizados para cada cliente.
+    Cálculo do valor total com base nos preços e percentuais de comissão.
+
+Painel do Cliente:
+
+    Cadastro e edição de perfil do cliente.
+    Lista de funcionários da barbearia e seus serviços.
+    Histórico de atendimentos e serviços utilizados.
+    Ofertas e descontos personalizados.
+
+Gerenciamento de Clientes:
+
+    Acesso para funcionários visualizarem e atualizarem informações dos clientes.
+    Acompanhamento do número de atendimentos de cada cliente.
+
+Aspectos Técnicos:
+
+    Plataforma web responsiva para acesso em dispositivos móveis e desktop.
+    Banco de dados para armazenar informações de barbearias, funcionários, produtos, serviços, agendamentos e clientes.
+    Implementação de cálculos automáticos de faturamento e comissões.
+    Medidas de segurança para proteção de dados pessoais e sensíveis.
+
+Lembre-se de que esse é apenas um esboço inicial. Dependendo das suas habilidades técnicas ou do suporte que você terá, você pode precisar de ajuda de desenvolvedores, designers e profissionais de segurança cibernética para construir uma plataforma completa e segura.
+
+
+Modelando o Projeto:
+
+Requisitos Funcionais:
+
+    Cadastro de Barbearias:
+        As barbearias podem se cadastrar na plataforma, fornecendo informações como nome, endereço, contato, etc.
+
+    Cadastro de Funcionários:
+        As barbearias podem adicionar e gerenciar informações sobre os funcionários, incluindo nome, especialidades, comissões, etc.
+
+    Cadastro de Produtos e Serviços:
+        As barbearias podem listar os produtos e serviços que oferecem, incluindo descrição, preço e duração.
+
+    Agendamento de Atendimento:
+        Clientes podem agendar horários para serviços específicos com funcionários selecionados.
+
+    Carrinho de Compras:
+        Os clientes podem adicionar produtos e serviços ao carrinho, que será totalizado para pagamento no caixa da barbearia.
+
+    Histórico de Atendimentos:
+        Manutenção de um histórico de todos os atendimentos realizados, incluindo data, serviço, funcionário e cliente.
+
+    Gestão Financeira:
+        Cálculo automático do faturamento com base nos serviços prestados e produtos vendidos.
+        Aplicação de descontos, comissões e divisão de receita entre a barbearia e os funcionários.
+
+    Painel do Cliente:
+        Clientes podem visualizar informações sobre os funcionários, serviços, produtos e suas preferências.
+        Ofertas e descontos personalizados podem ser exibidos.
+
+Requisitos Não Funcionais:
+
+    Segurança:
+        Dados sensíveis, como informações pessoais e financeiras, devem ser armazenados com segurança e criptografados.
+
+    Desempenho:
+        A plataforma deve ser responsiva e rápida para evitar atrasos durante agendamentos e pagamentos.
+
+    Escalabilidade:
+        O sistema deve ser capaz de lidar com um grande número de barbearias, funcionários e clientes sem comprometer o desempenho.
+
+    Compatibilidade:
+        O site deve ser compatível com diversos navegadores e dispositivos, incluindo smartphones e tablets.
+
+Regras de Negócio:
+
+    Comissões de Funcionários:
+        Os funcionários receberão uma porcentagem da receita gerada pelos serviços que prestam, de acordo com as regras estabelecidas.
+
+    Divisão de Receita:
+        A barbearia receberá uma porcentagem da receita total, após dedução das comissões dos funcionários.
+
+    Agendamentos e Cancelamentos:
+        Os clientes podem agendar serviços com antecedência e cancelar dentro de um limite de tempo especificado.
+
+    Descontos e Ofertas:
+        A plataforma pode oferecer descontos baseados na frequência dos clientes ou em promoções especiais.
+
+    Pagamentos:
+        Os pagamentos por produtos e serviços serão realizados na barbearia no momento do atendimento.
+        
+        
+        
+        
+Modelo Entidade Relacionamento 
+
+Entidades:
+
+    Barbearia
+    Funcionário
+    Produto
+    Serviço
+    Cliente
+    Agendamento
+    Carrinho de Compras
+    Histórico de Atendimento
+    Tabela de Faturamento do Funcionário
+
+Relacionamentos:
+
+    Uma Barbearia pode ter vários Funcionários.
+    Uma Barbearia pode oferecer vários Produtos.
+    Uma Barbearia pode oferecer vários Serviços.
+    Um Funcionário pode realizar vários Serviços.
+    Um Cliente pode fazer vários Agendamentos.
+    Um Agendamento está associado a um Funcionário e a um Serviço.
+    Um Carrinho de Compras pertence a um Cliente e contém vários Produtos/Serviços.
+    Um Histórico de Atendimento registra informações sobre Atendimentos anteriores.
+    Uma Tabela de Faturamento do Funcionário está associada a um Funcionário e registra informações financeiras.
+
+Atributos:
+
+    Barbearia:
+        Nome
+        Endereço
+        Contato
+
+    Funcionário:
+        Nome
+        Especialidades
+        Comissão
+        Acesso à agenda pessoal e faturamento
+
+    Produto:
+        Nome
+        Descrição
+        Preço
+
+    Serviço:
+        Nome
+        Descrição
+        Preço
+        Duração
+
+    Cliente:
+        Nome
+        Informações de contato
+
+    Agendamento:
+        Data e Hora
+        Funcionário
+        Serviço
+
+    Carrinho de Compras:
+        Produtos/Serviços selecionados
+        Total a ser cobrado
+
+    Histórico de Atendimento:
+        Data
+        Serviço
+        Funcionário
+        Cliente
+
+    Tabela de Faturamento do Funcionário:
+        Registros de atividades (Serviços e produtos realizados para cada cliente)
+        Valor total com base nos preços e percentuais de comissão
+        
