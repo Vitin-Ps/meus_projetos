@@ -1,0 +1,40 @@
+<mxfile host="Electron" modified="2023-08-26T19:42:33.007Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.6.8 Chrome/114.0.5735.289 Electron/25.5.0 Safari/537.36" etag="S3IrmJHI1JMdG8donATl" version="21.6.8" type="device">
+  <diagram name="Página-1" id="JvtUWAz6pcBEB4IvSJ-b">
+    <mxGraphModel dx="1050" dy="629" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="3MxLHpkuTHlxXDLLftGC-2" value="Barbearia" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="10" y="160" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="3MxLHpkuTHlxXDLLftGC-3" value="Serviço" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="10" y="240" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="3MxLHpkuTHlxXDLLftGC-4" value="Funcionário" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="10" y="520" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="3MxLHpkuTHlxXDLLftGC-5" value="Histórico Pessoal" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="10" y="10" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="3MxLHpkuTHlxXDLLftGC-6" value="Cliente" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="10" y="380" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="3MxLHpkuTHlxXDLLftGC-7" value="Carrinho de Compras" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="10" y="80" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="3MxLHpkuTHlxXDLLftGC-8" value="Agendamento" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="10" y="450" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="3MxLHpkuTHlxXDLLftGC-9" value="Agenda funcionário" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="10" y="310" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="3MxLHpkuTHlxXDLLftGC-10" value="Estoque" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="10" y="590" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="3MxLHpkuTHlxXDLLftGC-12" value="Produto" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="10" y="660" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
