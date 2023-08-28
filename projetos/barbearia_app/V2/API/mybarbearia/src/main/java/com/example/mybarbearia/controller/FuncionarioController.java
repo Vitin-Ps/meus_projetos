@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/funcionario")
 public class FuncionarioController {
     @Autowired
-    FuncionarioRepository repository;
+    private FuncionarioRepository repository;
 
     @PostMapping
     @Transactional

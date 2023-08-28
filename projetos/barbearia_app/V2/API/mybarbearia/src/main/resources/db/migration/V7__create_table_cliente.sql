@@ -1,8 +1,7 @@
-CREATE TABLE funcionario (
+CREATE TABLE cliente (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL,
-    cpf CHAR(11) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
     telefone CHAR(14) NOT NULL,
     logradouro VARCHAR(150) NOT NULL,
     bairro VARCHAR(100) NOT NULL,
