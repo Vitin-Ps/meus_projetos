@@ -1,25 +1,62 @@
 package com.example.mybarbearia.controller;
 
-import com.example.mybarbearia.model.servico.DadosCadastroServico;
-import com.example.mybarbearia.model.servico.ServicoRepository;
+import com.example.mybarbearia.model.servico.*;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/servico")
-public class Servico {
+public class ServicoController {
     @Autowired
     private ServicoRepository repository;
 
     @PostMapping
     @Transactional
     public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroServico dados) {
+        var servico = new Servico(dados);
+        repository.save(servico);
         return ResponseEntity.ok("Serviço cadastrado com Sucesso");
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<DadosListagemServico>> listar(@PageableDefault(size = 10, page = 0, sort = {"nome"}) Pageable pageable) {
+        var page = repository.findByAtivoTrue(pageable).map(DadosListagemServico::new);
+        return ResponseEntity.ok(page);
+    }
+
+    @PutMapping
+    @Transactional
+    public ResponseEntity atualizar(@RequestBody @Valid DadosAtualizaServico dados) {
+        var servico = repository.getReferenceById(dados.id());
+        System.out.println(dados);
+        servico.atualizarInformacoes(dados);
+        return ResponseEntity.ok(new DadosListagemServico(servico));
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity apagarLogico(@PathVariable Long id) {
+        var servico = repository.getReferenceById(id);
+        servico.apagarLogico();
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/apagar/{id}")
+    @Transactional
+    public ResponseEntity apagarDefinitivo(@PathVariable Long id) {
+        repository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity detalhar(@PathVariable Long id) {
+        var servico = repository.getReferenceByIdAndAtivoTrue(id);
+        return ResponseEntity.ok(new DadosListagemServico(servico));
     }
 }

@@ -1,3 +1,3 @@
-ALTER TABLE produto ADD ativo TINYINT NULL;
+ALTER TABLE servico ADD ativo TINYINT NULL;
 
-UPDATE produto SET ativo = 1;
+UPDATE servico SET ativo = 1;

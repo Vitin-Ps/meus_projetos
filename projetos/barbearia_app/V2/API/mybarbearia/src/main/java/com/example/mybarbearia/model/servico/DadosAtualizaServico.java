@@ -1,2 +1,12 @@
-package com.example.mybarbearia.model.servico;public record DadosAtualizaServico() {
+package com.example.mybarbearia.model.servico;
+
+import java.math.BigDecimal;
+
+public record DadosAtualizaServico(
+        Long id,
+        String nome,
+        String descricao,
+        BigDecimal preco,
+        String duracao
+) {
 }
