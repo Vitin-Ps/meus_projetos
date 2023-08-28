@@ -1,3 +1,3 @@
-ALTER TABLE servico ADD ativo TINYINT NULL;
-
-UPDATE servico SET ativo = 1;
+ALTER TABLE funcionario
+ADD CONSTRAINT unique_email UNIQUE (email),
+ADD CONSTRAINT unique_cpf UNIQUE (cpf);
