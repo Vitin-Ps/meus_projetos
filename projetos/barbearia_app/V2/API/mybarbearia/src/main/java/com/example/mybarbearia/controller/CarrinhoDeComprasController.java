@@ -2,7 +2,6 @@ package com.example.mybarbearia.controller;
 
 import com.example.mybarbearia.model.carrinhodecompras.AdicionarNoCarrinho;
 import com.example.mybarbearia.model.carrinhodecompras.DadosCadastroCarrinho;
-import com.example.mybarbearia.repository.CarrinhoDeComprasRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,10 +1,8 @@
 package com.example.mybarbearia.model.carrinhodecompras;
 
 import com.example.mybarbearia.exception.ValidacaoExeption;
-import com.example.mybarbearia.repository.CarrinhoDeComprasRepository;
-import com.example.mybarbearia.repository.ClienteRepository;
-import com.example.mybarbearia.repository.ProdutoRepository;
-import com.example.mybarbearia.repository.ServicoRepository;
+import com.example.mybarbearia.model.produto.Produto;
+import com.example.mybarbearia.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,19 +16,29 @@ public class AdicionarNoCarrinho {
     ProdutoRepository produtoRepository;
     @Autowired
     ServicoRepository servicoRepository;
+    @Autowired
+    EstoqueRepository estoqueRepository;
 
 
-    public DadosListagemCarrinho agendar(DadosCadastroCarrinho dados) {
+    public DadosDetalhamentoCarrinho agendar(DadosCadastroCarrinho dados) {
         if (!clienteRepository.existsById(dados.idCliente())) {
             throw new ValidacaoExeption("Cliente não Existe");
         }
-        if (dados.tipoItem() == TipoItem.PRODUTO && !produtoRepository.existsById(dados.idCliente())) {
+        if (!produtoRepository.existsById(dados.idCliente())) {
             throw new ValidacaoExeption("Produto não Existe");
         }
-        if (dados.tipoItem() == TipoItem.SERVICO && !servicoRepository.existsById(dados.idCliente())) {
+        if (!servicoRepository.existsById(dados.idCliente())) {
             throw new ValidacaoExeption("Serviço não Existe");
         }
 
         return null;
+    }
+
+    public Produto checarQuantidade(DadosCadastroCarrinho dados) {
+        var estoque = estoqueRepository.findByIdProduto(dados.idProduto());
+        if(dadosestoque.getQuantidade() < 1) {
+            throw new ValidacaoExeption("Produto em falta no Estoque");
+        }
+        return estoque.getProduto();
     }
 }
