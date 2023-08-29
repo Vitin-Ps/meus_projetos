@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/cliente")
@@ -22,10 +23,12 @@ public class ClienteController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity cadastrat(@RequestBody @Valid DadosCadastroCliente dados) {
+    public ResponseEntity cadastrat(@RequestBody @Valid DadosCadastroCliente dados, UriComponentsBuilder componentsBuilder) {
         var cliente = new Cliente(dados);
         repository.save(cliente);
-        return ResponseEntity.ok("Cliente Cadastrado com sucesso");
+
+        var uri = componentsBuilder.path("/cliente/{id}").buildAndExpand(cliente.getId()).toUri();
+        return ResponseEntity.created(uri).body(new DadosListagemCliente(cliente));
     }
 
     @GetMapping

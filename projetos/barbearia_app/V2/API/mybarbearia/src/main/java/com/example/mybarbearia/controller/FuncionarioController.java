@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/funcionario")
@@ -22,10 +23,12 @@ public class FuncionarioController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroFuncionario dados) {
-        var funconario = new Funcionario(dados);
-        repository.save(funconario);
-        return ResponseEntity.ok().build();
+    public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroFuncionario dados, UriComponentsBuilder componentsBuilder) {
+        var funcionario = new Funcionario(dados);
+        repository.save(funcionario);
+
+        var uri = componentsBuilder.path("/funcionario/{id}").buildAndExpand(funcionario.getId()).toUri();
+        return ResponseEntity.created(uri).body(new DadosListagemFuncionario(funcionario));
     }
 
     @GetMapping

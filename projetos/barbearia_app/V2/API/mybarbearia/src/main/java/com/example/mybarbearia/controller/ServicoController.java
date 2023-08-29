@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/servico")
@@ -18,10 +19,12 @@ public class ServicoController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroServico dados) {
+    public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroServico dados, UriComponentsBuilder componentsBuilder) {
         var servico = new Servico(dados);
         repository.save(servico);
-        return ResponseEntity.ok("Serviço cadastrado com Sucesso");
+
+        var uri = componentsBuilder.path("/servico/{id}").buildAndExpand(servico.getId()).toUri();
+        return ResponseEntity.created(uri).body(new DadosListagemServico(servico));
     }
 
     @GetMapping

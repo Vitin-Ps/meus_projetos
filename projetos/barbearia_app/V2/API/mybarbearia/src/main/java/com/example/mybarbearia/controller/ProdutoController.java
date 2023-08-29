@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/produto")
@@ -19,10 +20,12 @@ public class ProdutoController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroProduto dados) {
+    public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroProduto dados, UriComponentsBuilder componentsBuilder) {
         var produto = new Produto(dados);
         repository.save(produto);
-        return ResponseEntity.ok("Produto adicionado com sucesso");
+
+        var uri = componentsBuilder.path("/produto/{id}").buildAndExpand(produto.getId()).toUri();
+        return ResponseEntity.created(uri).body(new DadosListagemProduto(produto));
     }
 
     @GetMapping
