@@ -1,5 +1,6 @@
-package com.example.mybarbearia.model.servico;
+package com.example.mybarbearia.repository;
 
+import com.example.mybarbearia.model.servico.Servico;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

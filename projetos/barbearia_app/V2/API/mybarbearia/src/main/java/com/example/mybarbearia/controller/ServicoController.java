@@ -1,6 +1,7 @@
 package com.example.mybarbearia.controller;
 
 import com.example.mybarbearia.model.servico.*;
+import com.example.mybarbearia.repository.ServicoRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

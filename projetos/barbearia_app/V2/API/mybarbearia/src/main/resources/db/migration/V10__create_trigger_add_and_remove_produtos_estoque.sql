@@ -1,7 +1,19 @@
-CREATE TABLE estoque (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    id_produto BIGINT NOT NULL,
-    quantidade INT NULL,
+DELIMITER //
+CREATE TRIGGER add_produto_estoque
+AFTER INSERT ON produto
+FOR EACH ROW
+BEGIN
+    INSERT INTO estoque (id_produto, quantidade) VALUES (NEW.id, 0);
+END;
+//
+DELIMITER ;
 
-    CONSTRAINT fk_produto_estoque_id FOREIGN KEY (id_produto) REFERENCES produto(id) ON DELETE CASCADE
-);
+DELIMITER //
+CREATE TRIGGER remove_produto_estoque
+AFTER DELETE ON produto
+FOR EACH ROW
+BEGIN
+    DELETE FROM estoque WHERE id_produto = OLD.id;
+END;
+//
+DELIMITER ;

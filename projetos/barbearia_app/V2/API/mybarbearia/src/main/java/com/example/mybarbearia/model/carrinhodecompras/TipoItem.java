@@ -1,2 +1,6 @@
-package com.example.mybarbearia.model.carrinhodecompras;public enum TipoItem {
+package com.example.mybarbearia.model.carrinhodecompras;
+
+public enum TipoItem {
+    PRODUTO,
+    SERVICO;
 }

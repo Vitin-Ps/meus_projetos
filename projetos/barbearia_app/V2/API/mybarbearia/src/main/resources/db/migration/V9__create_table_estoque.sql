@@ -1,7 +1,7 @@
-CREATE TABLE carrinho_de_compras (
+CREATE TABLE estoque (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    id_cliente BIGINT NOT NULL,
-    id_item BIGINT NOT NULL,
-    tipo_item VARCHAR(9) NOT NULL,
-    preco DECIMAL(10, 2) NOT NULL
+    id_produto BIGINT NOT NULL,
+    quantidade INT NULL,
+
+    CONSTRAINT fk_produto_estoque_id FOREIGN KEY (id_produto) REFERENCES produto(id) ON DELETE CASCADE
 );
