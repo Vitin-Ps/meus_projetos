@@ -5,9 +5,8 @@ import java.math.BigDecimal;
 public record DadosListagemCarrinho(
         Long id,
         Long idCliente,
-        Long idItem,
-        TipoItem tipoItem,
+        Long idProduto,
+        Long idSercvico,
         BigDecimal preco
 ) {
-
 }
