@@ -1,9 +1,9 @@
-package com.example.mybarbearia.model.carrinhodecompras;
+package com.example.mybarbearia.model.recibo;
 
 import java.math.BigDecimal;
 
 public
-record DadosSomaItens(
+record DadosCriacaoRecibo(
         Long idProduto,
         Integer quantidadeProduto,
         Long idCliente,

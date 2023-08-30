@@ -1,7 +1,10 @@
 package com.example.mybarbearia.model.carrinhodecompras;
 
 import com.example.mybarbearia.exception.ValidacaoExeption;
+import com.example.mybarbearia.model.estoque.AlterarQuantidade;
+import com.example.mybarbearia.model.estoque.DadosAtualizaEstoque;
 import com.example.mybarbearia.model.produto.Produto;
+import com.example.mybarbearia.model.recibo.DadosCriacaoRecibo;
 import com.example.mybarbearia.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 
 @Service
-public class AdicionarNoCarrinho {
+public class FuncionalidadesDoCarrinho {
     @Autowired
     CarrinhoDeComprasRepository carrinhoDeComprasRepository;
     @Autowired
@@ -27,20 +30,16 @@ public class AdicionarNoCarrinho {
         if (dados.idCliente() != null && !clienteRepository.existsById(dados.idCliente())) {
             throw new ValidacaoExeption("Cliente não Existe");
         }
-        if (dados.idProduto() != null && !produtoRepository.existsById(dados.idCliente())) {
+        if (dados.idProduto() != null && !produtoRepository.existsById(dados.idProduto())) {
             throw new ValidacaoExeption("Produto não Existe");
         }
-        if (dados.idServico() != null && !servicoRepository.existsById(dados.idCliente())) {
+        if (dados.idServico() != null && !servicoRepository.existsById(dados.idServico())) {
             throw new ValidacaoExeption("Serviço não Existe");
         }
        // criando as Entidades baseado no id passado pelo dto
-        System.out.println("Passou1");
         var cliente = clienteRepository.findById(dados.idCliente()).get();
-        System.out.println("Passou2");
         var produto = checarQuantidade(dados);
-        System.out.println("Passou3");
         var servico = servicoRepository.findById(dados.idCliente()).orElse(null);
-        System.out.println("servico " + servico);
 
 
         // fazendo a diferenciação de preço se for produto ou servico
@@ -51,22 +50,34 @@ public class AdicionarNoCarrinho {
         if(dados.idServico() != null) {
             preco = servico.getPreco();
         }
-        System.out.println("Passou4");
         // criando o carrinho e salvando o banco
         var carrinho = new CarrinhoDeCompras(null, cliente, produto, servico, preco);
         carrinhoDeComprasRepository.save(carrinho);
-        System.out.println("Passou5");
         return new DadosDetalhamentoCarrinho(carrinho);
     }
 
-    public Produto checarQuantidade(DadosCadastroCarrinho dados) {
-        if(dados.idProduto() == null) {
-            return null;
-        }
-        var estoque = estoqueRepository.findByProdutoId(dados.idProduto());
-        if(estoque.getQuantidade() < 1) {
-            throw new ValidacaoExeption("Produto em falta no Estoque");
-        }
-        return estoque.getProduto();
+    public void limparCarrinho() {
+        Long id = 3L;
+        carrinhoDeComprasRepository.deleteAllByClienteId(id);
     }
+
+    public void finalizarCarrinho(Long idCliente) {
+//        var quantidade = carrinhoDeComprasRepository.somarQuantidadeProdutosByClienteId(dados.idCliente());
+//        var estoque = estoqueRepository.getReferenceByProdutoId(dados.idProduto());
+//        estoque.alterarQuantidade(new DadosAtualizaEstoque(estoque.getId(), quantidade, AlterarQuantidade.DIMINUIR));
+
+        var produtosSelecionados = carrinhoDeComprasRepository.produtosSelecionados(idCliente);
+        produtosSelecionados.forEach(produtos -> {
+            System.out.println("produto aqeui : " + produtos);
+            var quantidadeNoCarrinho = carrinhoDeComprasRepository.somarQuantidadeTotalProdutosByClienteIdAndProdutoId(idCliente, produtos);
+            System.out.println("quantidade Produto: " + quantidadeNoCarrinho);
+        });
+
+////        this.limparCarrinho();
+//    }
+
+
+//    public DadosCriacaoRecibo dadosPeloIdCliente(Long id) {
+//        var listaCarrinho = carrinhoDeComprasRepository.findByClienteId(id);
+//    }
 }
