@@ -26,7 +26,7 @@ public class CarrinhoDeComprasController {
     @GetMapping("/{id}")
     @Transactional
     public ResponseEntity deletar(@PathVariable Long id) {
-        fCarrinho.finalizarCarrinho(id);
+        fCarrinho.cancelarCarrinho(id);
         return ResponseEntity.ok("Carrinho limpo");
     }
 }

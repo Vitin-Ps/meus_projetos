@@ -56,14 +56,7 @@ public class FuncionalidadesDoCarrinho {
         return new DadosDetalhamentoCarrinho(carrinho);
     }
 
-    public void limparCarrinho() {
-        Long id = 3L;
-        carrinhoDeComprasRepository.deleteAllByClienteId(id);
-    }
-
-    public void finalizarCarrinho(Long idCliente) {
-//
-
+    public void cancelarCarrinho(Long idCliente) {
         var produtosSelecionados = carrinhoDeComprasRepository.produtosSelecionados(idCliente);
         produtosSelecionados.forEach(produtos -> {
             System.out.println("produto aqeui : " + produtos);
@@ -71,19 +64,10 @@ public class FuncionalidadesDoCarrinho {
             System.out.println("quantidade Produto: " + quantidadeNoCarrinho);
 
             var estoque = estoqueRepository.getReferenceByProdutoId(produtos);
-            estoque.alterarQuantidade(new DadosAtualizaEstoque(estoque.getId(), quantidadeNoCarrinho, AlterarQuantidade.DIMINUIR));
+            estoque.alterarQuantidade(new DadosAtualizaEstoque(null, quantidadeNoCarrinho, AlterarQuantidade.ADICIONAR));
 
         });
-
-////        this.limparCarrinho();
-//    }
-
-
-//    public DadosCriacaoRecibo dadosPeloIdCliente(Long id) {
-//        var listaCarrinho = carrinhoDeComprasRepository.findByClienteId(id);
-//    }
-
-
+        carrinhoDeComprasRepository.deleteAllByClienteId(idCliente);
     }
 
     public Produto checarQuantidade(DadosCadastroCarrinho dados) {
@@ -94,6 +78,7 @@ public class FuncionalidadesDoCarrinho {
         if(estoque.getQuantidade() < 1) {
             throw new ValidacaoExeption("Produto está em Falta");
         }
+        estoque.alterarQuantidade(new DadosAtualizaEstoque(null,1, AlterarQuantidade.DIMINUIR));
         return estoque.getProduto();
     }
 }
