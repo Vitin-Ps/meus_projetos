@@ -11,13 +11,6 @@ public interface CarrinhoDeComprasRepository extends JpaRepository<CarrinhoDeCom
 
     void deleteAllByClienteId(Long idCliente);
 
-//    @Query("""
-//        SELECT COUNT(c.cliente.id) as total
-//        FROM CarrinhoDeCompras c
-//        WHERE c.cliente.id = :idCliente
-//        """)
-//    Integer somarQuantidadeProdutosByClienteId(Long idCliente);
-
     @Query("""
             SELECT
                 c.produto.id

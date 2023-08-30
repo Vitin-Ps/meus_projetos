@@ -4,7 +4,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
 public record DadosAtualizaEstoque(
-        Long id,
+        Long idProduto,
         Integer quantidade,
         AlterarQuantidade alterarQuantidade
 ) {

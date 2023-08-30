@@ -18,23 +18,21 @@ import org.springframework.web.bind.annotation.*;
 public class EstoqueController {
     @Autowired
     EstoqueRepository repository;
-    @Autowired
-    ProdutoRepository produtoRepository;
 
     @GetMapping
     public ResponseEntity<Page<DadosListagemEstoque>> listar(@PageableDefault Pageable pageable) {
-        var page = repository.findAll(pageable).map(estoque -> new DadosListagemEstoque(estoque, estoque.getProduto()));
+        var page = repository.findAll(pageable).map(DadosListagemEstoque::new);
         return ResponseEntity.ok(page);
     }
 
     @PutMapping
     @Transactional
     public ResponseEntity addQuantidade(@RequestBody @Valid DadosAtualizaEstoque dados) {
-        var estoque = repository.getReferenceById(dados.id());
-        var produto = produtoRepository.getReferenceById(estoque.getProduto().getId());
+        var estoque = repository.getReferenceByProdutoId(dados.idProduto());
+        System.out.println(estoque.getProduto().getNome());
         System.out.println("AQUI " + dados.alterarQuantidade());
         estoque.alterarQuantidade(dados);
-        return ResponseEntity.ok(new DadosListagemEstoque(estoque, produto));
+        return ResponseEntity.ok(new DadosListagemEstoque(estoque));
     }
 
 }

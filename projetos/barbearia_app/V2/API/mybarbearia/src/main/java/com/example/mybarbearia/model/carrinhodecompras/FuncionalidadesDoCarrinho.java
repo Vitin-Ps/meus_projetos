@@ -4,7 +4,6 @@ import com.example.mybarbearia.exception.ValidacaoExeption;
 import com.example.mybarbearia.model.estoque.AlterarQuantidade;
 import com.example.mybarbearia.model.estoque.DadosAtualizaEstoque;
 import com.example.mybarbearia.model.produto.Produto;
-import com.example.mybarbearia.model.recibo.DadosCriacaoRecibo;
 import com.example.mybarbearia.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,15 +56,16 @@ public class FuncionalidadesDoCarrinho {
     }
 
     public void cancelarCarrinho(Long idCliente) {
+
         var produtosSelecionados = carrinhoDeComprasRepository.produtosSelecionados(idCliente);
+        if(produtosSelecionados.isEmpty()) {
+            throw new ValidacaoExeption("Cliente não encontrado");
+        }
         produtosSelecionados.forEach(produtos -> {
-            System.out.println("produto aqeui : " + produtos);
             var quantidadeNoCarrinho = carrinhoDeComprasRepository.somarQuantidadeTotalProdutosByClienteIdAndProdutoId(idCliente, produtos);
-            System.out.println("quantidade Produto: " + quantidadeNoCarrinho);
-
             var estoque = estoqueRepository.getReferenceByProdutoId(produtos);
+            System.out.println(quantidadeNoCarrinho);
             estoque.alterarQuantidade(new DadosAtualizaEstoque(null, quantidadeNoCarrinho, AlterarQuantidade.ADICIONAR));
-
         });
         carrinhoDeComprasRepository.deleteAllByClienteId(idCliente);
     }
