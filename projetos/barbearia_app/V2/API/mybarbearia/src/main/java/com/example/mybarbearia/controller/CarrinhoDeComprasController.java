@@ -23,10 +23,10 @@ public class CarrinhoDeComprasController {
         return ResponseEntity.ok().build();
     }
 
-//    @DeleteMapping("/{id}")
-//    @Transactional
-//    public ResponseEntity deletar(@PathVariable Long id) {
-//        fCarrinho.finalizarCarrinho(id);
-//        return ResponseEntity.ok("Carrinho limpo");
-//    }
+    @GetMapping("/{id}")
+    @Transactional
+    public ResponseEntity deletar(@PathVariable Long id) {
+        fCarrinho.finalizarCarrinho(id);
+        return ResponseEntity.ok("Carrinho limpo");
+    }
 }

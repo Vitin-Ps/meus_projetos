@@ -62,15 +62,17 @@ public class FuncionalidadesDoCarrinho {
     }
 
     public void finalizarCarrinho(Long idCliente) {
-//        var quantidade = carrinhoDeComprasRepository.somarQuantidadeProdutosByClienteId(dados.idCliente());
-//        var estoque = estoqueRepository.getReferenceByProdutoId(dados.idProduto());
-//        estoque.alterarQuantidade(new DadosAtualizaEstoque(estoque.getId(), quantidade, AlterarQuantidade.DIMINUIR));
+//
 
         var produtosSelecionados = carrinhoDeComprasRepository.produtosSelecionados(idCliente);
         produtosSelecionados.forEach(produtos -> {
             System.out.println("produto aqeui : " + produtos);
             var quantidadeNoCarrinho = carrinhoDeComprasRepository.somarQuantidadeTotalProdutosByClienteIdAndProdutoId(idCliente, produtos);
             System.out.println("quantidade Produto: " + quantidadeNoCarrinho);
+
+            var estoque = estoqueRepository.getReferenceByProdutoId(produtos);
+            estoque.alterarQuantidade(new DadosAtualizaEstoque(estoque.getId(), quantidadeNoCarrinho, AlterarQuantidade.DIMINUIR));
+
         });
 
 ////        this.limparCarrinho();
@@ -80,4 +82,18 @@ public class FuncionalidadesDoCarrinho {
 //    public DadosCriacaoRecibo dadosPeloIdCliente(Long id) {
 //        var listaCarrinho = carrinhoDeComprasRepository.findByClienteId(id);
 //    }
+
+
+    }
+
+    public Produto checarQuantidade(DadosCadastroCarrinho dados) {
+        if(dados.idProduto() == null) {
+            return null;
+        }
+        var estoque = estoqueRepository.getReferenceByProdutoId(dados.idProduto());
+        if(estoque.getQuantidade() < 1) {
+            throw new ValidacaoExeption("Produto está em Falta");
+        }
+        return estoque.getProduto();
+    }
 }
