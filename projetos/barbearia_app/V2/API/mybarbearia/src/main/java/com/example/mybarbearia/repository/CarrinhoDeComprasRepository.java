@@ -1,7 +1,8 @@
 package com.example.mybarbearia.repository;
 
 import com.example.mybarbearia.model.carrinhodecompras.CarrinhoDeCompras;
-import com.example.mybarbearia.model.carrinhodecompras.DadosDetalhamentoCarrinho;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -31,4 +32,9 @@ public interface CarrinhoDeComprasRepository extends JpaRepository<CarrinhoDeCom
 Integer somarQuantidadeTotalProdutosByClienteIdAndProdutoId(Long idCliente, Long idProduto);
 
     CarrinhoDeCompras getReferenceByClienteId(Long idCliente);
+
+    Page<CarrinhoDeCompras> findByClienteId(Long id, Pageable pageable);
+
+    CarrinhoDeCompras findFirstByClienteIdAndProdutoId(Long idCliente, Long idProduto);
+    CarrinhoDeCompras findFirstByClienteIdAndServicoId(Long idCliente, Long idServico);
 }
