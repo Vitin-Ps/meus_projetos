@@ -55,55 +55,56 @@ public class FuncionalidadesDoCarrinho {
         return new DadosDetalhamentoCarrinho(carrinho);
     }
 
-    public void cancelarCarrinho(Long idCliente) {
-
-        var produtosSelecionados = carrinhoDeComprasRepository.produtosSelecionados(idCliente);
-        System.out.println("chegou1");
-        if(produtosSelecionados.isEmpty()) {
-            throw new ValidacaoExeption("Cliente não encontrado");
+    public void cancelarCarrinho(Long idCliente) { // essa função devolve os itens para o estoque e apaga o carrinho
+        if(idCliente == null || !carrinhoDeComprasRepository.existsByClienteId(idCliente)) {
+            throw new RuntimeException("Seu carrinho está Vazio");
         }
-        System.out.println(produtosSelecionados);
-        System.out.println("chegou2");
-        produtosSelecionados.forEach(produtos -> {
+        var produtosSelecionados = carrinhoDeComprasRepository.produtosSelecionados(idCliente); // coleta od id dos produtos selecionados
+        produtosSelecionados.forEach(produtos -> { // vai realizar o código baseado em cada id de produto
             if (produtos == null) {
-                return;
+                return; // para o looping
             }
+            // faz uma soma de quantos dados com i mesmo id de produto tem
             var quantidadeNoCarrinho = carrinhoDeComprasRepository.somarQuantidadeTotalProdutosByClienteIdAndProdutoId(idCliente, produtos);
+            //chama o estoque baseado no id de produto do lopping
             var estoque = estoqueRepository.getReferenceByProdutoId(produtos);
-            System.out.println(quantidadeNoCarrinho);
+            // pega a quantidade que tem no carrinho e adiciona de novo no estoque
             estoque.alterarQuantidade(new DadosAtualizaEstoque(null, quantidadeNoCarrinho, AlterarQuantidade.ADICIONAR));
         });
+        // deletar todos os dados do carrinho baseado no id do cliente
         carrinhoDeComprasRepository.deleteAllByClienteId(idCliente);
     }
 
-    public Produto retirarEstoque(DadosCadastroCarrinho dados) {
+    public Produto retirarEstoque(DadosCadastroCarrinho dados) { // vai diminuir a quantidade do produto na tabela
         if(dados.idProduto() == null) {
             return null;
         }
-        var estoque = estoqueRepository.getReferenceByProdutoId(dados.idProduto());
-        if(estoque.getQuantidade() < 1) {
+        var estoque = estoqueRepository.getReferenceByProdutoId(dados.idProduto()); // idantifica o estoque baseado no id do produto
+        if(estoque.getQuantidade() < 1) { // se quantidade do estoque for menor que 1
             throw new ValidacaoExeption("Produto está em Falta");
         }
+        // diminuir a quantidade do estoque
         estoque.alterarQuantidade(new DadosAtualizaEstoque(null,1, AlterarQuantidade.DIMINUIR));
+        // retorna o produto
         return estoque.getProduto();
     }
 
-    public void retirarCarrinho(DadosCadastroCarrinho dados) {
+    public void retirarCarrinho(DadosCadastroCarrinho dados) { // apada item do carrinho e devolve item para o estoque
         if(dados.idCliente() != null) {
             if(dados.idProduto() != null) {
-                System.out.println("deucerto " + dados.idCliente() + dados.idProduto());
-               var carrinho =  carrinhoDeComprasRepository.findFirstByClienteIdAndProdutoId(dados.idCliente(),dados.idProduto());
-                carrinhoDeComprasRepository.deleteById(carrinho.getId());
+                // vai pergar o primeiro resultado da consulta com o id cliente e o id produto
+                var carrinho =  carrinhoDeComprasRepository.findFirstByClienteIdAndProdutoId(dados.idCliente(),dados.idProduto());
+               // deleta o dado
+               carrinhoDeComprasRepository.deleteById(carrinho.getId());
                 var estoque = estoqueRepository.getReferenceByProdutoId(dados.idProduto());
+                // devolve o item para o estoque
                 estoque.alterarQuantidade(new DadosAtualizaEstoque(null, 1, AlterarQuantidade.ADICIONAR));
             }
             if(dados.idServico() != null) {
-                System.out.println("intrometido");
+                // faz o mesmo com o serviço
                 var carrinho = carrinhoDeComprasRepository.findFirstByClienteIdAndServicoId(dados.idCliente(), dados.idServico());
                 carrinhoDeComprasRepository.deleteById(carrinho.getId());
             }
-
-
         }
     }
 }
