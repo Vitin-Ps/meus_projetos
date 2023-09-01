@@ -78,7 +78,7 @@ public class FuncionalidadesDoCarrinho {
                    var produto =  produtoRepository.getReferenceByIdAndAtivoTrue(p);
                    var preco = produto.getPreco().multiply(new BigDecimal(quantidade));
 
-                   var recibo = new DadosCadastroRecibo(p, null, quantidade, preco);
+                   var recibo = new DadosCadastroRecibo(p, null, quantidade, null, preco);
                    System.out.println("produtos " + recibo);
                    listaRecibos.add(recibo);
                }
@@ -92,7 +92,7 @@ public class FuncionalidadesDoCarrinho {
                    var servico = servicoRepository.getReferenceByIdAndAtivoTrue(s);
                    var preco = servico.getPreco().multiply(new BigDecimal(quantidade));
 
-                   var recibo = new DadosCadastroRecibo(null, s, quantidade, preco);
+                   var recibo = new DadosCadastroRecibo(null, s, quantidade, null, preco);
                    System.out.println("servicos " + recibo);
                    listaRecibos.add(recibo);
                }

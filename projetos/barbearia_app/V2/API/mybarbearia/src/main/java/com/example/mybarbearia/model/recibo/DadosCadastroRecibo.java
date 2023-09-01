@@ -11,6 +11,7 @@ public record DadosCadastroRecibo(
         Long produto,
         Long servico,
         Integer quantidade,
+        String duracao,
         BigDecimal preco
 
 ) {
