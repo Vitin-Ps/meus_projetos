@@ -4,6 +4,7 @@ public record DadosAtualizaFuncionario(
         Long id,
         String nome,
         String email,
-        String telefone
+        String telefone,
+        Cargo cargo
 ) {
 }

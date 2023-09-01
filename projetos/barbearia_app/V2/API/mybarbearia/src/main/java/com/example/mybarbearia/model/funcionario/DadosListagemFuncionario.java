@@ -5,9 +5,10 @@ public record DadosListagemFuncionario(
         String nome,
         String email,
         String cpf,
-        String telefone
+        String telefone,
+        Cargo cargo
 ) {
     public DadosListagemFuncionario(Funcionario funcionario) {
-        this(funcionario.getId(), funcionario.getNome(), funcionario.getEmail(), funcionario.getCpf(), funcionario.getTelefone());
+        this(funcionario.getId(), funcionario.getNome(), funcionario.getEmail(), funcionario.getCpf(), funcionario.getTelefone(), funcionario.getCargo());
     }
 }

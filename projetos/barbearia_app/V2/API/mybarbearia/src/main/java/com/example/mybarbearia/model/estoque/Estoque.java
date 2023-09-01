@@ -1,6 +1,5 @@
 package com.example.mybarbearia.model.estoque;
 
-import com.example.mybarbearia.exception.ValidacaoExeption;
 import com.example.mybarbearia.model.produto.Produto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

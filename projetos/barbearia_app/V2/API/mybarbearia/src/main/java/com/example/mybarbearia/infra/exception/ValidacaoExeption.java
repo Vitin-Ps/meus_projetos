@@ -1,4 +1,4 @@
-package com.example.mybarbearia.exception;
+package com.example.mybarbearia.infra.exception;
 
 public class ValidacaoExeption extends RuntimeException {
     public ValidacaoExeption(String message) {

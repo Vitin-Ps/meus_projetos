@@ -1,6 +1,6 @@
 package com.example.mybarbearia.model.carrinhodecompras;
 
-import com.example.mybarbearia.exception.ValidacaoExeption;
+import com.example.mybarbearia.infra.exception.ValidacaoExeption;
 import com.example.mybarbearia.model.carrinhodecompras.validacoes.ValidaCarrinhoComItem;
 import com.example.mybarbearia.model.carrinhodecompras.validacoes.ValidaItemNoEstoque;
 import com.example.mybarbearia.model.carrinhodecompras.validacoes.ValidadorFuncionalidadeCarrinhoDeCompras;

@@ -16,6 +16,8 @@ public record DadosCadastroFuncionario(
         String cpf,
         @NotBlank(message = "Telefone {dados.obrigatorio}")
         String telefone,
+        @NotNull(message = "Cargo {dados.obrigatorio}")
+        Cargo cargo,
         @NotNull(message = "Endereço {dados.obrigatorio}")
         @Valid
         DadosEndereco endereco

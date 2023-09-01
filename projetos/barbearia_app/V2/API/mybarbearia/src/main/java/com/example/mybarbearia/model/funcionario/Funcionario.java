@@ -21,6 +21,8 @@ public class Funcionario {
     private String email;
     private String cpf;
     private String telefone;
+    @Enumerated(EnumType.STRING)
+    private Cargo cargo;
     @Embedded
     private Endereco endereco;
     private Boolean ativo;
@@ -30,6 +32,7 @@ public class Funcionario {
         this.email = dados.email();
         this.cpf = dados.cpf();
         this.telefone = dados.telefone();
+        this.cargo = dados.cargo();
         this.endereco = new Endereco(dados.endereco());
         this.ativo = true;
     }
@@ -43,6 +46,9 @@ public class Funcionario {
         }
         if(dados.telefone() != null) {
             this.telefone = dados.telefone();
+        }
+        if(dados.cargo() != null) {
+            this.cargo = dados.cargo();
         }
     }
 
