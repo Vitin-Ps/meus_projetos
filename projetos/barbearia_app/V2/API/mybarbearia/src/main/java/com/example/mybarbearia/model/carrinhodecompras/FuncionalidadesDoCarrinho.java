@@ -1,12 +1,14 @@
 package com.example.mybarbearia.model.carrinhodecompras;
 
 import com.example.mybarbearia.infra.exception.ValidacaoExeption;
+import com.example.mybarbearia.model.atendimento.Atendimento;
 import com.example.mybarbearia.model.carrinhodecompras.validacoes.ValidaCarrinhoComItem;
 import com.example.mybarbearia.model.carrinhodecompras.validacoes.ValidaItemNoEstoque;
 import com.example.mybarbearia.model.carrinhodecompras.validacoes.ValidadorFuncionalidadeCarrinhoDeCompras;
 import com.example.mybarbearia.model.estoque.AlterarQuantidade;
 import com.example.mybarbearia.model.estoque.DadosAtualizaEstoque;
 import com.example.mybarbearia.model.produto.Produto;
+import com.example.mybarbearia.model.recibo.DadosCadastroRecibo;
 import com.example.mybarbearia.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -59,6 +62,51 @@ public class FuncionalidadesDoCarrinho {
         carrinhoDeComprasRepository.save(carrinho);
         return new DadosDetalhamentoCarrinho(carrinho);
     }
+
+    public List<DadosCadastroRecibo> finalizarPedido(Long idCliente) {
+        validadorCarrinho.forEach(validador -> validador.checar(new DadosCadastroCarrinho(idCliente, null, null)));
+
+
+        List<DadosCadastroRecibo> listaRecibos = new ArrayList<>();
+
+        var produtos = carrinhoDeComprasRepository.produtosSelecionados(1L);
+            System.out.println("Valos la: " + produtos);
+            produtos.forEach(p -> {
+               if(p != null) {
+                   System.out.println("Produtos: " + p);
+                   var quantidade = carrinhoDeComprasRepository.somarQuantidadeTotalProdutosByClienteIdAndProdutoId(idCliente, p);
+                   var produto =  produtoRepository.getReferenceByIdAndAtivoTrue(p);
+                   var preco = produto.getPreco().multiply(new BigDecimal(quantidade));
+
+                   var recibo = new DadosCadastroRecibo(p, null, quantidade, preco);
+                   System.out.println("produtos " + recibo);
+                   listaRecibos.add(recibo);
+               }
+            });
+
+        var servicos = carrinhoDeComprasRepository.servicosSelecionados(idCliente);
+            System.out.println("Vamos la 2: " + servicos);
+            servicos.forEach(s -> {
+               if(s != null) {
+                   var quantidade = carrinhoDeComprasRepository.somarQuantidadeTotalServicosByClienteIdAndServicoId(idCliente, s);
+                   var servico = servicoRepository.getReferenceByIdAndAtivoTrue(s);
+                   var preco = servico.getPreco().multiply(new BigDecimal(quantidade));
+
+                   var recibo = new DadosCadastroRecibo(null, s, quantidade, preco);
+                   System.out.println("servicos " + recibo);
+                   listaRecibos.add(recibo);
+               }
+            });
+
+
+
+        System.out.println("lista Completa " + listaRecibos);
+
+//        this.cancelarCarrinho(idCliente);
+
+        return listaRecibos;
+    }
+
 
     public Page<DadosListagemCarrinho> detalharCarrinho(Long idCliente, Pageable pageable) {
         validadorCarrinho.forEach(validador -> validador.checar(new DadosCadastroCarrinho(idCliente, null, null)));

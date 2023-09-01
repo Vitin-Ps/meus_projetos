@@ -24,16 +24,35 @@ public interface CarrinhoDeComprasRepository extends JpaRepository<CarrinhoDeCom
             """)
     List<Long> produtosSelecionados(Long idCliente);
 
-@Query("""
-    SELECT COUNT(c.produto.id)
-    FROM CarrinhoDeCompras c
-    WHERE c.cliente.id = :idCliente AND c.produto.id = :idProduto
-""")
+    @Query("""
+            SELECT
+                c.servico.id
+            FROM
+                CarrinhoDeCompras c
+            WHERE
+                c.cliente.id = :idCliente
+            GROUP BY
+                c.servico.id
+            """)
+    List<Long> servicosSelecionados(Long idCliente);
+
+    @Query("""
+        SELECT COUNT(c.produto.id)
+        FROM CarrinhoDeCompras c
+        WHERE c.cliente.id = :idCliente AND c.produto.id = :idProduto
+    """)
 Integer somarQuantidadeTotalProdutosByClienteIdAndProdutoId(Long idCliente, Long idProduto);
+        @Query("""
+        SELECT COUNT(c.servico.id)
+        FROM CarrinhoDeCompras c
+        WHERE c.cliente.id = :idCliente AND c.servico.id = :idServico
+    """)
+Integer somarQuantidadeTotalServicosByClienteIdAndServicoId(Long idCliente, Long idServico);
 
     CarrinhoDeCompras getReferenceByClienteId(Long idCliente);
 
     Page<CarrinhoDeCompras> findByClienteId(Long id, Pageable pageable);
+    List<CarrinhoDeCompras> findAllByClienteId(Long id);
 
     CarrinhoDeCompras findFirstByClienteIdAndProdutoId(Long idCliente, Long idProduto);
     CarrinhoDeCompras findFirstByClienteIdAndServicoId(Long idCliente, Long idServico);
