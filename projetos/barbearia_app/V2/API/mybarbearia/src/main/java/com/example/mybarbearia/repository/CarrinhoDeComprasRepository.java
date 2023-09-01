@@ -39,4 +39,8 @@ Integer somarQuantidadeTotalProdutosByClienteIdAndProdutoId(Long idCliente, Long
     CarrinhoDeCompras findFirstByClienteIdAndServicoId(Long idCliente, Long idServico);
 
     boolean existsByClienteId(Long idCliente);
+
+    boolean existsByClienteIdAndProdutoId(Long idCliente, Long idProduto);
+
+    boolean existsByClienteIdAndServicoId(Long idCliente, Long idServico);
 }

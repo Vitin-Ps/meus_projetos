@@ -9,4 +9,6 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
     Page<Cliente> findByAtivoTrue(Pageable pageable);
 
     Cliente getReferenceByIdAndAtivoTrue(Long id);
+
+    boolean existsByIdAndAtivoTrue(Long idCliente);
 }

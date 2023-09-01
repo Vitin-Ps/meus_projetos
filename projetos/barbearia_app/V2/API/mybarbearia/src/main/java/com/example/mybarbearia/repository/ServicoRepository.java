@@ -9,4 +9,6 @@ public interface ServicoRepository extends JpaRepository<Servico, Long> {
     Page<Servico> findByAtivoTrue(Pageable pageable);
 
     Servico getReferenceByIdAndAtivoTrue(Long id);
+
+    boolean existsByIdAndAtivoTrue(Long idServico);
 }

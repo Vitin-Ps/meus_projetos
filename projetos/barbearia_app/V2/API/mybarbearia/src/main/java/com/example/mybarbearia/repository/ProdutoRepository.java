@@ -10,4 +10,6 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
     Page<Produto> findAllByAtivoTrue(Pageable pageable);
 
     Produto getReferenceByIdAndAtivoTrue(Long id);
+
+    boolean existsByIdAndAtivoTrue(Long idProduto);
 }
