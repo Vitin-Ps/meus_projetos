@@ -1,6 +1,7 @@
 package com.example.mybarbearia.model.carrinhodecompras;
 
 import com.example.mybarbearia.infra.exception.ValidacaoExeption;
+import com.example.mybarbearia.infra.services.StringEmMinutos;
 import com.example.mybarbearia.model.atendimento.Atendimento;
 import com.example.mybarbearia.model.carrinhodecompras.validacoes.ValidaCarrinhoComItem;
 import com.example.mybarbearia.model.carrinhodecompras.validacoes.ValidaItemNoEstoque;
@@ -91,8 +92,16 @@ public class FuncionalidadesDoCarrinho {
                    var quantidade = carrinhoDeComprasRepository.somarQuantidadeTotalServicosByClienteIdAndServicoId(idCliente, s);
                    var servico = servicoRepository.getReferenceByIdAndAtivoTrue(s);
                    var preco = servico.getPreco().multiply(new BigDecimal(quantidade));
+                   List<String> duracoes = new ArrayList<>();
+                   for(int i = 0; i <= quantidade; i++) {
+                       System.out.println(i);
+                       duracoes.add(servico.getDuracao());
+                   }
+                   System.out.println(duracoes);
+                   var date = StringEmMinutos.duracaoTotal(duracoes);
 
-                   var recibo = new DadosCadastroRecibo(null, s, quantidade, null, preco);
+
+                   var recibo = new DadosCadastroRecibo(null, s, quantidade, StringEmMinutos.converterDateParaString(date), preco);
                    System.out.println("servicos " + recibo);
                    listaRecibos.add(recibo);
                }

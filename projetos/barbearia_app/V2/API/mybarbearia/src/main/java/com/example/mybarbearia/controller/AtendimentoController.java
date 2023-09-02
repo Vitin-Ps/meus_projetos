@@ -1,5 +1,6 @@
 package com.example.mybarbearia.controller;
 
+import com.example.mybarbearia.infra.services.StringEmMinutos;
 import com.example.mybarbearia.model.atendimento.AtendimentoService;
 import com.example.mybarbearia.model.atendimento.DadosAgendamentoAtendimento;
 import jakarta.transaction.Transactional;
