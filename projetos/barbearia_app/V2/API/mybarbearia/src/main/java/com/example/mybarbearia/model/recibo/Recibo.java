@@ -25,7 +25,7 @@ public class Recibo {
     @JoinColumn(name = "id_atendimento")
     private Atendimento atendimento;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "is_produto")
+    @JoinColumn(name = "id_produto")
     private Produto produto;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_servico")

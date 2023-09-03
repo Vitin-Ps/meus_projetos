@@ -19,11 +19,21 @@ public class StringEmMinutos {
         int segundos = 0;
 
         for (String duracao : listaDuracao) {
-            String[] partes = duracao.split(":");
-            minutos += Integer.parseInt(partes[0]);
-            segundos += Integer.parseInt(partes[1]);
+            if(duracao != null) {
+                String[] partes = duracao.split(":");
+                if(partes.length > 2) {
+                    horas += Integer.parseInt(partes[0]);
+                    minutos += Integer.parseInt(partes[1]);
+                    segundos += Integer.parseInt(partes[2]);
+                } else {
+                    minutos += Integer.parseInt(partes[0]);
+                    segundos += Integer.parseInt(partes[1]);
+                }
+
+            }
+
         }
-        int segundosTotais = segundos + (minutos * 60);
+        int segundosTotais = segundos + (minutos * 60) + (horas * 3600);
         horas = segundosTotais / 3600;
         minutos = (segundosTotais % 3600) / 60;
         segundos = (segundosTotais % 60) % 60;

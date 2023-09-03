@@ -2,11 +2,11 @@ package com.example.mybarbearia.model.recibo;
 
 import com.example.mybarbearia.model.atendimento.Atendimento;
 import com.example.mybarbearia.model.carrinhodecompras.FuncionalidadesDoCarrinho;
-import com.example.mybarbearia.repository.CarrinhoDeComprasRepository;
 import com.example.mybarbearia.repository.ReciboRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,18 +16,24 @@ public class ReciboService {
     @Autowired
     FuncionalidadesDoCarrinho fCarrinho;
 
-    public List<Recibo> gerarRecibo(Long atendimento) {
+    public List<DadosDetalhamentoRecibo> gerarRecibo(Atendimento atendimento) {
 
-        fCarrinho.finalizarPedido(atendimento);
+        var recibos = fCarrinho.finalizarPedido(atendimento.getCliente().getId());
+        List<DadosDetalhamentoRecibo> itensDoRecibo = new ArrayList<>();
 
-//        var listaCarrinho = fCarrinho.finalizarPedido(atendimento.getCliente().getId());
-////        listaCarrinho.forEach(lista -> {
-////            if(lista.getProduto() != null) {
-////                var recibo = new Recibo(null, atendimento, lista.getProduto(), null, list., null);
-////            }
-////
-////        });
+        recibos.forEach(r -> {
+            if(r.produto() != null) {
+                var recibo = new Recibo(null, atendimento, r.produto(), null, r.quantidade(), r.preco());
+                reciboRepository.save(recibo);
+                itensDoRecibo.add(new DadosDetalhamentoRecibo(recibo, null));
+            }
+            if(r.servico() != null) {
+                var recibo = new Recibo(null, atendimento, null, r.servico(), r.quantidade(), r.preco());
+                reciboRepository.save(recibo);
+                itensDoRecibo.add(new DadosDetalhamentoRecibo(recibo, r.duracao()));
+            }
+        });
 
-        return null;
+        return itensDoRecibo;
     }
 }

@@ -30,4 +30,9 @@ public class Atendimento {
     private LocalDateTime data;
     private String duracao;
     private BigDecimal precoTotal;
+
+    public void addPrecoEDuracao(String duracao, BigDecimal preco) {
+        this.precoTotal = preco;
+        this.duracao = duracao;
+    }
 }
