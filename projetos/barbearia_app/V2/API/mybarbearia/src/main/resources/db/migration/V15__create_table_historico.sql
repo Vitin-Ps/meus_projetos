@@ -1,13 +1,10 @@
-CREATE TABLE recibo (
+CREATE TABLE historico (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     id_atendimento BIGINT NOT NULL,
-    id_produto BIGINT NULL,
-    id_servico BIGINT NULL,
-    quantidade INT NOT NULL,
-    preco DECIMAL(10, 2) NOT NULL,
+    id_funcionario BIGINT NULL,
+    valor_total DECIMAL(10, 2) NULL,
+    comissao DECIMAL(10, 2) NULL,
 
-    CONSTRAINT fk_atendimento_recibo_id FOREIGN KEY(id_atendimento) REFERENCES atendimento(id) ON DELETE CASCADE,
-    CONSTRAINT fk_produto_recibo_id FOREIGN KEY(id_produto) REFERENCES produto(id) ON DELETE CASCADE,
-    CONSTRAINT fk_servico_recibo_id FOREIGN KEY(id_servico) REFERENCES servico(id) ON DELETE CASCADE
+    CONSTRAINT fk_funcionario_historico FOREIGN KEY(id_funcionario) REFERENCES funcionario(id) ON DELETE CASCADE,
+    CONSTRAINT fk_atendimento_historico FOREIGN KEY(id_atendimento) REFERENCES atendimento(id) ON DELETE CASCADE
 );
-

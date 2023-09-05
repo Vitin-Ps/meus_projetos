@@ -25,6 +25,7 @@ public class Funcionario {
     private Cargo cargo;
     @Embedded
     private Endereco endereco;
+    private Integer porcentagemComissao;
     private Boolean ativo;
 
     public Funcionario(DadosCadastroFuncionario dados) {
@@ -33,6 +34,7 @@ public class Funcionario {
         this.cpf = dados.cpf();
         this.telefone = dados.telefone();
         this.cargo = dados.cargo();
+        this.porcentagemComissao = dados.porcentagemComissao();
         this.endereco = new Endereco(dados.endereco());
         this.ativo = true;
     }
@@ -49,6 +51,9 @@ public class Funcionario {
         }
         if(dados.cargo() != null) {
             this.cargo = dados.cargo();
+        }
+        if(dados.porcentagemComissao() != null) {
+            this.porcentagemComissao = dados.porcentagemComissao();
         }
     }
 

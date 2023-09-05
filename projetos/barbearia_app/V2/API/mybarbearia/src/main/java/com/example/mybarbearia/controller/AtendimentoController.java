@@ -3,9 +3,12 @@ package com.example.mybarbearia.controller;
 import com.example.mybarbearia.infra.services.StringEmMinutos;
 import com.example.mybarbearia.model.atendimento.AtendimentoService;
 import com.example.mybarbearia.model.atendimento.DadosAgendamentoAtendimento;
+import com.example.mybarbearia.model.atendimento.DadosAtualizaAtendimento;
+import com.example.mybarbearia.model.atendimento.DadosListagemAgendamento;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +20,7 @@ import java.util.List;
 @RequestMapping("/atendimento")
 public class AtendimentoController {
     @Autowired
-    AtendimentoService atendimento;
+    AtendimentoService atendimento; // classe onde toda lógica sera realizada
 
     @PostMapping
     @Transactional
@@ -26,6 +29,12 @@ public class AtendimentoController {
         return ResponseEntity.ok(atendimentoDados);
     }
 
+    @PutMapping
+    @Transactional
+    public ResponseEntity alterarAtendimento(@RequestBody @Valid DadosAtualizaAtendimento dados) {
+        var atendimentoDados= atendimento.atualizarDados(dados);
+        return ResponseEntity.ok().build();
+    }
     @GetMapping("/teste")
     @Transactional
     public ResponseEntity teste() {

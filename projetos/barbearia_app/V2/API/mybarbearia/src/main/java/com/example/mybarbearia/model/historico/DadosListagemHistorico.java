@@ -1,2 +1,6 @@
-package com.example.mybarbearia.model.historico;public record DadosListagemHistorico() {
-}
+//package com.example.mybarbearia.model.historico;
+//
+//public record DadosListagemHistorico(
+//
+//) {
+//}

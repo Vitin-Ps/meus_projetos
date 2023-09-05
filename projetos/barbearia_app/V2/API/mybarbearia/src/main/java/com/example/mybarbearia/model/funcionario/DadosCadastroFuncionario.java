@@ -18,6 +18,8 @@ public record DadosCadastroFuncionario(
         String telefone,
         @NotNull(message = "Cargo {dados.obrigatorio}")
         Cargo cargo,
+        @NotNull(message = "Porcentagem {dados.obrigatorio}")
+        Integer porcentagemComissao,
         @NotNull(message = "Endereço {dados.obrigatorio}")
         @Valid
         DadosEndereco endereco

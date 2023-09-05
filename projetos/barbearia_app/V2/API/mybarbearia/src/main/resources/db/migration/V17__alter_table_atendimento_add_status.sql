@@ -1,1 +1,1 @@
-ALTER TABLE funcionario ADD porcentagem_comissao INT;
+ALTER TABLE atendimento ADD status VARCHAR(15) NULL;

@@ -5,6 +5,7 @@ public record DadosAtualizaFuncionario(
         String nome,
         String email,
         String telefone,
-        Cargo cargo
+        Cargo cargo,
+        Integer porcentagemComissao
 ) {
 }

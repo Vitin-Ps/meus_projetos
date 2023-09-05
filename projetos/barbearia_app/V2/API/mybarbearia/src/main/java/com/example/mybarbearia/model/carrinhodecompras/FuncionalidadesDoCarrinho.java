@@ -67,41 +67,31 @@ public class FuncionalidadesDoCarrinho {
     public List<DadosCadastroRecibo> finalizarPedido(Long idCliente) {
         validadorCarrinho.forEach(validador -> validador.checar(new DadosCadastroCarrinho(idCliente, null, null)));
 
-
         List<DadosCadastroRecibo> listaRecibos = new ArrayList<>();
 
-        var produtos = carrinhoDeComprasRepository.produtosSelecionados(1L);
-            System.out.println("Valos la: " + produtos);
-            produtos.forEach(p -> {
-               if(p != null) {
-                   System.out.println("Produtos: " + p);
-                   var quantidade = carrinhoDeComprasRepository.somarQuantidadeTotalProdutosByClienteIdAndProdutoId(idCliente, p);
-                   System.out.println("teste5 " + quantidade);
+        var produtos = carrinhoDeComprasRepository.produtosSelecionados(idCliente); // separa os produtos diferentes que clinete selecionou
+            produtos.forEach(p -> { // looping
+               if(p != null) { // se for differente de null
+                   var quantidade = carrinhoDeComprasRepository.somarQuantidadeTotalProdutosByClienteIdAndProdutoId(idCliente, p); // faz um count dos dados baseado no id do produto e no id do cliente
                    var produto =  produtoRepository.getReferenceByIdAndAtivoTrue(p);
-                   var preco = produto.getPreco().multiply(new BigDecimal(quantidade));
+                   var preco = produto.getPreco().multiply(new BigDecimal(quantidade)); // pega a quantidade e multiploca pelo preço do produto
 
-                   var recibo = new DadosCadastroRecibo(produto, null, quantidade, null, preco);
-                   System.out.println("produtos " + recibo);
-                   listaRecibos.add(recibo);
+                   var recibo = new DadosCadastroRecibo(produto, null, quantidade, null, preco); // cria um ovo objeto recibo
+                   listaRecibos.add(recibo); // adiciona na lista que vai ser mandada como retorno
                }
             });
 
-        var servicos = carrinhoDeComprasRepository.servicosSelecionados(idCliente);
-            System.out.println("Vamos la 2: " + servicos);
+        var servicos = carrinhoDeComprasRepository.servicosSelecionados(idCliente); // mesam coisa so que com os servicos
             servicos.forEach(s -> {
                if(s != null) {
-                   System.out.println(s);
                    var quantidade = carrinhoDeComprasRepository.somarQuantidadeTotalServicosByClienteIdAndServicoId(idCliente, s);
-                   System.out.println("teste6 " + quantidade);
                    var servico = servicoRepository.getReferenceByIdAndAtivoTrue(s);
                    var preco = servico.getPreco().multiply(new BigDecimal(quantidade));
                    List<String> duracoes = new ArrayList<>();
                    for(int i = 0; i < quantidade; i++) {
-                       System.out.println(i);
-                       duracoes.add(servico.getDuracao());
+                       duracoes.add(servico.getDuracao()); // adiciona a duração dos serviços no list String
                    }
-                   System.out.println(duracoes);
-                   var date = StringEmMinutos.duracaoTotal(duracoes);
+                   var date = StringEmMinutos.duracaoTotal(duracoes); // faz o metodo para calcular as durações e retorna um date
 
 
                    var recibo = new DadosCadastroRecibo(null, servico, quantidade, StringEmMinutos.converterDateParaString(date), preco);
