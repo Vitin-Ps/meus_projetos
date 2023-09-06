@@ -1,4 +1,4 @@
-package com.example.mybarbearia.infra.services;
+package com.example.mybarbearia.services;
 
 import org.springframework.stereotype.Component;
 

@@ -12,8 +12,7 @@ public class ValidaCarrinhoComItem implements ValidadorFuncionalidadeCarrinhoDeC
     CarrinhoDeComprasRepository carrinhoDeComprasRepository;
     @Override
     public void checar(DadosCadastroCarrinho dados) {
-        if(dados.idCliente() != null && !carrinhoDeComprasRepository.existsByClienteId(dados.idCliente())) {
-            System.out.println("ENTROU");
+        if(dados.idCliente() != null && !carrinhoDeComprasRepository.existsByClienteId(dados.idCliente())) { //se o id for diferente de null e não existir no db
             throw new ValidacaoExeption("Seu Carrinho está vazio");
         }
     }

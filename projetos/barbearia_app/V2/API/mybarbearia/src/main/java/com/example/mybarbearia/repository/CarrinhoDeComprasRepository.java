@@ -22,7 +22,7 @@ public interface CarrinhoDeComprasRepository extends JpaRepository<CarrinhoDeCom
             GROUP BY
                 c.produto.id
             """)
-    List<Long> produtosSelecionados(Long idCliente);
+    List<Long> produtosSelecionados(Long idCliente); // mostra os ids diferentes dos produtos que o cliente selecionou
 
     @Query("""
             SELECT
@@ -41,7 +41,7 @@ public interface CarrinhoDeComprasRepository extends JpaRepository<CarrinhoDeCom
         FROM CarrinhoDeCompras c
         WHERE c.cliente.id = :idCliente AND c.produto.id = :idProduto
     """)
-Integer somarQuantidadeTotalProdutosByClienteIdAndProdutoId(Long idCliente, Long idProduto);
+Integer somarQuantidadeTotalProdutosByClienteIdAndProdutoId(Long idCliente, Long idProduto); // faz um count(soma) dos dados que tenham o id do cliente e do produto conforma os parametros passados
         @Query("""
         SELECT COUNT(c.servico.id)
         FROM CarrinhoDeCompras c
@@ -49,17 +49,14 @@ Integer somarQuantidadeTotalProdutosByClienteIdAndProdutoId(Long idCliente, Long
     """)
 Integer somarQuantidadeTotalServicosByClienteIdAndServicoId(Long idCliente, Long idServico);
 
-    CarrinhoDeCompras getReferenceByClienteId(Long idCliente);
+    Page<CarrinhoDeCompras> findByClienteId(Long id, Pageable pageable); // devolve uma lista dos dados que tenham o id cliente conforme os parametros
 
-    Page<CarrinhoDeCompras> findByClienteId(Long id, Pageable pageable);
-    List<CarrinhoDeCompras> findAllByClienteId(Long id);
-
-    CarrinhoDeCompras findFirstByClienteIdAndProdutoId(Long idCliente, Long idProduto);
+    CarrinhoDeCompras findFirstByClienteIdAndProdutoId(Long idCliente, Long idProduto); // paega o primeiro resultado da consulta de dados com o id cliente e id produto especificados
     CarrinhoDeCompras findFirstByClienteIdAndServicoId(Long idCliente, Long idServico);
 
-    boolean existsByClienteId(Long idCliente);
+    boolean existsByClienteId(Long idCliente); // se existe algum dado com o id Cliente especificado
 
-    boolean existsByClienteIdAndProdutoId(Long idCliente, Long idProduto);
+    boolean existsByClienteIdAndProdutoId(Long idCliente, Long idProduto); // mesma coisa so que com produto
 
-    boolean existsByClienteIdAndServicoId(Long idCliente, Long idServico);
+    boolean existsByClienteIdAndServicoId(Long idCliente, Long idServico); // mesma coisa so que com servico
 }

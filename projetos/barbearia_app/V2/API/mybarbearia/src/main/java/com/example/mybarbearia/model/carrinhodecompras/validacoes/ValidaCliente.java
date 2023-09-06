@@ -16,10 +16,10 @@ public class ValidaCliente implements ValidadorFuncionalidadeCarrinhoDeCompras{
     @Override
     public void checar(DadosCadastroCarrinho dados) {
 
-        if(dados.idCliente() == null) {
+        if(dados.idCliente() == null) { // se id for null
             throw new ValidacaoExeption("Id do Cliente está nulo");
         }
-        if(!clienteRepository.existsByIdAndAtivoTrue(dados.idCliente())) {
+        if(!clienteRepository.existsByIdAndAtivoTrue(dados.idCliente())) { // se não existor no banco de dados
             throw new ValidacaoExeption("Cliente não existe");
         }
     }

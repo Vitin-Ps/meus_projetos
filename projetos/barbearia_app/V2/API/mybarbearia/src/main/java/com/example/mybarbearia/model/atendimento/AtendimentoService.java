@@ -1,7 +1,7 @@
 package com.example.mybarbearia.model.atendimento;
 
 import com.example.mybarbearia.infra.exception.ValidacaoExeption;
-import com.example.mybarbearia.infra.services.StringEmMinutos;
+import com.example.mybarbearia.services.StringEmMinutos;
 import com.example.mybarbearia.model.cliente.DadosListagemCliente;
 import com.example.mybarbearia.model.funcionario.Cargo;
 import com.example.mybarbearia.model.funcionario.DadosListagemFuncionario;

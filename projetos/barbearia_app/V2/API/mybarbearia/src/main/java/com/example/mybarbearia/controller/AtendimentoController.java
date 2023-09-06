@@ -1,20 +1,15 @@
 package com.example.mybarbearia.controller;
 
-import com.example.mybarbearia.infra.services.StringEmMinutos;
 import com.example.mybarbearia.model.atendimento.AtendimentoService;
 import com.example.mybarbearia.model.atendimento.DadosAgendamentoAtendimento;
 import com.example.mybarbearia.model.atendimento.DadosAtualizaAtendimento;
-import com.example.mybarbearia.model.atendimento.DadosListagemAgendamento;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/atendimento")

@@ -25,6 +25,6 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Long> 
                 ORDER BY FUNCTION('RAND')
                 LIMIT 1
             """)
-    Funcionario escolherFuncionarioComAgendaLivreNoHorario(LocalDateTime data);
+    Funcionario escolherFuncionarioComAgendaLivreNoHorario(LocalDateTime data); // prucura um fucnionario aleatorio que seja barbeiro e que não esteja com a dada igual a passada no parametro
 
 }

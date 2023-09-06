@@ -1,8 +1,11 @@
 package com.example.mybarbearia.model.carrinhodecompras;
 
 import com.example.mybarbearia.infra.exception.ValidacaoExeption;
-import com.example.mybarbearia.infra.services.StringEmMinutos;
-import com.example.mybarbearia.model.atendimento.Atendimento;
+import com.example.mybarbearia.model.carrinhodecompras.CarrinhoDeCompras;
+import com.example.mybarbearia.model.carrinhodecompras.DadosCadastroCarrinho;
+import com.example.mybarbearia.model.carrinhodecompras.DadosDetalhamentoCarrinho;
+import com.example.mybarbearia.model.carrinhodecompras.DadosListagemCarrinho;
+import com.example.mybarbearia.services.StringEmMinutos;
 import com.example.mybarbearia.model.carrinhodecompras.validacoes.ValidaCarrinhoComItem;
 import com.example.mybarbearia.model.carrinhodecompras.validacoes.ValidaItemNoEstoque;
 import com.example.mybarbearia.model.carrinhodecompras.validacoes.ValidadorFuncionalidadeCarrinhoDeCompras;
@@ -21,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class FuncionalidadesDoCarrinho {
+public class CarrinhoService {
     @Autowired
     CarrinhoDeComprasRepository carrinhoDeComprasRepository;
     @Autowired
@@ -36,13 +39,13 @@ public class FuncionalidadesDoCarrinho {
     private List<ValidadorFuncionalidadeCarrinhoDeCompras> validadorCarrinho;
 
 
-    public DadosDetalhamentoCarrinho addNoCarrinho(DadosCadastroCarrinho dados) {
+    public DadosDetalhamentoCarrinho addNoCarrinho(DadosCadastroCarrinho dados) { // adiciona itens no carrinho baseado no idCliente
 
         validadorCarrinho.forEach(validador -> {
             if (!(validador instanceof ValidaCarrinhoComItem) && !(validador instanceof ValidaItemNoEstoque)) {
                 validador.checar(dados);
             }
-        });
+        }); // checa os validadores tirando o carrinho com item ja que na primeira vez o carrinho vai esta vazio
 
         // criando as Entidades baseado no id passado pelo dto
         var cliente = clienteRepository.findById(dados.idCliente()).get();
@@ -61,11 +64,12 @@ public class FuncionalidadesDoCarrinho {
         // criando o carrinho e salvando o banco
         var carrinho = new CarrinhoDeCompras(null, cliente, produto, servico, preco);
         carrinhoDeComprasRepository.save(carrinho);
+        //retornando os detalhes do carrinho
         return new DadosDetalhamentoCarrinho(carrinho);
     }
 
     public List<DadosCadastroRecibo> finalizarPedido(Long idCliente) {
-        validadorCarrinho.forEach(validador -> validador.checar(new DadosCadastroCarrinho(idCliente, null, null)));
+        validadorCarrinho.forEach(validador -> validador.checar(new DadosCadastroCarrinho(idCliente, null, null))); // validadores
 
         List<DadosCadastroRecibo> listaRecibos = new ArrayList<>();
 
@@ -92,19 +96,12 @@ public class FuncionalidadesDoCarrinho {
                        duracoes.add(servico.getDuracao()); // adiciona a duração dos serviços no list String
                    }
                    var date = StringEmMinutos.duracaoTotal(duracoes); // faz o metodo para calcular as durações e retorna um date
-
-
                    var recibo = new DadosCadastroRecibo(null, servico, quantidade, StringEmMinutos.converterDateParaString(date), preco);
-                   System.out.println("servicos " + recibo);
                    listaRecibos.add(recibo);
                }
             });
 
-
-
-        System.out.println("lista Completa " + listaRecibos);
-
-//        this.cancelarCarrinho(idCliente);
+//        this.cancelarCarrinho(idCliente); //limpa o carrinho de compras
 
         return listaRecibos;
     }
@@ -112,7 +109,7 @@ public class FuncionalidadesDoCarrinho {
 
     public Page<DadosListagemCarrinho> detalharCarrinho(Long idCliente, Pageable pageable) {
         validadorCarrinho.forEach(validador -> validador.checar(new DadosCadastroCarrinho(idCliente, null, null)));
-        return carrinhoDeComprasRepository.findByClienteId(idCliente, pageable).map(DadosListagemCarrinho::new);
+        return carrinhoDeComprasRepository.findByClienteId(idCliente, pageable).map(DadosListagemCarrinho::new); // detalha o carrinho baseado no id, usa um método que retorna uma lista dos intens presentes no id do cliente
     }
 
     public void cancelarCarrinho(Long idCliente) { // essa função devolve os itens para o estoque e apaga o carrinho
@@ -139,7 +136,7 @@ public class FuncionalidadesDoCarrinho {
         if (dados.idProduto() == null) {
             return null;
         }
-        var estoque = estoqueRepository.getReferenceByProdutoId(dados.idProduto()); // idantifica o estoque baseado no id do produto
+        var estoque = estoqueRepository.getReferenceByProdutoId(dados.idProduto()); // identifica o estoque baseado no id do produto
         if (estoque.getQuantidade() < 1) { // se quantidade do estoque for menor que 1
             throw new ValidacaoExeption("Produto está em Falta");
         }

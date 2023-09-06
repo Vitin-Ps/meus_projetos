@@ -1,6 +1,6 @@
 package com.example.mybarbearia.model.atendimento;
 
-import com.example.mybarbearia.infra.services.StringEmMinutos;
+import com.example.mybarbearia.services.StringEmMinutos;
 import com.example.mybarbearia.model.cliente.Cliente;
 import com.example.mybarbearia.model.funcionario.Funcionario;
 import jakarta.persistence.*;

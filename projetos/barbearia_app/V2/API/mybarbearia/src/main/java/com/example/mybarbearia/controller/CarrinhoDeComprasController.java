@@ -1,7 +1,7 @@
 package com.example.mybarbearia.controller;
 
 import com.example.mybarbearia.model.carrinhodecompras.DadosListagemCarrinho;
-import com.example.mybarbearia.model.carrinhodecompras.FuncionalidadesDoCarrinho;
+import com.example.mybarbearia.model.carrinhodecompras.CarrinhoService;
 import com.example.mybarbearia.model.carrinhodecompras.DadosCadastroCarrinho;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/carrinho")
 public class CarrinhoDeComprasController {
     @Autowired
-    FuncionalidadesDoCarrinho fCarrinho;
+    CarrinhoService fCarrinho;
 
     @PostMapping
     @Transactional

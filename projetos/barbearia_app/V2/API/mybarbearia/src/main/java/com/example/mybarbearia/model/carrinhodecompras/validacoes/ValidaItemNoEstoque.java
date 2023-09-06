@@ -12,11 +12,7 @@ public class ValidaItemNoEstoque implements ValidadorFuncionalidadeCarrinhoDeCom
     CarrinhoDeComprasRepository carrinhoDeComprasRepository;
 
     @Override
-    public void checar(DadosCadastroCarrinho dados) {
-        System.out.println("Chegou No teste");
-        System.out.println("Ids: " + dados.idCliente() + dados.idProduto());
-        var teste = carrinhoDeComprasRepository.existsByClienteIdAndProdutoId(dados.idCliente(), dados.idProduto());
-        System.out.println("Resultado: " + teste);
+    public void checar(DadosCadastroCarrinho dados) { // checa se item existe no banco de dados do carrinho
         if(dados.idProduto() != null && !carrinhoDeComprasRepository.existsByClienteIdAndProdutoId(dados.idCliente(), dados.idProduto())) {
             throw new ValidacaoExeption("Produto não está no carrinho");
         }
