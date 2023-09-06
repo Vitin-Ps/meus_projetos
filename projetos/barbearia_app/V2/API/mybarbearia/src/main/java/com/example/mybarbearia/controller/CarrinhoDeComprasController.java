@@ -15,31 +15,31 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/carrinho")
 public class CarrinhoDeComprasController {
     @Autowired
-    CarrinhoService fCarrinho;
+    CarrinhoService carrinhoService;
 
     @PostMapping
     @Transactional
     public ResponseEntity adicionarItem(@RequestBody @Valid DadosCadastroCarrinho dados) {
-        fCarrinho.addNoCarrinho(dados);
-        return ResponseEntity.ok().build();
+        var dadosCarrinho = carrinhoService.addNoCarrinho(dados);
+        return ResponseEntity.ok(dadosCarrinho);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Page<DadosListagemCarrinho>> detalhar(@PathVariable Long id, Pageable pageable) {
-        var page = fCarrinho.detalharCarrinho(id, pageable);
+        var page = carrinhoService.detalharCarrinho(id, pageable);
         return ResponseEntity.ok(page);
     }
     @DeleteMapping
     @Transactional
     public ResponseEntity removerItem(@RequestBody @Valid DadosCadastroCarrinho dados) {
-        fCarrinho.retirarCarrinho(dados);
-        return ResponseEntity.ok("Carrinho limpo");
+        carrinhoService.retirarCarrinho(dados);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity cancelarCarrinho(@PathVariable Long id) {
-        fCarrinho.cancelarCarrinho(id);
-        return ResponseEntity.ok("Carrinho limpo");
+        carrinhoService.cancelarCarrinho(id);
+        return ResponseEntity.noContent().build();
     }
 }

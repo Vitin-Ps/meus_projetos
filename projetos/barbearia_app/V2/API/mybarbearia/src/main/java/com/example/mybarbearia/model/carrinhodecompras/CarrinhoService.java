@@ -5,6 +5,7 @@ import com.example.mybarbearia.model.carrinhodecompras.CarrinhoDeCompras;
 import com.example.mybarbearia.model.carrinhodecompras.DadosCadastroCarrinho;
 import com.example.mybarbearia.model.carrinhodecompras.DadosDetalhamentoCarrinho;
 import com.example.mybarbearia.model.carrinhodecompras.DadosListagemCarrinho;
+import com.example.mybarbearia.model.carrinhodecompras.validacoes.ValidaIdItemNull;
 import com.example.mybarbearia.services.StringEmMinutos;
 import com.example.mybarbearia.model.carrinhodecompras.validacoes.ValidaCarrinhoComItem;
 import com.example.mybarbearia.model.carrinhodecompras.validacoes.ValidaItemNoEstoque;
@@ -108,13 +109,19 @@ public class CarrinhoService {
 
 
     public Page<DadosListagemCarrinho> detalharCarrinho(Long idCliente, Pageable pageable) {
-        validadorCarrinho.forEach(validador -> validador.checar(new DadosCadastroCarrinho(idCliente, null, null)));
+        validadorCarrinho.forEach(validador -> {
+            if(!(validador instanceof ValidaIdItemNull)) validador.checar(new DadosCadastroCarrinho(idCliente, null, null));
+                });
+
+
         return carrinhoDeComprasRepository.findByClienteId(idCliente, pageable).map(DadosListagemCarrinho::new); // detalha o carrinho baseado no id, usa um método que retorna uma lista dos intens presentes no id do cliente
     }
 
     public void cancelarCarrinho(Long idCliente) { // essa função devolve os itens para o estoque e apaga o carrinho
 
-        validadorCarrinho.forEach(validador -> validador.checar(new DadosCadastroCarrinho(idCliente, null, null)));
+        validadorCarrinho.forEach(validador -> {
+            if(!(validador instanceof ValidaIdItemNull)) validador.checar(new DadosCadastroCarrinho(idCliente, null, null));
+        });
 
         var produtosSelecionados = carrinhoDeComprasRepository.produtosSelecionados(idCliente); // coleta od id dos produtos selecionados
         produtosSelecionados.forEach(produtos -> { // vai realizar o código baseado em cada id de produto
