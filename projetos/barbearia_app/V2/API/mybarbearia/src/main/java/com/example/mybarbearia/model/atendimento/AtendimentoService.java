@@ -1,6 +1,7 @@
 package com.example.mybarbearia.model.atendimento;
 
 import com.example.mybarbearia.infra.exception.ValidacaoExeption;
+import com.example.mybarbearia.model.atendimento.validadores.agendamento.ValidadorAgendar;
 import com.example.mybarbearia.services.StringEmMinutos;
 import com.example.mybarbearia.model.cliente.DadosListagemCliente;
 import com.example.mybarbearia.model.funcionario.Cargo;
@@ -22,14 +23,15 @@ import java.util.List;
 @Service
 public class AtendimentoService {
     @Autowired
-    AtendimentoRepository atendimentoRepository;
+    private AtendimentoRepository atendimentoRepository;
     @Autowired
-    FuncionarioRepository funcionarioRepository;
+    private FuncionarioRepository funcionarioRepository;
     @Autowired
-    ClienteRepository clienteRepository;
+    private ClienteRepository clienteRepository;
     @Autowired
-    ReciboService reciboService;
-
+    private ReciboService reciboService;
+    @Autowired
+    private List<ValidadorAgendar> validadorAgendar;
     public DadosListagemAgendamento agendar(DadosAgendamentoAtendimento dados) {
 
         if(dados.idFuncionario() != null && !funcionarioRepository.existsById(dados.idFuncionario())) {
@@ -40,12 +42,17 @@ public class AtendimentoService {
         }
 
         var funcionario = escolherBarbeiro(dados); // metodo abaixo
+        var dadosModificados = new DadosAgendamentoAtendimento(dados.idCliente(), funcionario.getId(), dados.data()); // cria um novo dados com o id funcionario, caso nenhum seja especificado
+        validadorAgendar.forEach(vA -> vA.validar(dadosModificados)); // checa as regras e validadções
         var cliente = clienteRepository.getReferenceByIdAndAtivoTrue(dados.idCliente()); // procura um cliente pelo id com o ativo true
+
+        var agendamentos = atendimentoRepository.findAllByFuncionarioIdAndStatus(funcionario.getId(), StatusAtendimento.PENDENTE);
 
         var atendimento = new Atendimento(null, cliente, funcionario, dados.data(), null, null, StatusAtendimento.PENDENTE); // cria um objeto atendimento
         atendimentoRepository.save(atendimento); // salva no db
-
         var listaRecibos = this.salvarDadosDoCarrinhoNoRecibo(atendimento); // metodo abaixo
+
+        this.horarioDispovelComDuracao(dados, atendimento, agendamentos);
 
         return new DadosListagemAgendamento(atendimento.getId(), new DadosListagemCliente(atendimento.getCliente()), new DadosListagemFuncionario(atendimento.getFuncionario()), atendimento.getData(), listaRecibos);
 
@@ -66,9 +73,12 @@ public class AtendimentoService {
             if(funcionario.getCargo() == Cargo.BARBEIRO) return funcionario; // se o cargo do funcionro for barbeiro
             else throw new ValidacaoExeption("Funcionário não é de um Barbeiro"); // se não
         }
-
-        return funcionarioRepository.escolherFuncionarioComAgendaLivreNoHorario(dados.data()); // etorna um funcionario
-    }
+        if(funcionarioRepository.escolherFuncionarioComAgendaLivreNoHorario(dados.data()) != null) { // checa se o resultado da consulta nao e null, se for e porque nenhum funconario esta dipovinel no horario
+            return funcionarioRepository.escolherFuncionarioComAgendaLivreNoHorario(dados.data());
+        } else {
+            throw new ValidacaoExeption("Não há funcionario disponivel esse horário");
+        }
+      }
 
     private List<DadosListagemRecibo> salvarDadosDoCarrinhoNoRecibo (Atendimento atendimento) { //esse método salva os dados do carrinho no recibo e limpa todos os intens que estiverem relacionado ao id do cliente
         List<String> listaDuracao = new ArrayList<>();
@@ -84,5 +94,17 @@ public class AtendimentoService {
         return listaRecibos; // retorna a lista com informações do recibo
     }
 
+    private void horarioDispovelComDuracao (DadosAgendamentoAtendimento dados, Atendimento atendimento, List<Atendimento> agendamentos) {
+
+        agendamentos.forEach(ag -> {
+            System.out.println(ag.getId());
+            var minutos = StringEmMinutos.converterParaMinutosEmRacional(atendimento.getDuracao());
+            var horarioIni = ag.getData().minusMinutes(minutos);
+            var horarioFim = ag.getData();
+            var novaData = dados.data();
+            if (novaData.isAfter(horarioIni) && novaData.isBefore(horarioFim)) throw new ValidacaoExeption("A duração dos seus serviços está conflitando com um atendimento posterior!!! \nDiminua o tempo do seu atendimento e tente novamente.");
+
+        });
+    }
 
 }

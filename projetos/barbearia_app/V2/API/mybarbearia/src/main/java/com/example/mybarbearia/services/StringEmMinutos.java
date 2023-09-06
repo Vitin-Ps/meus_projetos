@@ -2,6 +2,7 @@ package com.example.mybarbearia.services;
 
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -53,4 +54,26 @@ public class StringEmMinutos {
     }
 
 
+    public static Integer converterParaMinutosEmRacional(String duracao) {
+        int horas = 0;
+        int minutos = 0;
+        int segundos = 0;
+
+        if(duracao != null) {
+            String[] partes = duracao.split(":");
+            if(partes.length > 2) {
+                horas += Integer.parseInt(partes[0]);
+                minutos += Integer.parseInt(partes[1]);
+                segundos += Integer.parseInt(partes[2]);
+            } else {
+                minutos += Integer.parseInt(partes[0]);
+                segundos += Integer.parseInt(partes[1]);
+            }
+
+        }
+
+        minutos = minutos + (segundos / 60) + (horas * 60);
+
+        return minutos;
+    }
 }

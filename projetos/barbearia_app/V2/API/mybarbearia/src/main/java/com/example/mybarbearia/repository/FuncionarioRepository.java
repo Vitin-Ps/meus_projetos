@@ -27,4 +27,5 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Long> 
             """)
     Funcionario escolherFuncionarioComAgendaLivreNoHorario(LocalDateTime data); // prucura um fucnionario aleatorio que seja barbeiro e que não esteja com a dada igual a passada no parametro
 
+    Boolean existsByIdAndAtivoTrue(Long aLong);
 }

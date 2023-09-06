@@ -27,15 +27,15 @@ import java.util.List;
 @Service
 public class CarrinhoService {
     @Autowired
-    CarrinhoDeComprasRepository carrinhoDeComprasRepository;
+    private CarrinhoDeComprasRepository carrinhoDeComprasRepository;
     @Autowired
-    ClienteRepository clienteRepository;
+    private ClienteRepository clienteRepository;
     @Autowired
-    ProdutoRepository produtoRepository;
+    private ProdutoRepository produtoRepository;
     @Autowired
-    ServicoRepository servicoRepository;
+    private ServicoRepository servicoRepository;
     @Autowired
-    EstoqueRepository estoqueRepository;
+    private EstoqueRepository estoqueRepository;
     @Autowired
     private List<ValidadorFuncionalidadeCarrinhoDeCompras> validadorCarrinho;
 
@@ -70,7 +70,9 @@ public class CarrinhoService {
     }
 
     public List<DadosCadastroRecibo> finalizarPedido(Long idCliente) {
-        validadorCarrinho.forEach(validador -> validador.checar(new DadosCadastroCarrinho(idCliente, null, null))); // validadores
+        validadorCarrinho.forEach(validador -> {
+            if(!(validador instanceof ValidaIdItemNull)) validador.checar(new DadosCadastroCarrinho(idCliente, null, null));
+        });
 
         List<DadosCadastroRecibo> listaRecibos = new ArrayList<>();
 
@@ -102,7 +104,7 @@ public class CarrinhoService {
                }
             });
 
-//        this.cancelarCarrinho(idCliente); //limpa o carrinho de compras
+        this.cancelarCarrinho(idCliente); //limpa o carrinho de compras
 
         return listaRecibos;
     }
