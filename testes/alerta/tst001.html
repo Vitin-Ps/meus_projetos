@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>teste 001</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        :root {
+            --cor001: #0000ff;
+            --cor002: #0000ff45;
+            --cor003: #0000ff0e;
+
+        }
+
+        .alerta-container {
+            position: relative;
+            background-color: rgb(0, 0, 108);
+            color: white;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            margin: 5px;
+            padding: 5px;
+            border-radius: 2px;
+            font-size: 3px;
+            transition: opacity 0.3s;
+        }
+
+        .icone {
+            margin-right: 5px;
+        }
+
+        .fechar {
+            position: absolute;
+            right: 3px;
+            cursor: pointer;
+        }
+    </style>
+   <script>
+    function fechar() {
+        const alertaContainer = this.parentElement;
+        alertaContainer.style.opacity = '0';
+        setTimeout(function () {
+            alertaContainer.style.display = 'none';
+        }, 300);
+    }
+
+    function ocultarApos5Segundos(alerta) {
+        const alertaContainer = alerta;
+        const tempoTotal = 10 * 1000;
+
+        setTimeout(function () {
+            alertaContainer.style.opacity = '0';
+            setTimeout(function () {
+                alertaContainer.style.display = 'none';
+            }, 300);
+        }, tempoTotal - 300);
+    }
+
+    window.onload = function () {
+        const alertas = document.querySelectorAll('.alerta-container');
+        alertas.forEach(function (alerta) {
+            ocultarApos5Segundos(alerta);
+        });
+
+        const botoesFechar = document.querySelectorAll('.fechar');
+        botoesFechar.forEach(function (botao) {
+            botao.addEventListener('click', fechar);
+        });
+    };
+</script>
+formAtend.addEventListener('hidden.bs.dropdown', function() { var formAtendSelectedValue = document.querySelector('input[name="ctl00$ContentPlaceHolder1$formAtendList"]:checked').value; if (formAtendSelectedValue != formAtendValue) { document.getElementById('cod_forma_atendimento_servico').value = formAtendSelectedValue; btnFiltro.click(); } });
+
+</head>
+
+<body>
+    <div class="alerta-container">
+        <i class="fa-regular fa-bell icone"></i>
+        <span>DICA 1: </span>
+        <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Est iure cupiditate sa</span>
+        <i class="fa-solid fa-xmark fechar"></i>
+        <div class="barra-progresso">
+            <div class="progresso"></div>
+        </div>
+    </div>
+
+    <div class="alerta-container">
+        <i class="fa-regular fa-bell icone"></i>
+        <span>DICA 2: </span>
+        <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Est iure cupiditate sa</span>
+        <i class="fa-solid fa-xmark fechar"></i>
+    </div>
+
+   
+</body>
+
+</html>
