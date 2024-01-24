@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página com Autenticação</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+
+<body>
+
+    <h1>Minha Página com Autenticação</h1>
+
+    <div id="imagemContainer"></div>
+
+    <script>
+        $(document).ready(function () {
+            var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjcnVkX2phdmEiLCJzdWIiOiJWaWN0b3IiLCJyb2xlIjoiQURNSU4iLCJpZCI6MSwiZXhwIjoxNzA2MTA4OTUxfQ.B97AehqPxeetxRC7TJiKpOpJaLOqZbGmUZoBLxzrJUU";
+
+            $.ajax({
+                url: "http://localhost:8080/arquivos/victin_perfil_1706057982328.jpg",
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + token
+                },
+                xhrFields: {
+                    responseType: 'blob' // Indica que a resposta é um blob (binary large object)
+                },
+                success: function (data) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var imageString = e.target.result;
+                        $("#imagemContainer").html('<img src="' + imageString + '" alt="Minha Imagem">');
+                        console.log("Imagem carregada com sucesso");
+                    };
+                    reader.readAsDataURL(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error("Erro ao carregar a imagem:", error);
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
