@@ -59,7 +59,7 @@ main {
 main  hr {
     background-color: var(--cor4);
     width: 95%;
-    margin: 30px auto;
+    margin: 15px auto;
 }
 
 main h2 {
@@ -82,7 +82,12 @@ main > section > ul {
     list-style-position: inside;
 }
 
+main > section > ul li{
+    margin-bottom: 1em;
+}
+
 main > article {
+    width: 30%;
     padding: 20px;
     background-color: var(--cor6);
     box-shadow: inset 2px 0px 0px var(--cor4);
@@ -101,10 +106,3 @@ main > section > div.mesmalinha {
 }
 
 
-
-
-
-
-.cert_line li{
-    margin: 10%;
-}
