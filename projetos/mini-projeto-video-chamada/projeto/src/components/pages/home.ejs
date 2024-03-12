@@ -2,21 +2,84 @@
 
 <div class="home">
     <%- include('../forms/join.ejs') %>
-        <%- include('../forms/chat.ejs') %>
+    <%- include('../forms/chat.ejs') %>
 </div>
 
+<script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
 
 <script>
-    const divChat = document.querySelector('.chat')
-    const divJoin = document.querySelector('.join')
+    let myId;
+    const divChat = document.querySelector('.chat');
+    const divJoin = document.querySelector('.join');
+    const divMensagemContainer = document.querySelector('.mensagens-container');
+    let socket = undefined;
+    let listaMensagem = [];
 
     divChat.style.display = "none";
 
-    function entrar(e) {
-        e.preventDefault()
-        let nome = document.querySelector('#nome').value
+    async function entrar(e) {
+        e.preventDefault();
+        socket = await io('http://localhost:3001');
+        let nome = document.querySelector('#nome').value;
+
+        // Verifica se o ID do usuário já foi obtido
+        if (!myId) {
+            socket.emit('set_nome', nome);
+            socket.on('receber_id', id => {
+                myId = id;
+                registrarListenerMensagens();
+            });
+        } else {
+            registrarListenerMensagens();
+        }
+
         divJoin.style.display = "none";
         divChat.style.display = "block";
-        console.log("chegou: ", nome)
+    }
+
+    function enviar(e) {
+    e.preventDefault();
+
+    let mensagem = document.querySelector('#mensagem').value;
+    if (!mensagem) return;
+
+    console.log("passou ", mensagem);
+
+    const mensagemObj = {
+        text: mensagem,
+        idAutor: myId 
+    };
+
+    socket.emit('mensagem', mensagemObj);
+    document.querySelector('#mensagem').value = "";
+}
+
+
+function registrarListenerMensagens() {
+    socket.on('receber_mensagem', data => {
+        listaMensagem.push(data);
+        renderizarMensagens();
+    });
+}
+
+
+    function renderizarMensagens() {
+        divMensagemContainer.innerHTML = "";
+        listaMensagem.forEach(message => {
+            const divCardMensagem = document.createElement('div');
+            divCardMensagem.classList.add('card-mensagem');
+            const p = document.createElement('p');
+            if (myId === message.idAutor) {
+                p.innerHTML = `${message.text} <span>: ${message.autor}</span>`;
+                divCardMensagem.classList.add('my-message');
+            } else {
+                p.innerHTML = `<span>${message.autor}: </span> ${message.text}`;
+            }
+            const spanHorario = document.createElement('span');
+            spanHorario.innerHTML = message.horario;
+            divCardMensagem.appendChild(p);
+            divCardMensagem.appendChild(spanHorario);
+            divMensagemContainer.appendChild(divCardMensagem);
+        });
     }
 </script>

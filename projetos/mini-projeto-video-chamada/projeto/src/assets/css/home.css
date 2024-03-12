@@ -4,17 +4,14 @@ body {
 }
 
 .home {
-    width: 400px;
+    min-width: 400px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     gap: 30px;
     flex-direction: column;
-    position: absolute;
-    left: 50%;
-    top: 25%;
-    transform: translateX(-50%);
+    margin-top: 100px;
 }
 
 .home > * {
@@ -45,4 +42,55 @@ body {
 .home > * button:hover {
     background-color: white;
     color: black;
+}
+
+.mensagens-container {
+    width: 450px;
+    background-color: rgb(63, 63, 63);
+    border: 2px solid white;
+    border-radius: 10px;
+    height: 400px;
+    overflow: auto;
+    box-shadow: 10px 10px 20px rgba(255, 255, 255, 0.167);
+    margin: 1em;
+    padding: .5em;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 10px;
+}
+.mensagens-container .card-mensagem {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.mensagens-container .card-mensagem p {
+   letter-spacing: 2px;
+   padding: .3em;
+   border: 1px solid transparent;
+   border-radius: 3px;
+   margin-right: auto;
+}
+
+.mensagens-container .card-mensagem p span {
+    font-weight: bold
+}
+
+.mensagens-container .card-mensagem > span {
+    font-size: .6em;
+    letter-spacing: 3px;
+    margin: 0 .5em;
+}
+
+.mensagens-container .card-mensagem.my-message {
+    flex-direction: row-reverse;
+}
+
+.mensagens-container .card-mensagem.my-message p {
+    background-color: rgba(255, 255, 255, 0.897);
+    color: black;
+    border-color: black;
+    margin-left: auto;
+    margin-right: unset;
 }
