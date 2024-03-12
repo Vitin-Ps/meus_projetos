@@ -1,0 +1,62 @@
+:root {
+    --cor001: #0091f9;
+    --cor002: #FFF;
+    --cor003: #004475;
+    --cor004: #222222;
+}
+
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+    min-height: 80vh;
+}
+
+header {
+    background-color: var(--cor001);
+    color: var(--cor002);
+    padding: 1em;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1em;
+}
+
+header h1 {
+    width: 150px;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+header nav a {
+    text-decoration: none;
+    padding: .2em .5em;
+    border: 1px solid transparent;
+    color: var(--cor002);
+    border-radius: 10px;
+    transition: .3s;
+}
+
+header nav a:hover {
+    background-color: var(--cor002);
+    color: var(--cor001);
+}
+
+footer {
+    background-color: var(--cor004);
+    color: var(--cor002);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1em;
+    margin-top: 1em;
+}

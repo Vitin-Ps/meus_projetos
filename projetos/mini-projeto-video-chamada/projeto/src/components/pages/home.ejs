@@ -1,0 +1,22 @@
+<link rel="stylesheet" href="/css/home.css">
+
+<div class="home">
+    <%- include('../forms/join.ejs') %>
+        <%- include('../forms/chat.ejs') %>
+</div>
+
+
+<script>
+    const divChat = document.querySelector('.chat')
+    const divJoin = document.querySelector('.join')
+
+    divChat.style.display = "none";
+
+    function entrar(e) {
+        e.preventDefault()
+        let nome = document.querySelector('#nome').value
+        divJoin.style.display = "none";
+        divChat.style.display = "block";
+        console.log("chegou: ", nome)
+    }
+</script>

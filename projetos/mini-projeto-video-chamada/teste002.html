@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Chat</title>
+</head>
+
+<body>
+    <video id="localVideo" autoplay></video>
+    <video id="remoteVideo" autoplay></video>
+
+    <button onclick="startCall()">Start Call</button>
+    <button onclick="joinCall()">Join Call</button>
+    <button onclick="solicitarAutorizacao()">Solicitar Autorização</button>
+
+    <script>
+        var localStream;
+        var configuration = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
+        var peerConnection = new RTCPeerConnection(configuration);
+
+        peerConnection.ontrack = function (event) {
+            var remoteVideo = document.getElementById('remoteVideo');
+            if (!remoteVideo.srcObject) {
+                remoteVideo.srcObject = event.streams[0];
+            }
+        };
+
+        function solicitarAutorizacao() {
+            // Verificar se o navegador suporta a API getUserMedia
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+                    .then(function (stream) {
+                        console.log('Permissão concedida.');
+                        var localVideo = document.getElementById('localVideo');
+                        localVideo.srcObject = stream;
+                        localStream = stream;
+                    })
+                    .catch(function (err) {
+                        console.error('Erro ao solicitar permissão:', err);
+                        // Trate o erro, informe ao usuário ou tente solicitar novamente
+                    });
+            } else {
+                console.error('getUserMedia não é suportado neste navegador.');
+                // Informe ao usuário que a funcionalidade não é suportada no navegador
+            }
+        }
+
+        function startCall() {
+            if (!localStream) {
+                console.error('A permissão ainda não foi concedida.');
+                return;
+            }
+
+            localStream.getTracks().forEach(track => {
+                peerConnection.addTrack(track, localStream);
+            });
+
+            peerConnection.createOffer()
+                .then(function (offer) {
+                    return peerConnection.setLocalDescription(offer);
+                })
+                .then(function () {
+                    // Enviar a oferta via WebSocket
+                    sendSignal(peerConnection.localDescription);
+                })
+                .catch(function (err) {
+                    console.error('Erro ao criar oferta:', err);
+                });
+        }
+
+        function joinCall() {
+            // Receber a oferta via WebSocket
+            receiveSignal();
+
+            peerConnection.createAnswer()
+                .then(function (answer) {
+                    return peerConnection.setLocalDescription(answer);
+                })
+                .then(function () {
+                    // Enviar a resposta via WebSocket
+                    sendSignal(peerConnection.localDescription);
+                })
+                .catch(function (err) {
+                    console.error('Erro ao criar resposta:', err);
+                });
+        }
+
+        // Função para receber a sinalização via WebSocket
+        function receiveSignal() {
+            var ws = new WebSocket('ws://localhost:3000/');
+
+            ws.onmessage = function (event) {
+                var receivedSignal = JSON.parse(event.data);
+                console.log('Sinalização recebida via WebSocket:', receivedSignal);
+
+                // Se o sinal for uma oferta, trate-a e responda
+                if (receivedSignal.type === 'offer') {
+                    peerConnection.setRemoteDescription(new RTCSessionDescription(receivedSignal))
+                        .then(function () {
+                            return peerConnection.createAnswer();
+                        })
+                        .then(function (answer) {
+                            return peerConnection.setLocalDescription(answer);
+                        })
+                        .then(function () {
+                            // Envie a resposta via WebSocket
+                            sendSignal(peerConnection.localDescription);
+                        })
+                        .catch(function (err) {
+                            console.error('Erro ao processar a oferta:', err);
+                        });
+                }
+                // Se o sinal for uma resposta, configure-a
+                else if (receivedSignal.type === 'answer') {
+                    peerConnection.setRemoteDescription(new RTCSessionDescription(receivedSignal))
+                        .then(function () {
+                            console.log('Configuração de resposta remota bem-sucedida.');
+                        })
+                        .catch(function (err) {
+                            console.error('Erro ao processar a resposta:', err);
+                        });
+                }
+            };
+
+            ws.onerror = function (event) {
+                console.error('Erro na conexão WebSocket:', event);
+            };
+
+            ws.onclose = function (event) {
+                console.log('Conexão WebSocket fechada.');
+            };
+        }
+
+        // Função para enviar a sinalização via WebSocket
+        function sendSignal(signal) {
+            var ws = new WebSocket('ws://localhost:3000/');
+
+            ws.onopen = function () {
+                console.log('Conexão WebSocket aberta.');
+                ws.send(JSON.stringify(signal)); // Envie a sinalização para o outro par
+            };
+
+            ws.onerror = function (event) {
+                console.error('Erro na conexão WebSocket:', event);
+            };
+
+            ws.onclose = function (event) {
+                console.log('Conexão WebSocket fechada.');
+            };
+        }
+
+    </script>
+</body>
+
+</html>
