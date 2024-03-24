@@ -1,0 +1,100 @@
+<link rel="stylesheet" href="/css/home.css">
+
+<div class="home">
+    <div class="join">
+        <h1>Join</h1>
+        <input type="text" placeholder="Nome de Usuário" id="nome">
+        <button onclick="criarSala(event)">Criar Sala</button>
+        <br>
+        <h3>ou</h3>
+        <input type="text" placeholder="Digite o código da sala" id="codSala">
+        <button onclick="entrar(event)">Entrar</button>
+    </div>
+</div>
+
+<script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
+
+<script>
+    const divChat = document.querySelector('.chat');
+    const divJoin = document.querySelector('.join');
+    const divMensagemContainer = document.querySelector('.mensagens-container');
+    var socket = undefined;
+    var cod_sala;
+    let listaMensagem = [];
+    var roomCode = window.location.href.split('/')[window.location.href.split('/').length - 1]
+
+    // Obtenha a parte da URL após o domínio (path)
+    const url = window.location.pathname;
+
+    // Divida a parte da URL em partes usando '/' como delimitador
+    const parts = url.split('/');
+
+    // Se houver pelo menos duas partes na URL (após o domínio), o código está presente
+    if (parts.length >= 3) {
+        if (parts[2] !== "") {
+
+            const cod_sala = parts[2];
+            console.log('Código encontrado na URL:', cod_sala);
+
+            socket = io('http://localhost:3000');
+            socket.emit('entrar_sala', cod_sala);
+            socket.on('erro', erro => {
+                alert(erro)
+                window.location.href = "/chamada"
+            })
+        } else {
+            alert("Sala não encontrada");
+            window.location.href = "/chamada"
+        }
+    }
+
+    async function entrar(e) {
+        e.preventDefault();
+        socket = await io('http://localhost:3000');
+        let nome = document.querySelector('#nome').value;
+        socket.emit('entrar_sala', roomCode);
+
+        // Verifica se o ID do usuário já foi obtido
+        if (!myId) {
+            socket.emit('set_nome', nome);
+            socket.on('receber_id', id => {
+                myId = id;
+                registrarListenerMensagens();
+            });
+        } else {
+            registrarListenerMensagens();
+        }
+
+        divJoin.style.display = "none";
+        divChat.style.display = "block";
+    }
+
+    async function criarSala(e) {
+
+        e.preventDefault();
+
+        socket = await io('http://localhost:3000');
+        socket.emit('criar_sala');
+        socket.on('sala_criada', (data) => {
+            console.log('Sala criada com sucesso:', data.roomCode);
+            // window.location.href = `/sala/${data.roomCode}`;
+            history.pushState(null, null, `/chamada/${data.roomCode}`);
+        });
+
+        // e.preventDefault()
+
+        // $.ajax({
+        //     type: 'GET',
+        //     url: '/criar_sala',
+        //     success: function (response) {
+        //         console.log("chegou")
+        //         // Redirecionar o usuário para a sala recém-criada
+
+        //         window.location.href = `/sala/${response.roomCode}`;
+        //     },
+        //     error: function (xhr, status, error) {
+        //         console.error('Erro ao criar sala:', error);
+        //     }
+        // });
+    }
+</script>
