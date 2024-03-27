@@ -15,8 +15,11 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-.container {
-    min-height: 80vh;
+.container { 
+    background: url("../imagens/bg-image.jpeg");
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
 }
 
 header {
@@ -27,7 +30,6 @@ header {
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1em;
 }
 
 header h1 {
@@ -58,5 +60,21 @@ footer {
     justify-content: center;
     align-items: center;
     padding: 1em;
-    margin-top: 1em;
+}
+
+button {
+    width: 100px;
+    background-color: #00a2ff;
+    border: 1px solid white;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: .8em;
+    padding: 1em;
+    color: white;
+    transition: .3s;
+}
+
+button:hover {
+    background-color: white;
+    color: #00a2ff;
 }

@@ -45,12 +45,6 @@ app.get('/sala/:roomCode', (req, res) => {
   // Renderizar a página da sala com o código único
   res.render('index', { content: 'pages/sala.ejs', roomCode });
 });
-
-
-function generateUniqueCode() {
-  // Implementação para gerar um código único, por exemplo, usando um timestamp
-  return Date.now().toString(36);
-}
 // Inicie o servidor
 app.listen(port, () => {
   console.log(`Servidor Express iniciado na porta ${port}`);
