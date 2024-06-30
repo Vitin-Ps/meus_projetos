@@ -10,14 +10,18 @@ body {
 
 :root {
   --cor001: #0083f6;
-  --cor002: rgba(196, 196, 196, 0.173);
-  --cor003: rgba(255, 255, 255, 0.5);
+  --cor002: rgba(196, 196, 196, 0.508);
+  --cor003: rgba(255, 255, 255, 0.781);
   --cor004: #ff7700;
+  --cor005: rgba(0, 0, 0, 0.2);
+  --cor006: #fc5d5b;
+  --cor007: linear-gradient(to bottom, #ff9d00, #ff8c00, #ffc800);
+  --cor008: #F4F9FD;
 }
 
 .main_container {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
 }
 
@@ -30,7 +34,7 @@ body {
 }
 
 .painel_header_container {
-  margin-top: .5em;
+  margin-top: 0.5em;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -203,17 +207,216 @@ input[type='checkbox']:checked::after {
 }
 
 .ligacao_container {
-  background-color: rgb(5, 147, 45);
   flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.videos_container {
+  padding: 1em;
+  height: 80%;
+  width: 100%;
+  position: relative;
+}
+
+.area_video {
+  background-color: var(--cor001);
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.area_video img {
+  max-width: 150px;
+}
+
+.local_video_container {
+  background-color: var(--cor002);
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  width: 150px;
+  height: 150px;
+  border-radius: 15px;
+  border: 1px solid #fff;
+  backdrop-filter: blur(60px);
+  overflow: hidden;
+}
+
+.local_video_container .local_video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.remote_video {
+  width: 100%;
+  height: 100%;
+}
+
+.btn_ligacao_container {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn_ligacao {
+  background-color: var(--cor005);
+  backdrop-filter: blur(60px);
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 1.5em;
+  color: #fff;
+}
+
+.btn_ligacao_grande {
+  width: 65px;
+  height: 65px;
+  background-color: var(--cor006);
+}
+
+.fa-record-vinyl {
+  color: #ff00005f;
+}
+
+.status_gravando_btn_container {
+  background-color: var(--cor005);
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  padding: 1em;
+  border-radius: 15px;
+  border-radius: 15px;
+  backdrop-filter: blur(60px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.status_gravando_btn_container button {
+  background-color: transparent;
+  border: none;
+  color: #fff;
+  font-size: 0.9em;
+}
+
+.status_gravando_btn_container button:hover {
+  color: #ffffff94;
+}
+
+.status_gravando_btn_container button i {
+  font-size: 1.2em;
+}
+
+.mensagens_container {
+  background-color: var(--cor008);
+  width: 30px;
+  overflow: hidden;
+  transition: 1s;
+  display: flex;
+  flex-direction: column;
+}
+
+.mensagens_container_main {
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.btn_show_mensagens {
+    position: absolute;
+    top: 15px;
+    right: 8px;
+    background-color: transparent;
+    border: 2px solid var(--cor001);
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.5s;
 }
 
 .mensagem_container {
-  background-color: rgb(255, 179, 0);
-  width: 0px;
-  overflow: hidden;
-  transition: 1s;
+  padding: 1em;
+  width: 80%;
+  height: 80%;
+  overflow: auto;
 }
 
+.nova_mensagem_container {
+  background-color: #fff;
+  border: 1px solid #a0adb5;
+  width: 90%;
+  padding: 0.5em;
+  border-radius: 15px;
+  display: flex;
+  gap: 10px;
+}
+
+.nova_mensagem_container input {
+  padding: 0.5em;
+  flex-grow: 1;
+  border: none;
+  font-size: 1em;
+}
+
+.nova_mensagem_container input:focus {
+  outline: none;
+}
+
+.nova_mensagem_container button {
+  background-image: var(--cor007);
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  font-size: 0.9em;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  transition: 0.4s;
+}
+
+.nova_mensagem_container button:hover {
+  background-color: #fff;
+  background-image: none;
+  color: var(--cor004);
+  border-color: var(--cor004);
+}
+
+
+
 .display_none {
-    display: none;
+  display: none;
+}
+
+@media (max-width: 650px) {
+  .main_container {
+    width: 100%;
+    background-color: #fc5d5b;
+    flex-direction: column;
+    gap: 1em;
+  }
+
+  .main_container > * {
+    width: 100%;
+  }
+
+  .ligacao_container {
+    height: 400px;
+  }
 }

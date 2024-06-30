@@ -30,14 +30,22 @@ function mostrarPainel(btnPainel) {
 }
 
 function mostrarMenssagens(btnMostrarMsn) {
-  const mensagem_container = document.querySelector('.mensagem_container');
+  const mensagem_container = document.querySelector('.mensagens_container');
+  const mensagens_container_main = document.querySelector('.mensagens_container_main');
 
   if (show_mensagens) {
-    mensagem_container.style = 'width: 0px;';
+    btnMostrarMsn.style = 'background-color: transparent;';
+
+    mensagem_container.style = 'width: 30px;';
+    mensagens_container_main.style.display = 'none';
 
     show_mensagens = !show_mensagens;
   } else {
+    btnMostrarMsn.style = 'background-color: var(--cor001);';
+
     mensagem_container.style = 'width: 300px;';
+    mensagens_container_main.style.display = 'flex';
+
     show_mensagens = !show_mensagens;
   }
 }

@@ -15,12 +15,10 @@
           <button onclick="mostrarPainel(this)"></button>
         </div>
         <div class="painel_main_container">
-          <!-- <button onclick="mostrarMenssagens(this)">teste mostrar div de mensagens</button> -->
-
           <div class="cod_unico_container">
             <p>Seu código:</p>
             <div class="cod_unico_valor_container">
-              <p id="cod_unico" class="cod_unico">DDDDDDDD</p>
+              <p id="cod_unico_valor" class="cod_unico_valor">DDDDDDDD</p>
               <button id="btn_copiar_cod_unico" class="btn_copiar_cod_unico"><i class="fas fa-clipboard"></i></button>
             </div>
           </div>
@@ -63,43 +61,66 @@
         <div class="videos_container">
           <div class="area_video"><img src="ultils/images/logo.png" alt="" /></div>
           <video class="remote_video display_none" muted autoplay id="remote_video"></video>
-        </div>
-        <div class="btn_ligacao_container" id="btns_ligacao">
-          <button class="btn-ligacao_pequeno" id="btn_mic">
-            <i class="fas fa-microphone"></i>
-          </button>
-          <button class="btn-ligacao_pequeno" id="btn_camera">
-            <i class="fas fa-camera"></i>
-          </button>
-          <button class="btn-ligacao_grande" id="btn_desliga">
-            <i class="fas fa-phone-slash"></i>
-          </button>
-          <button class="btn-ligacao_pequeno" id="btn_compartilha_camera">
-            <i class="fas fa-film"></i>
-          </button>
-          <button class="btn-ligacao_pequeno" id="btn_grava">
-            <i class="fas fa-record-vinyl"></i>
-          </button>
-        </div>
-        <div class="finaliza_chat_btn_container" id="finaliza_chat_btn">
-          <button class="btn-ligacao_grande" id="btn_desliga">
-            <i class="fas fa-phone-slash"></i>
-          </button>
-        </div>
-        <div class="status_gravando_btn_container" id="status_gravando_btn">
-          <button id="btn_pausa_gravacao">
-            <i class="fas fa-pause"></i>
-          </button>
-          <button id="btn_continuar_gravacao">
-            <i class="fas fa-play"></i>
-          </button>
+          <div class="local_video_container">
+            <video src="ultils/videos/teste.mp4" class="local_video" id="local_video" muted autoplay></video>
+          </div>
+
+          <div class="btn_ligacao_container display_none" id="btns_ligacao">
+            <button class="btn_ligacao" id="btn_mic">
+              <i class="fas fa-microphone"></i>
+            </button>
+            <button class="btn_ligacao" id="btn_camera">
+              <i class="fas fa-camera"></i>
+            </button>
+            <button class="btn_ligacao btn_ligacao_grande" id="btn_desliga">
+              <i class="fas fa-phone-slash"></i>
+            </button>
+            <button class="btn_ligacao" id="btn_compartilha_camera">
+              <i class="fas fa-film"></i>
+            </button>
+            <button class="btn_ligacao" id="btn_grava">
+              <i class="fas fa-record-vinyl"></i>
+            </button>
+          </div>
+          <div class="btn_ligacao_container display_none" id="finaliza_chat_btn">
+            <button class="btn_ligacao btn_ligacao_grande" id="btn_desliga">
+              <i class="fas fa-phone-slash"></i>
+            </button>
+          </div>
+          <div class="status_gravando_btn_container display_none" id="status_gravando_btn">
+            <button id="btn_pausa_gravacao">
+              <i class="fas fa-pause"></i>
+            </button>
+            <button id="btn_continuar_gravacao">
+              <i class="fas fa-play"></i>
+            </button>
+            <button id="btn_para_gravacao">Parar gravação</button>
+          </div>
         </div>
       </div>
-      <div class="mensagem_container">
-        <p>teste</p>
+      <div class="mensagens_container">
+        <button onclick="mostrarMenssagens(this)" class="btn_show_mensagens"></button>
+
+        <div class="mensagens_container_main">
+            <div class="mensagem_container" id="mensagens_container"></div>
+            <div class="nova_mensagem_container" id="nov_mensagem">
+              <input type="text" class="nova_mensagem_input" id="nova_mensagem_input" placeholder="Digite sua mensagem..." />
+              <button class="enviar_mensagem_btn" id="enviar_mensagem_btn"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
       </div>
       <div class="alerta"></div>
     </div>
     <script src="./js/domEventos.js"></script>
+
+    <script src='/socket.io/socket.io.js'></script>
+    <script src='./js/elements.js' type='module'></script>
+    <script src='./js/constants.js' type='module'></script>
+    <script src='./js/ui.js' type='module'></script>
+    <script src='./js/wss.js' type='module'></script>
+    <script src='./js/store.js' type='module'></script>
+    <script src='./js/webRTCHandler.js' type='module'></script>
+    <script src='./js/main.js' type='module'></script>
+
   </body>
 </html>
