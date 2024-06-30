@@ -13,10 +13,18 @@ export const registraSocketEventos = (socket) => {
   });
 
   socket.on('pedido-chamada', (data) => {
-    webRTCHandler.executandoPedidoChamada(data);
+    webRTCHandler.executaPedidoChamada(data);
+  });
+
+  socket.on('pedido-chamada-resposta', (data) => {
+    webRTCHandler.executaPedidoChamadaResposta(data);
   });
 };
 
 export const enviarPedidoChamada = (data) => {
   socketIO.emit('pedido-chamada', data);
+};
+
+export const enviarPedidoChamadaResposta = (data) => {
+  socketIO.emit('pedido-chamada-resposta', data);
 };

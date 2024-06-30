@@ -25,7 +25,7 @@
 
           <div class="cod_unico_conexao_container">
             <p>Código Único:</p>
-            <input type="text" class="cod_unico_input" class="cod_unico_input" />
+            <input type="text" class="cod_unico_input" id="cod_unico_input" />
             <div class="cod_unico_conexao_btn_container">
               <button class="conexao_btn" id="cod_unico_chat_btn">
                 <i class="fas fa-comment"></i>
@@ -55,6 +55,7 @@
               <p>Permitir conexões aleatórias</p>
             </div>
           </div>
+          <div class='dashboard_blur display_none' id='dashboard_blur'></div>
         </div>
       </div>
       <div class="ligacao_container">
@@ -62,7 +63,7 @@
           <div class="area_video"><img src="ultils/images/logo.png" alt="" /></div>
           <video class="remote_video display_none" muted autoplay id="remote_video"></video>
           <div class="local_video_container">
-            <video src="ultils/videos/teste.mp4" class="local_video" id="local_video" muted autoplay></video>
+            <video class="local_video" id="local_video" muted autoplay></video>
           </div>
 
           <div class="btn_ligacao_container display_none" id="btns_ligacao">
@@ -102,25 +103,24 @@
         <button onclick="mostrarMenssagens(this)" class="btn_show_mensagens"></button>
 
         <div class="mensagens_container_main">
-            <div class="mensagem_container" id="mensagens_container"></div>
-            <div class="nova_mensagem_container" id="nov_mensagem">
-              <input type="text" class="nova_mensagem_input" id="nova_mensagem_input" placeholder="Digite sua mensagem..." />
-              <button class="enviar_mensagem_btn" id="enviar_mensagem_btn"><i class="fas fa-paper-plane"></i></button>
-            </div>
+          <div class="mensagem_container" id="mensagens_container"></div>
+          <div class="nova_mensagem_container" id="nova_mensagem">
+            <input type="text" class="nova_mensagem_input" id="nova_mensagem_input" placeholder="Digite sua mensagem..." />
+            <button class="enviar_mensagem_btn" id="enviar_mensagem_btn"><i class="fas fa-paper-plane"></i></button>
+          </div>
         </div>
       </div>
-      <div class="alerta"></div>
+      <div id="alerta"></div>
     </div>
     <script src="./js/domEventos.js"></script>
 
-    <script src='/socket.io/socket.io.js'></script>
-    <script src='./js/elements.js' type='module'></script>
-    <script src='./js/constants.js' type='module'></script>
-    <script src='./js/ui.js' type='module'></script>
-    <script src='./js/wss.js' type='module'></script>
-    <script src='./js/store.js' type='module'></script>
-    <script src='./js/webRTCHandler.js' type='module'></script>
-    <script src='./js/main.js' type='module'></script>
-
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./js/elements.js" type="module"></script>
+    <script src="./js/constants.js" type="module"></script>
+    <script src="./js/ui.js" type="module"></script>
+    <script src="./js/wss.js" type="module"></script>
+    <script src="./js/store.js" type="module"></script>
+    <script src="./js/webRTCHandler.js" type="module"></script>
+    <script src="./js/main.js" type="module"></script>
   </body>
 </html>

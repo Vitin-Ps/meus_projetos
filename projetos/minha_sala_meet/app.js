@@ -42,14 +42,28 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('disconect', () => {
-    console.log('Usuário desconectado...');
+  socket.on('pedido-chamada-resposta', (data) => {
+    const { chamadorSocketId } = data;
 
+    const peerConectado = peersConmectados.find((peerSokcketId) => peerSokcketId === chamadorSocketId);
+
+    if (peerConectado) {
+      io.to(data.chamadorSocketId).emit('pedido-chamada-resposta', data);
+    }
+  });
+ 
+
+  socket.on('disconnect', () => {
+    console.log('Usuário desconectado');
+    
     const newPeersConectados = peersConmectados.filter((peerSokcketId) => peerSokcketId !== socket.id);
 
-    peersConmectados - newPeersConectados;
+    peersConmectados = newPeersConectados;
     console.log(peersConmectados);
   });
+
+
+
 });
 
 server.listen(PORT, () => {

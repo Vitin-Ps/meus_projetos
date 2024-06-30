@@ -1,6 +1,7 @@
 import * as wss from './wss.js';
 import * as store from './store.js';
 import * as constants from './constants.js';
+import * as webRTCHandler from './webRTCHandler.js';
 
 // Inicialização da conexão do soketio
 
@@ -27,4 +28,5 @@ cod_unico_chat_btn.addEventListener('click', () => {
   const cod_unico_ligacao = document.getElementById('cod_unico_input').value;
 
   const ligacaoTipo = constants.ligacaoTipo.CHAT_COD_UNICO;
+  webRTCHandler.enviarPedidoChamada(ligacaoTipo, cod_unico_ligacao);
 });
