@@ -21,24 +21,24 @@ io.on('connection', (socket) => {
   console.log(peersConmectados);
 
   socket.on('pedido-chamada', (data) => {
-    const { cod_unico_ligacao, ligacaoTipo } = data;
-    const peerConectado = peersConmectados.find((peerSokcketId) => peerSokcketId === cod_unico_ligacao);
+    const { chamadorSocketId, ligacaoTipo } = data;
+    const peerConectado = peersConmectados.find((peerSokcketId) => peerSokcketId === chamadorSocketId);
 
     console.log(peerConectado);
 
     if (peerConectado) {
       const data = {
-        ligacaoSocketId: socket.id,
+        chamadorSocketId: socket.id,
         ligacaoTipo,
       };
 
-      io.to(cod_unico_ligacao).emit('pedido-chamada', data);
+      io.to(chamadorSocketId).emit('pedido-chamada', data);
     } else {
       const data = {
-        pedidoChamadaResponsdida: 'CHAMADA_NAO_ENCONTRADA',
+        pedidoChamadaResposta: 'CHAMADA_NAO_ENCONTRADA',
       };
 
-      io.to(socket.id).emit('pedido-chamada-respondida', data);
+      io.to(socket.id).emit('pedido-chamada-resposta', data);
     }
   });
 
@@ -51,19 +51,25 @@ io.on('connection', (socket) => {
       io.to(data.chamadorSocketId).emit('pedido-chamada-resposta', data);
     }
   });
- 
+
+  socket.on('sinal-webRTC', (data) => {
+    const { usuarioConectadoSocketId } = data;
+
+    const peerConectado = peersConmectados.find((peerSokcketId) => peerSokcketId === usuarioConectadoSocketId);
+
+    if (peerConectado) {
+      io.to(usuarioConectadoSocketId).emit('sinal-webRTC', data);
+    }
+  });
 
   socket.on('disconnect', () => {
     console.log('Usuário desconectado');
-    
+
     const newPeersConectados = peersConmectados.filter((peerSokcketId) => peerSokcketId !== socket.id);
 
     peersConmectados = newPeersConectados;
     console.log(peersConmectados);
   });
-
-
-
 });
 
 server.listen(PORT, () => {

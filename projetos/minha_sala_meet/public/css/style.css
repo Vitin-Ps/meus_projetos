@@ -229,10 +229,17 @@ input[type='checkbox']:checked::after {
 }
 
 .videos_container {
-  padding: 1em;
+  background-image: var(--cor009);
+  margin: 1em;
+  border-radius: 20px;
   height: 80%;
   width: 100%;
   position: relative;
+}
+
+.remote_video {
+  width: 100%;
+  height: 100%;
 }
 
 .area_video {
@@ -380,7 +387,7 @@ input[type='checkbox']:checked::after {
   width: 90%;
   padding: 0.5em;
   border-radius: 15px;
-  display: flex;
+  display: none;
   gap: 10px;
 }
 

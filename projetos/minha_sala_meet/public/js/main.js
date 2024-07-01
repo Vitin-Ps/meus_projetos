@@ -8,6 +8,8 @@ import * as webRTCHandler from './webRTCHandler.js';
 const socket = io('/');
 wss.registraSocketEventos(socket);
 
+webRTCHandler.getPreviewLocal();
+
 // registrando evento para copiar cod_unico
 
 const btn_copiar_cod_unico = document.getElementById('btn_copiar_cod_unico');
@@ -28,5 +30,13 @@ cod_unico_chat_btn.addEventListener('click', () => {
   const cod_unico_ligacao = document.getElementById('cod_unico_input').value;
 
   const ligacaoTipo = constants.ligacaoTipo.CHAT_COD_UNICO;
+  webRTCHandler.enviarPedidoChamada(ligacaoTipo, cod_unico_ligacao);
+});
+
+cod_unico_video_btn.addEventListener('click', () => {
+  console.log('VIDEO');
+  const cod_unico_ligacao = document.getElementById('cod_unico_input').value;
+
+  const ligacaoTipo = constants.ligacaoTipo.VIDEO_COD_UNICO;
   webRTCHandler.enviarPedidoChamada(ligacaoTipo, cod_unico_ligacao);
 });

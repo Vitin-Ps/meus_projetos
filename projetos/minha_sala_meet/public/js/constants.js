@@ -11,3 +11,9 @@ export const pedidoChamadaResposta = {
   CHAMADA_REJEITADA: 'CHAMADA_REJEITADA',
   CHAMADA_INDISPONIVEL: 'CHAMADA_INDISPONIVEL',
 };
+
+export const sinalWebRTC = {
+  PEDIDO: 'PEDIDO',
+  RESPOSTA: 'RESPOSTA',
+  ICE_CANDIDATE: 'ICE_CANDIDATE',
+};

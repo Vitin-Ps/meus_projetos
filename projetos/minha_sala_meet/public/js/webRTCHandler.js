@@ -58,7 +58,7 @@ const criarPeerConexao = () => {
 
   // adicionar esse stream no peer de conexão
   if (userDetailsConectado.ligacaoTipo === constants.ligacaoTipo.VIDEO_COD_UNICO) {
-    const streamLocal = store.getState().streamLocal;
+    const streamLocal = store.getState().localStream;
     for (const track of streamLocal.getTracks()) {
       peerConexao.addTrack(track, streamLocal);
     }
@@ -74,7 +74,7 @@ export const enviarPedidoChamada = (ligacaoTipo, cod_unico_ligacao) => {
   if (ligacaoTipo === constants.ligacaoTipo.CHAT_COD_UNICO || ligacaoTipo === constants.ligacaoTipo.VIDEO_COD_UNICO) {
     const data = {
       ligacaoTipo,
-      cod_unico_ligacao,
+      chamadorSocketId: cod_unico_ligacao,
     };
     ui.mostrarLigacaoMensagem(rejeitaLigacaoMensagem);
     wss.enviarPedidoChamada(data);
@@ -82,10 +82,10 @@ export const enviarPedidoChamada = (ligacaoTipo, cod_unico_ligacao) => {
 };
 
 export const executaPedidoChamada = (data) => {
-  const { ligacaoTipo, ligacaosocketId } = data;
+  const { ligacaoTipo, chamadorSocketId } = data;
 
   userDetailsConectado = {
-    socketId: ligacaosocketId,
+    socketId: chamadorSocketId,
     ligacaoTipo,
   };
 
@@ -114,13 +114,16 @@ export const executaPedidoChamadaResposta = (data) => {
   if (pedidoChamadaResposta === constants.pedidoChamadaResposta.CHAMADA_ACEITA) {
     // enciar o webRtc pedido
     ui.mostrarLigacaoElementos(userDetailsConectado.ligacaoTipo);
+    criarPeerConexao();
+
+    enviarPedidoWebRTC();
   }
 };
 
 const aceitarLigacao = () => {
   console.log('ligacao aceita...');
   criarPeerConexao();
-  enviarPedidoChamadaResposta(constants.pedidoChamadaResposta.CHAMADA_ACEITA);  
+  enviarPedidoChamadaResposta(constants.pedidoChamadaResposta.CHAMADA_ACEITA);
   ui.mostrarLigacaoElementos(userDetailsConectado.ligacaoTipo);
 };
 
@@ -133,11 +136,39 @@ const rejeitaLigacaoMensagem = () => {
   console.log('Rejeitando a ligação...');
 };
 
-const enviarPedidoChamadaResposta = (pedidoChamadoResposta) => {
+const enviarPedidoChamadaResposta = (pedidoChamadaResposta) => {
   const data = {
     chamadorSocketId: userDetailsConectado.socketId,
-    pedidoChamadoResposta,
+    pedidoChamadaResposta,
   };
   ui.removerAllAlertas();
   wss.enviarPedidoChamadaResposta(data);
+};
+
+export const enviarPedidoWebRTC = async () => {
+  const pedido = await peerConexao.createOffer();
+  await peerConexao.setLocalDescription(pedido);
+
+  wss.enviarDadosUsandoSinalWebRTC({
+    usuarioConectadoSocketId: userDetailsConectado.socketId,
+    tipo: constants.sinalWebRTC.PEDIDO,
+    pedido: pedido,
+  });
+};
+
+export const executaWebRTCPedido = async (data) => {
+  await peerConexao.setLocalDescription(data.pedido);
+  const resposta = await peerConexao.createAnswer();
+
+  await peerConexao.setLocalDescription(resposta);
+  wss.enviarDadosUsandoSinalWebRTC({
+    usuarioConectadoSocketId: userDetailsConectado.socketId,
+    tipo: constants.sinalWebRTC.RESPOSTA,
+    resposta: resposta,
+  });
+};
+
+export const executaWebRTCResposta = async (data) => {
+  console.log('executando webRTC resposta');
+  await peerConexao.setRemoteDescription(data.resposta);
 };

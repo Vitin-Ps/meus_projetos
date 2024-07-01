@@ -58,7 +58,7 @@ export const mostrarInfoAlerta = (pedidoChamadaResposta) => {
   }
 
   if (pedidoChamadaResposta === constants.pedidoChamadaResposta.CHAMADA_NAO_ENCONTRADA) {
-    infoAlerta = elements.getInfoAlerta('Chamada rnão encontrada', 'Cheque seu código único, por favor');
+    infoAlerta = elements.getInfoAlerta('Chamada não encontrada', 'Cheque seu código único, por favor');
   }
 
   if (pedidoChamadaResposta === constants.pedidoChamadaResposta.CHAMADA_INDISPONIVEL) {
@@ -101,7 +101,7 @@ const mostrarVideoLigacaoElementos = () => {
   mostrarElemento(btns_ligacao);
 
   const area_video = document.getElementById('area_video');
-  mostrarElemento(area_video);
+  esconderElemento(area_video);
 
   const remote_video = document.getElementById('remote_video');
   mostrarElemento(remote_video);
@@ -125,14 +125,14 @@ const esconderElemento = (elemento) => {
   }
 };
 
-const ativarDashBoard = (elemento) => {
+const ativarDashBoard = () => {
   const dashboard_blur = document.getElementById('dashboard_blur');
   if (!dashboard_blur.classList.contains('display_none')) {
     dashboard_blur.classList.add('display_none');
   }
 };
 
-const desativaDashboard = (elemento) => {
+const desativaDashboard = () => {
   const dashboard_blur = document.getElementById('dashboard_blur');
   if (dashboard_blur.classList.contains('display_none')) {
     dashboard_blur.classList.remove('display_none');
