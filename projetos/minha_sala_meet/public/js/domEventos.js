@@ -32,19 +32,22 @@ function mostrarPainel(btnPainel) {
 function mostrarMenssagens(btnMostrarMsn) {
   const mensagem_container = document.querySelector('.mensagens_container');
   const mensagens_container_main = document.querySelector('.mensagens_container_main');
+  const nova_mensagem_container = document.querySelector('.nova_mensagem_container');
 
   if (show_mensagens) {
     btnMostrarMsn.style = 'background-color: transparent;';
 
     mensagem_container.style = 'width: 30px;';
     mensagens_container_main.style.display = 'none';
-
+    nova_mensagem_container.style.display = 'none';
+    
     show_mensagens = !show_mensagens;
   } else {
     btnMostrarMsn.style = 'background-color: var(--cor001);';
-
+    
     mensagem_container.style = 'width: 300px;';
     mensagens_container_main.style.display = 'flex';
+    nova_mensagem_container.style.display = 'flex';
 
     show_mensagens = !show_mensagens;
   }

@@ -14,7 +14,7 @@ const constraintsPadroes = {
 const configuracao = {
   iceServers: [
     {
-      urls: 'stun:stun.l.google.com:13902',
+      urls: 'stun:stun.l.google.com:19302',
     },
   ],
 };
@@ -157,7 +157,7 @@ export const enviarPedidoWebRTC = async () => {
 };
 
 export const executaWebRTCPedido = async (data) => {
-  await peerConexao.setLocalDescription(data.pedido);
+  await peerConexao.setRemoteDescription(data.pedido);
   const resposta = await peerConexao.createAnswer();
 
   await peerConexao.setLocalDescription(resposta);
