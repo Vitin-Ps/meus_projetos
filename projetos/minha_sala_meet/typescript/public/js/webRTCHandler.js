@@ -3,7 +3,7 @@ import * as constants from './constants.js';
 import * as ui from './ui.js';
 import * as store from './store.js';
 
-let userDetailsConectado;
+let detalhesUsuarioConectado;
 let peerConexao;
 let dataCanal;
 
@@ -25,6 +25,8 @@ export const getPreviewLocal = () => {
     .getUserMedia(constraintsPadroes)
     .then((stream) => {
       ui.atualizaVideoLocal(stream);
+      ui.mostrarBotoesLigacaoVideo();
+      store.setCallState(constants.estadoLigacao.LIGACAO_DISPONIVEL);
       store.setLocalStream(stream);
     })
     .catch((erro) => {
@@ -35,29 +37,30 @@ export const getPreviewLocal = () => {
 const criarPeerConexao = () => {
   peerConexao = new RTCPeerConnection(configuracao);
 
-  // dataCanal = peerConexao.createDataChannel('chat');
+  // parte do chat
 
-  // peerConexao.ondatachannel = (event) => {
-  //   const dataCanal = event.channel;
+  dataCanal = peerConexao.createDataChannel('chat');
 
-  //   dataCanal.onopen = () => {
-  //     console.log(' Conexão peer está pronta para receber as mensagens dos dados do canal');
-  //   };
+  peerConexao.ondatachannel = (event) => {
+    const dataCanal = event.channel;
 
-  //   dataCanal.onmessage = (event) => {
-  //     console.log('mensagem veio do data Canal');
-  //     const mensagem = JSON.parse(event.data);
-  //     // ui.inserirMensagem(mensagem)
-  //     console.log(mensagem);
-  //   };
-  // };
+    dataCanal.onopen = () => {
+      console.log(' Conexão peer está pronta para receber as mensagens dos dados do canal');
+    };
+
+    dataCanal.onmessage = (event) => {
+      console.log('mensagem veio do data Canal');
+      const mensagem = JSON.parse(event.data);
+      ui.inserirMensagem(mensagem);
+    };
+  };
 
   peerConexao.onicecandidate = (event) => {
     console.log('buscando ice candidates para criar a conexão de ponto a ponto');
     if (event.candidate) {
       // envia essa ice candidates para outro peer
       wss.enviarDadosUsandoSinalWebRTC({
-        usuarioConectadoSocketId: userDetailsConectado.socketId,
+        usuarioConectadoSocketId: detalhesUsuarioConectado.socketId,
         tipo: constants.sinalWebRTC.ICE_CANDIDATE,
         candidate: event.candidate,
       });
@@ -81,7 +84,10 @@ const criarPeerConexao = () => {
   };
 
   // adicionar esse stream no peer de conexão
-  if (userDetailsConectado.ligacaoTipo === constants.ligacaoTipo.VIDEO_COD_UNICO) {
+  if (
+    detalhesUsuarioConectado.ligacaoTipo === constants.ligacaoTipo.VIDEO_COD_UNICO ||
+    detalhesUsuarioConectado.ligacaoTipo === constants.ligacaoTipo.VIDEO_ALEATORIO
+  ) {
     const streamLocal = store.getState().localStream;
     for (const track of streamLocal.getTracks()) {
       peerConexao.addTrack(track, streamLocal);
@@ -89,8 +95,13 @@ const criarPeerConexao = () => {
   }
 };
 
+export const enviarMensagemUsandoDataCanal = (mensagem) => {
+  const stringfieldMensagem = JSON.stringify(mensagem);
+  dataCanal.send(stringfieldMensagem);
+};
+
 export const enviarPedidoChamada = (ligacaoTipo, cod_unico_ligacao) => {
-  userDetailsConectado = {
+  detalhesUsuarioConectado = {
     ligacaoTipo,
     socketId: cod_unico_ligacao,
   };
@@ -100,7 +111,20 @@ export const enviarPedidoChamada = (ligacaoTipo, cod_unico_ligacao) => {
       ligacaoTipo,
       chamadorSocketId: cod_unico_ligacao,
     };
-    ui.mostrarLigacaoMensagem(rejeitaLigacaoMensagem);
+    ui.mostrarLigacaoMensagem(ligandoAlertaParaLigacaoReigeitadaExecutada);
+
+    store.setCallState(constants.estadoLigacao.LIGACAO_INDISPONIVEL);
+
+    wss.enviarPedidoChamada(data);
+  }
+
+  if (ligacaoTipo === constants.ligacaoTipo.CHAT_ALEATORIO || ligacaoTipo === constants.ligacaoTipo.VIDEO_ALEATORIO) {
+    const data = {
+      ligacaoTipo,
+      chamadorSocketId: cod_unico_ligacao,
+    };
+
+    store.setCallState(constants.estadoLigacao.LIGACAO_INDISPONIVEL);
     wss.enviarPedidoChamada(data);
   }
 };
@@ -108,39 +132,26 @@ export const enviarPedidoChamada = (ligacaoTipo, cod_unico_ligacao) => {
 export const executaPedidoChamada = (data) => {
   const { ligacaoTipo, chamadorSocketId } = data;
 
-  userDetailsConectado = {
+  if (!checarPossibilidadeLigacao()) {
+    return enviarPedidoChamadaResposta(constants.pedidoChamadaResposta.CHAMADA_INDISPONIVEL, chamadorSocketId);
+  }
+
+  detalhesUsuarioConectado = {
     socketId: chamadorSocketId,
     ligacaoTipo,
   };
+
+  store.setCallState(constants.estadoLigacao.LIGACAO_INDISPONIVEL);
 
   if (ligacaoTipo === constants.ligacaoTipo.CHAT_COD_UNICO || ligacaoTipo === constants.ligacaoTipo.VIDEO_COD_UNICO) {
     console.log('Mostrando ligação Mensagem');
     ui.mostrarEntradaLigacaoChamada(ligacaoTipo, aceitarLigacao, rejeitarLigacao);
   }
-};
 
-export const executaPedidoChamadaResposta = (data) => {
-  const { pedidoChamadaResposta } = data;
-  ui.removerAllAlertas();
-
-  if (pedidoChamadaResposta === constants.pedidoChamadaResposta.CHAMADA_NAO_ENCONTRADA) {
-    ui.mostrarInfoAlerta(pedidoChamadaResposta);
-  }
-
-  if (pedidoChamadaResposta === constants.pedidoChamadaResposta.CHAMADA_INDISPONIVEL) {
-    ui.mostrarInfoAlerta(pedidoChamadaResposta);
-  }
-
-  if (pedidoChamadaResposta === constants.pedidoChamadaResposta.CHAMADA_REJEITADA) {
-    ui.mostrarInfoAlerta(pedidoChamadaResposta);
-  }
-
-  if (pedidoChamadaResposta === constants.pedidoChamadaResposta.CHAMADA_ACEITA) {
-    // enciar o webRtc pedido
-    ui.mostrarLigacaoElementos(userDetailsConectado.ligacaoTipo);
+  if (ligacaoTipo === constants.ligacaoTipo.CHAT_ALEATORIO || ligacaoTipo === constants.ligacaoTipo.VIDEO_ALEATORIO) {
     criarPeerConexao();
-
-    enviarPedidoWebRTC();
+    enviarPedidoChamadaResposta(constants.pedidoChamadaResposta.CHAMADA_ACEITA);
+    ui.mostrarLigacaoElementos(detalhesUsuarioConectado.ligacaoTipo);
   }
 };
 
@@ -148,25 +159,62 @@ const aceitarLigacao = () => {
   console.log('ligacao aceita...');
   criarPeerConexao();
   enviarPedidoChamadaResposta(constants.pedidoChamadaResposta.CHAMADA_ACEITA);
-  ui.mostrarLigacaoElementos(userDetailsConectado.ligacaoTipo);
+  ui.mostrarLigacaoElementos(detalhesUsuarioConectado.ligacaoTipo);
 };
 
 const rejeitarLigacao = () => {
   console.log('Ligação rejeitada...');
-  enviarPedidoChamadaResposta(constants.ligacaoTipo.CHAMADA_REJEITADA);
+  setEntradaLigacaoDisponivel();
+  enviarPedidoChamadaResposta(constants.pedidoChamadaResposta.CHAMADA_REJEITADA);
 };
 
-const rejeitaLigacaoMensagem = () => {
-  console.log('Rejeitando a ligação...');
-};
-
-const enviarPedidoChamadaResposta = (pedidoChamadaResposta) => {
+const ligandoAlertaParaLigacaoReigeitadaExecutada = () => {
   const data = {
-    chamadorSocketId: userDetailsConectado.socketId,
+    usuarioConectadoSocketId: detalhesUsuarioConectado.socketId,
+  };
+
+  fecharPeerConectadoEReiniciarEstado();
+
+  wss.enviarUsuarioDesconectado(data);
+};
+
+const enviarPedidoChamadaResposta = (pedidoChamadaResposta, chamadorSocketId = null) => {
+  const socketId = chamadorSocketId ? chamadorSocketId : detalhesUsuarioConectado.socketId;
+
+  const data = {
+    chamadorSocketId: socketId,
     pedidoChamadaResposta,
   };
-  ui.removerAllAlertas();
+  ui.removerTodosAlertas();
   wss.enviarPedidoChamadaResposta(data);
+};
+
+export const executaPedidoChamadaResposta = (data) => {
+  const { pedidoChamadaResposta } = data;
+  ui.removerTodosAlertas();
+
+  if (pedidoChamadaResposta === constants.pedidoChamadaResposta.CHAMADA_NAO_ENCONTRADA) {
+    ui.mostrarInfoAlerta(pedidoChamadaResposta);
+    setEntradaLigacaoDisponivel();
+  }
+
+  if (pedidoChamadaResposta === constants.pedidoChamadaResposta.CHAMADA_INDISPONIVEL) {
+    setEntradaLigacaoDisponivel();
+    ui.mostrarInfoAlerta(pedidoChamadaResposta);
+  }
+
+  if (pedidoChamadaResposta === constants.pedidoChamadaResposta.CHAMADA_REJEITADA) {
+    setEntradaLigacaoDisponivel();
+    ui.mostrarInfoAlerta(pedidoChamadaResposta);
+  }
+
+  if (pedidoChamadaResposta === constants.pedidoChamadaResposta.CHAMADA_ACEITA) {
+    // enciar o webRtc pedido
+    ui.mostrarLigacaoElementos(detalhesUsuarioConectado.ligacaoTipo);
+    criarPeerConexao();
+
+    enviarPedidoWebRTC();
+  }
 };
 
 export const enviarPedidoWebRTC = async () => {
@@ -174,7 +222,7 @@ export const enviarPedidoWebRTC = async () => {
   await peerConexao.setLocalDescription(pedido);
 
   wss.enviarDadosUsandoSinalWebRTC({
-    usuarioConectadoSocketId: userDetailsConectado.socketId,
+    usuarioConectadoSocketId: detalhesUsuarioConectado.socketId,
     tipo: constants.sinalWebRTC.PEDIDO,
     pedido: pedido,
   });
@@ -186,7 +234,7 @@ export const executaWebRTCPedido = async (data) => {
 
   await peerConexao.setLocalDescription(resposta);
   wss.enviarDadosUsandoSinalWebRTC({
-    usuarioConectadoSocketId: userDetailsConectado.socketId,
+    usuarioConectadoSocketId: detalhesUsuarioConectado.socketId,
     tipo: constants.sinalWebRTC.RESPOSTA,
     resposta: resposta,
   });
@@ -208,12 +256,12 @@ export const executaWebRTCCandidate = async (data) => {
 
 let compartilharTelaStream;
 
-export const trocaEntreCameraETelaCompartilhada = async (telaCompatilhaAtivada) => {
-  if (telaCompatilhaAtivada) {
+export const trocaEntreCameraETelaCompartilhada = async (telaCompatilhadaAtivada) => {
+  if (telaCompatilhadaAtivada) {
     const streamLocal = store.getState().localStream;
     const senders = peerConexao.getSenders();
 
-    const sender = senders.finmd((sender) => {
+    const sender = senders.find((sender) => {
       return sender.track.kind === streamLocal.getVideoTracks()[0].kind;
     });
 
@@ -225,10 +273,10 @@ export const trocaEntreCameraETelaCompartilhada = async (telaCompatilhaAtivada) 
 
     store
       .getState()
-      .screenSharingActive.getTracks()
+      .screenSharingStream.getTracks()
       .forEach((track) => track.stop());
 
-    store.setScreenSharingActive(!telaCompatilhaAtivada);
+    store.setScreenSharingActive(!telaCompatilhadaAtivada);
 
     ui.atualizarVideoLocal(streamLocal);
   } else {
@@ -244,19 +292,79 @@ export const trocaEntreCameraETelaCompartilhada = async (telaCompatilhaAtivada) 
       // Substituir track pelo sender enviado
       const senders = peerConexao.getSenders();
 
-      const sender = senders.finmd((sender) => {
-        return sender.track.kind === streamLocal.getVideoTracks()[0].kind;
+      const sender = senders.find((sender) => {
+        return sender.track.kind === compartilharTelaStream.getVideoTracks()[0].kind;
       });
-  
+
       if (sender) {
-        sender.replaceTrack(streamLocal.getVideoTracks()[0]);
-      }     
-  
-      store.setScreenSharingActive(!telaCompatilhaAtivada);
-  
+        sender.replaceTrack(compartilharTelaStream.getVideoTracks()[0]);
+      }
+
+      store.setScreenSharingActive(!telaCompatilhadaAtivada);
+
       ui.atualizarVideoLocal(compartilharTelaStream);
     } catch (erro) {
-      console.log('Ocorreu um erro ao tentar pegar o stream compartilhado');
+      console.log('Ocorreu um erro ao tentar pegar o stream compartilhado: ', erro);
     }
+  }
+};
+
+// desligar ligação
+export const executaDesligamento = () => {
+  console.log('Finalizando a ligação');
+  const data = {
+    usuarioConectadoSocketId: detalhesUsuarioConectado.socketId,
+  };
+
+  wss.enviarUsuarioDesconectado(data);
+  fecharPeerConectadoEReiniciarEstado();
+};
+
+export const executaDesligamentoUsuarioConectado = () => {
+  fecharPeerConectadoEReiniciarEstado();
+};
+
+const fecharPeerConectadoEReiniciarEstado = () => {
+  if (peerConexao) {
+    peerConexao.close();
+    peerConexao = null;
+  }
+
+  if (
+    detalhesUsuarioConectado.ligacaoTipo === constants.ligacaoTipo.VIDEO_COD_UNICO ||
+    detalhesUsuarioConectado.ligacaoTipo === constants.ligacaoTipo.VIDEO_ALEATORIO
+  ) {
+    store.getState().localStream.getVideoTracks()[0].enabled = true;
+    store.getState().localStream.getAudioTracks()[0].enabled = true;
+  }
+
+  ui.atualizaUIDepoisDeDesligar(detalhesUsuarioConectado.ligacaoTipo);
+  setEntradaLigacaoDisponivel();
+};
+
+const checarPossibilidadeLigacao = (ligacaoTipo) => {
+  const estadoLigacao = store.getState().callState;
+
+  if (estadoLigacao === constants.estadoLigacao.LIGACAO_DISPONIVEL) {
+    return true;
+  }
+
+  if (
+    (ligacaoTipo === constants.ligacaoTipo.VIDEO_COD_UNICO || ligacaoTipo === constants.ligacaoTipo.VIDEO_ALEATORIO) &&
+    estadoLigacao === constants.estadoLigacao.LIGACAO_DISPONIVEL_SOMENTE_CHAT
+  ) {
+    return false;
+  }
+
+  return false;
+};
+
+const setEntradaLigacaoDisponivel = () => {
+  const streamLocal = store.getState().localStream;
+
+  if (streamLocal) {
+    store.setCallState(constants.estadoLigacao.LIGACAO_DISPONIVEL);
+  } else {
+    store.setCallState(constants.estadoLigacao.LIGACAO_DISPONIVEL_SOMENTE_CHAT);
   }
 };
