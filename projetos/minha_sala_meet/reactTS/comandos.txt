@@ -1,0 +1,6 @@
+npx create-react-app my_chat --template typescript
+npm i react-router-dom
+npm i prettier
+
+extensão vscode ES7+ React/Redux/React-Native snippets
+comando: rafce
