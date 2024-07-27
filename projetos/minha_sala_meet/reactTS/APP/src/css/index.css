@@ -22,6 +22,9 @@ body {
   --cor007: #F4F4F4;  
   --cor008: #efefef;
   --cor009: #ccc;
+  --cor010: #d7d7d78f;
+  --cor011: #d7d7d7e7;
+  --cor012: #c4c4c4;
 
 
   --degrade001: linear-gradient(145deg, #0084ff, #46a5fd, #77baf9);

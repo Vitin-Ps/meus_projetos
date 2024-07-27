@@ -15,9 +15,12 @@ const io = new socket_io_1.Server(server, {
     },
 });
 let users = [];
+let peersConectados = [];
 io.on('connection', (socket) => {
     console.log('Usuários: ', users);
     // Lida com o evento 'addCodigoUser'
+    peersConectados.push(socket.id);
+    console.log('Peers: ', peersConectados);
     socket.on('addCodigoUser', (codigo) => {
         let user = users.find((user) => user.codigo === codigo);
         if (!user) {
@@ -32,19 +35,19 @@ io.on('connection', (socket) => {
             console.log('usuário já conectado');
         }
     });
+    socket.on('entrarSala', (codSala) => {
+        socket.join(codSala);
+        console.log(`Usuário ${socket.id} entrou na sala ${codSala}`);
+    });
     // Lida com o evento 'addMensagem'
-    socket.on('addMensagem', (message, codigo) => {
-        console.log('chegou');
-        const user = users.find((user) => user.codigo === codigo);
-        const socketUser = user ? user.peer : null;
-        if (socketUser) {
-            io.to(socketUser).emit('receberMensagem', message);
-        }
+    socket.on('addMensagem', (data) => {
+        socket.to(data.grupo.uuid).emit('receberMensagem', data);
     });
     // Lida com o evento 'disconnect'
     socket.on('disconnect', () => {
         console.log('Usuário desconectado');
-        // peersConectados = peersConectados.filter((peerSocketId) => peerSocketId !== socket.id);
+        peersConectados = peersConectados.filter((peerSocketId) => peerSocketId !== socket.id);
+        users = users.filter((user) => user.peer !== socket.id);
         // console.log('Peers Conectados: ', peersConectados);
     });
 });

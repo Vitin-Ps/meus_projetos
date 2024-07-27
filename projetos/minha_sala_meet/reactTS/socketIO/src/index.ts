@@ -1,6 +1,7 @@
 import http from 'http';
 import { Server, Socket } from 'socket.io';
 import { User } from './interfaces/User';
+import { Mensagem } from './interfaces/Mensagem';
 
 const PORT = process.env.PORT || 3005;
 
@@ -14,10 +15,14 @@ const io = new Server(server, {
 });
 
 let users: User[] = [];
+let peersConectados: String[] = [];
 
 io.on('connection', (socket: Socket) => {
   console.log('Usuários: ', users);
   // Lida com o evento 'addCodigoUser'
+  peersConectados.push(socket.id);
+  console.log('Peers: ', peersConectados);
+
   socket.on('addCodigoUser', (codigo: string) => {
     let user: User | undefined = users.find((user) => user.codigo === codigo);
 
@@ -35,22 +40,22 @@ io.on('connection', (socket: Socket) => {
     }
   });
 
-  // Lida com o evento 'addMensagem'
-  socket.on('addMensagem', (message: string, codigo: string) => {
-    console.log('chegou');
-    const user = users.find((user) => user.codigo === codigo);
-    const socketUser: string | null = user ? user.peer : null;
+  socket.on('entrarSala', (codSala: string) => {
+    socket.join(codSala);
+    console.log(`Usuário ${socket.id} entrou na sala ${codSala}`);
+  });
 
-    if (socketUser) {
-      io.to(socketUser).emit('receberMensagem', message);
-    }
+  // Lida com o evento 'addMensagem'
+  socket.on('addMensagem', (data: Mensagem) => {
+    socket.to(data.grupo.uuid).emit('receberMensagem', data);
   });
 
   // Lida com o evento 'disconnect'
   socket.on('disconnect', () => {
     console.log('Usuário desconectado');
 
-    // peersConectados = peersConectados.filter((peerSocketId) => peerSocketId !== socket.id);
+    peersConectados = peersConectados.filter((peerSocketId) => peerSocketId !== socket.id);
+    users = users.filter((user) => user.peer !== socket.id);
     // console.log('Peers Conectados: ', peersConectados);
   });
 });
