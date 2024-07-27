@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
+
 import '../css/Home.css'
-import socket from '../services/socket';
-import { addCodigoUser, addMensagem, registraSocketEventos } from '../services/wss';
 
 const Home = () => {
 

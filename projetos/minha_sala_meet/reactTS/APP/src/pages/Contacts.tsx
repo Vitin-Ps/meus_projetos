@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { Mensagem } from '../interfaces/Mensagem';
-import { addCodigoUser, addMensagem, entrarSala, registraSocketEventos } from '../services/wss';
+import { addCodigoUser, addMensagem, entrarSala } from '../services/wss';
 import socket from '../services/socket';
 import CardMensagem from './components/CardMensagem';
 
@@ -13,7 +13,7 @@ const conversas2: Mensagem[] = [
     id: 4,
     grupo: {
       id: 5,
-      uuid: 'dsfdfd',
+      uuid: 'dfghjjjj',
       nome: 'Os brabo da progamação',
     },
     usuario_remetente: {
@@ -27,7 +27,7 @@ const conversas2: Mensagem[] = [
     id: 5,
     grupo: {
       id: 5,
-      uuid: 'dsfdfd',
+      uuid: 'dfghjjjj',
       nome: 'Os brabo da progamação',
     },
     usuario_remetente: {
@@ -41,7 +41,7 @@ const conversas2: Mensagem[] = [
     id: 6,
     grupo: {
       id: 5,
-      uuid: 'dsfdfd',
+      uuid: 'dfghjjjj',
       nome: 'Os brabo da progamação',
     },
     usuario_remetente: {
@@ -55,7 +55,7 @@ const conversas2: Mensagem[] = [
     id: 7,
     grupo: {
       id: 5,
-      uuid: 'dsfdfd',
+      uuid: 'dfghjjjj',
       nome: 'Os brabo da progamação',
     },
     usuario_remetente: {
@@ -69,7 +69,7 @@ const conversas2: Mensagem[] = [
     id: 8,
     grupo: {
       id: 5,
-      uuid: 'dsfdfd',
+      uuid: 'dfghjjjj',
       nome: 'Os brabo da progamação',
     },
     usuario_remetente: {
@@ -81,6 +81,8 @@ const conversas2: Mensagem[] = [
   },
 ];
 
+const socketIO = socket;
+
 const Contacts = () => {
   const [nomeGrupo, setNomeGrupo] = useState('Nenhum');
   const [idUser, setIdUser] = useState<number>();
@@ -88,23 +90,26 @@ const Contacts = () => {
   const [conversas, setConversas] = useState<Mensagem[]>(conversas2);
   const [showConversa, setShowConversa] = useState(false);
 
-  useEffect(() => {
-    socket.on('receberMensagem', (data: Mensagem) => {
-      console.log('A mensagem chegou: ', data.mensagem);
-      setConversas((prevConversas) => [...prevConversas, data]);
-    });
-  }, []);
+  // useEffect(() => {
+  //   // socket.on('receberMensagem', (data: Mensagem) => {
+  //   //   console.log('A mensagem chegou: ', data.mensagem);
+  //   //   setConversas((prevConversas) => [...prevConversas, data]);
+  //   // });
+  // }, []);
 
   const entrarGrupo = () => {
     setNomeGrupo('Teste Grupo 1');
-    entrarSala(cod_sala);
+    entrarSala(socketIO, cod_sala);
     setShowConversa(true);
   };
 
   const entrarUser = (id: string) => {
     setIdUser(Number(id));
-    registraSocketEventos(socket);
-    addCodigoUser(id);
+    socketIO.on('receberMensagem', (data: Mensagem) => {
+      console.log('A mensagem chegou: ', data.mensagem);
+      setConversas((prevConversas) => [...prevConversas, data]);
+    });
+    addCodigoUser(socket, id);
   };
 
   const enviarMensagem = () => {
@@ -115,7 +120,7 @@ const Contacts = () => {
       data_hora: new Date(),
       grupo: {
         id: 5,
-        uuid: 'dsfdfd',
+        uuid: 'dfghjjjj',
         nome: 'Os brabo da progamação',
       },
       usuario_remetente: {
@@ -125,7 +130,7 @@ const Contacts = () => {
       mensagem,
     };
 
-    addMensagem(novaMensagem);
+    addMensagem(socketIO, novaMensagem);
     setConversas([...conversas, novaMensagem]);
     setMensagem('');
   };
@@ -135,7 +140,7 @@ const Contacts = () => {
       id: conversas.length + 1,
       grupo: {
         id: 5,
-        uuid: 'dsfdfd',
+        uuid: 'dfghjjjj',
         nome: 'Os brabo da progamação',
       },
       usuario_remetente: {
@@ -194,7 +199,7 @@ const Contacts = () => {
               {showConversa &&
                 conversas.length > 0 &&
                 conversas.map((conversa) => (
-                  <div key={conversa.id} className='card_msg_pai'>
+                  <div key={conversa.id} className="card_msg_pai">
                     {conversa.usuario_remetente.id === idUser ? (
                       <CardMensagem key={conversa.id} conversa={conversa} tipoMsg="msg_user" />
                     ) : (
@@ -207,12 +212,7 @@ const Contacts = () => {
                 ))}
             </div>
             <div className="nova_mensagem_container">
-              <input
-                type="text"
-                id="nova_mensagem"
-                value={mensagem}
-                onChange={(e) => setMensagem(e.target.value)}
-              />
+              <input type="text" id="nova_mensagem" value={mensagem} onChange={(e) => setMensagem(e.target.value)} />
               <button onClick={enviarMensagem}>
                 <FontAwesomeIcon icon={faPaperPlane} />
               </button>
