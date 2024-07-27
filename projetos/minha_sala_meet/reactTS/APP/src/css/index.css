@@ -7,6 +7,7 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
+    font-size: 1em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -15,7 +16,14 @@ body {
   --cor001: #333;
   --cor002: #FFF;
   --cor003: #000;
+  --cor004: #0084ff;
+  --cor005: #FAF6F4;
+  --cor006: #EAEAEA;
+  --cor007: #F4F4F4;  
+  --cor008: #efefef;
+  --cor009: #ccc;
 
 
-  --degrade001: linear
+  --degrade001: linear-gradient(145deg, #0084ff, #46a5fd, #77baf9);
+  --degrade002: linear-gradient(145deg, #0084ff, #6cb8ff, #9ecffd);
 }

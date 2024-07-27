@@ -4,3 +4,10 @@ npm i prettier
 
 extensão vscode ES7+ React/Redux/React-Native snippets
 comando: rafce
+
+npm install uuid
+
+npm install socket.io-client
+npm install uuid
+
+npm install --save @fortawesome/react-fontawesome @fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg-icons
