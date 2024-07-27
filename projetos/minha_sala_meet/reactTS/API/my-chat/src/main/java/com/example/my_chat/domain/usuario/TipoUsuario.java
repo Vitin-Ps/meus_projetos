@@ -2,7 +2,7 @@ package com.example.my_chat.domain.usuario;
 
 public enum TipoUsuario {
     ADMIN("admin"),
-    FUNCIONARIO("funcionario");
+    USER("user");
 
     private String tipoUsuario;
 

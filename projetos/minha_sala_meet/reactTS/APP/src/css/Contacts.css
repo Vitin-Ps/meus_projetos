@@ -3,7 +3,6 @@ img {
 }
 
 .contatos_container {
-  background-color: aqua;
   min-height: 75vh;
   display: flex;
 }

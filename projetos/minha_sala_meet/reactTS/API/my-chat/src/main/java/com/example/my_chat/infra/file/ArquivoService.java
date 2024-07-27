@@ -1,7 +1,7 @@
 package com.example.my_chat.infra.file;
 
-import com.example.crudjava.infra.FuncionalidadesService;
-import com.example.crudjava.infra.exception.ValidacaoException;
+import com.example.my_chat.infra.FuncionalidadesService;
+import com.example.my_chat.infra.exception.ValidacaoException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;

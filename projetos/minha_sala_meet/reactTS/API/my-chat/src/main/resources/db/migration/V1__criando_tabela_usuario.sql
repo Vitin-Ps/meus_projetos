@@ -1,0 +1,7 @@
+CREATE TABLE tbl_usuario (
+    id INT PRIMARY kEY AUTO_INCREMENT,
+    nome VARCHAR(255) NOT NULL,
+    login VARCHAR(255) NOT NULL UNIQUE,
+    senha VARCHAR(255) NOT NULL,
+    imagem VARCHAR(255) NULL
+);
