@@ -1,23 +1,23 @@
-header {
+header.header_estilo_old {
   background-color: var(--cor001);
   
   display: flex;
   flex-direction: column;
 }
 
-header aside {
+header.header_estilo_old aside {
   padding: 1em;
   text-align: center;
   font-size: 2em;
   color: var(--cor002);
 }
 
-header nav {
+header.header_estilo_old nav {
   background-color: var(--cor003);
   padding: .5em;  
 }
 
-header nav ul {
+header.header_estilo_old nav ul {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -26,7 +26,7 @@ header nav ul {
   list-style-type: none;
 }
 
-header nav ul a {
+header.header_estilo_old nav ul a {
   color: var(--cor002);
   font-size: 1.2em;
   padding: .2em .3em;
@@ -34,16 +34,34 @@ header nav ul a {
   transition: .4s;
 }
 
-header nav ul a:hover {
+header.header_estilo_old nav ul a:hover {
   background-color: var(--cor002);
   color: var(--cor003);
   border-radius: 5px;
 }
 
+
+
+header.header_estilo_new {
+  position: relative;
+  background-color: var(--cor005);
+  padding: .5em 1em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  box-shadow: 0 5px 15px #0000001a;
+  z-index: 2;
+}
+
+header.header_estilo_new p {
+  color: var(--cor004);
+}
+
 .main {
   min-height: 75vh;
-  background-image: var(--degrade001);
-  padding: .5em;
+  /* background-image: var(--degrade001);
+  padding: .5em; */
 }
 
 .container_branco {

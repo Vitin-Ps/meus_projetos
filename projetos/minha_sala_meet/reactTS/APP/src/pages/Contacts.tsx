@@ -161,7 +161,7 @@ const Contacts = () => {
         <div className="conversas_container">
           <aside>
             <h2>Conversas</h2>
-            <button
+            {/* <button
               onClick={() => {
                 entrarUser('1');
               }}
@@ -175,7 +175,7 @@ const Contacts = () => {
             >
               user 02
             </button>
-            <button onClick={teste}>teste</button>
+            <button onClick={teste}>teste</button> */}
           </aside>
           <div className="conversas_main_container">
             <input type="text" placeholder="Pesquisar grupos" className="input_pesquisar_grupos" />

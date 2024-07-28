@@ -8,4 +8,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     UserDetails findByLogin(String subject);
 
     Usuario getReferenceByLogin(String email);
+
+    Usuario getReferenceByIdAndAtivoTrue(Long id);
 }

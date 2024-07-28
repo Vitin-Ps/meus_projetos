@@ -5,11 +5,13 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 // configurando o router
-import { createBrowserRouter, Navigate, RouterProvider, useNavigate } from 'react-router-dom';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import Home from './pages/Home';
 import Contacts from './pages/Contacts';
 import ErrorPage from './pages/ErrorPage';
 import ContactsDetails from './pages/ContactsDetails';
+import { AuthProvider } from './contexts/Auth/AuthProvider';
+import { RequireAuth } from './contexts/Auth/RequireAuth';
 
 // const router = createBrowserRouter([
 //   {
@@ -21,12 +23,6 @@ import ContactsDetails from './pages/ContactsDetails';
 //     element: <Contacts />,
 //   },
 // ]);
-
-const Private = ({ Item }: any) => {
-  const signed: boolean = false; // Substitua isso pela sua lógica de autenticação
-
-  return signed ? <Item /> : <Home />;
-};
 
 const router = createBrowserRouter([
   {
@@ -40,7 +36,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/contacts',
-        element: <Private item={Contacts} />,
+        element: (
+          <RequireAuth>
+            <Contacts />
+          </RequireAuth>
+        ),
       },
       {
         path: '/contacts/:id',
@@ -57,7 +57,9 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </React.StrictMode>,
 );
 

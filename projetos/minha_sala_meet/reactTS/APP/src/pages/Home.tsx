@@ -1,10 +1,10 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useContext, useState } from 'react';
 import '../css/Home.css';
 import Input from './components/Input';
 import { Usuario } from '../interfaces/Usuario';
 import { cadastrarUsuario } from '../services/UsuarioService';
-import { error } from 'console';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../contexts/Auth/AuthContext';
 
 const Home = () => {
   const [showCadastro, setShowCadastro] = useState(false);
@@ -12,6 +12,8 @@ const Home = () => {
   const [senha, setSenha] = useState('');
   const [nome, setNome] = useState('');
   const navigate = useNavigate();
+
+  const auth = useContext(AuthContext);
 
   const cadastrarUser = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -37,6 +39,22 @@ const Home = () => {
     }
   };
 
+  const fazerLogin = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    if (!login || !senha) {
+      alert('Preencha todos os Campos');
+    }
+
+    const isLogged: boolean = await auth.signin(login, senha);
+
+    if (isLogged) {
+      navigate('/contacts');
+    } else {
+      alert('Login falhou');
+    }
+  };
+
   const limparInputs = () => {
     setNome('');
     setLogin('');
@@ -49,7 +67,7 @@ const Home = () => {
         {!showCadastro ? (
           <div className="entrar_container">
             <h2>Entrar</h2>
-            <form action="" className="form_padrao">
+            <form className="form_padrao" onSubmit={fazerLogin}>
               <Input
                 label="Login:"
                 tipo="string"

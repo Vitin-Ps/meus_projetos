@@ -3,8 +3,8 @@ import { Usuario } from '../../interfaces/Usuario';
 
 export type AuthContentType = {
   user: Usuario | null;
-  sigin: (email: string, password: string) => Promise<boolean>;
-  singout: () => void;
+  signin: (login: string, senha: string) => Promise<boolean>;
+  sigout: () => void;
 };
 
 export const AuthContext = createContext<AuthContentType>(null!);
