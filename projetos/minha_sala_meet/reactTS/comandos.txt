@@ -11,3 +11,5 @@ npm install socket.io-client
 npm install uuid
 
 npm install --save @fortawesome/react-fontawesome @fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg-icons
+
+npm install axios

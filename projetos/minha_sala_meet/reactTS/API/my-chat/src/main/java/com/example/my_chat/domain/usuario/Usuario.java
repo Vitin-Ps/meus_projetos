@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 import java.util.List;
 
-@Table(name = "usuario")
-@Entity(name = "Usuario")
+@Table(name = "tbl_usuario")
+@Entity(name = "TblUsuario")
 @Component
 @Getter
 @NoArgsConstructor
@@ -25,21 +25,26 @@ public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String nome;
+    private String imagem;
     private String login;
     private String senha;
+    private Boolean ativo;
     @Enumerated(EnumType.STRING)
-    private TipoUsuario tipo;
+    private TipoUsuario tipoUsuario;
 
-    public Usuario(String login, String senhaCodificada, TipoUsuario tipoUsuario) {
+    public Usuario(String nome, String login, String senhaCodificada, TipoUsuario tipoUsuario) {
+        this.nome = nome;
         this.login = login;
         this.senha = senhaCodificada;
-        this.tipo = tipoUsuario;
+        this.tipoUsuario = tipoUsuario;
+        this.ativo = true;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(this.tipo == TipoUsuario.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
-        if(this.tipo == TipoUsuario.USER) return List.of( new SimpleGrantedAuthority("ROLE_USER"));
+        if(this.tipoUsuario == TipoUsuario.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+        if(this.tipoUsuario == TipoUsuario.USER) return List.of( new SimpleGrantedAuthority("ROLE_USER"));
         else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 

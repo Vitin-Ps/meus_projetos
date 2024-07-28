@@ -28,7 +28,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.GET, "/hello").permitAll()
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "login/cad/admin").permitAll()
-                        .requestMatchers(HttpMethod.POST, "login/cad/funcionarios").permitAll()
+                        .requestMatchers(HttpMethod.POST, "login/cad/user").permitAll()
                         .requestMatchers(HttpMethod.POST, "funcionarios").hasAnyRole("ADMIN", "FUNCIONARIO")
                         .requestMatchers("/vendas").hasRole("ADMIN") // Bloqueia o acesso à "/home" apenas para ADMIN
                         .requestMatchers(HttpMethod.GET, "/arquivos/**").permitAll()

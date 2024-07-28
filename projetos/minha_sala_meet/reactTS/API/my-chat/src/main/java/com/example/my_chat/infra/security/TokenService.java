@@ -24,7 +24,7 @@ public class TokenService {
             return JWT.create()
                     .withIssuer("crud_java")
                     .withSubject(usuario.getLogin())
-                    .withClaim("role", String.valueOf(usuario.getTipo()))
+                    .withClaim("role", String.valueOf(usuario.getTipoUsuario()))
                     .withClaim("id", usuario.getId())
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritmo);

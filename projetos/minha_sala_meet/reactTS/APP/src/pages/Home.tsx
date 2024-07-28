@@ -1,12 +1,133 @@
-
-import '../css/Home.css'
+import { FormEvent, useState } from 'react';
+import '../css/Home.css';
+import Input from './components/Input';
+import { Usuario } from '../interfaces/Usuario';
+import { cadastrarUsuario } from '../services/UsuarioService';
+import { error } from 'console';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
+  const [showCadastro, setShowCadastro] = useState(false);
+  const [login, setLogin] = useState('');
+  const [senha, setSenha] = useState('');
+  const [nome, setNome] = useState('');
+  const navigate = useNavigate();
+
+  const cadastrarUser = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (nome === '' || login === '' || senha === '') {
+      alert('Prencha todos os dados!');
+    }
+
+    const user: Usuario = {
+      nome,
+      login,
+      senha,
+    };
+
+    const res = await cadastrarUsuario(user);
+    if (!res) {
+      console.log('Ocorreu algum erro no servior. Tente novamente mais tarde!');
+      limparInputs();
+      return;
+    } else {
+      alert('Usuário cadastrado com sucesso');
+      navigate('/');
+    }
+  };
+
+  const limparInputs = () => {
+    setNome('');
+    setLogin('');
+    setSenha('');
+  };
 
   return (
-    <div>
-      <h2>home</h2>           
-    </div>
+    <>
+      <div className="fundo_branco">
+        {!showCadastro ? (
+          <div className="entrar_container">
+            <h2>Entrar</h2>
+            <form action="" className="form_padrao">
+              <Input
+                label="Login:"
+                tipo="string"
+                placeholder="Digite seu Login"
+                setValor={(valor) => setLogin(valor)}
+                obrigatório={true}
+                valor={login}
+              />
+              <Input
+                label="Senha:"
+                tipo="password"
+                placeholder="Digite sua Senha"
+                setValor={(valor) => setSenha(valor)}
+                obrigatório={true}
+                valor={senha}
+              />
+              <div>
+                <span>
+                  Ainda não é cadastrado?{' '}
+                  <span
+                    className="link"
+                    onClick={() => {
+                      setShowCadastro(true);
+                      limparInputs();
+                    }}
+                  >
+                    Cadastre-se
+                  </span>
+                  !
+                </span>
+              </div>
+              <input type="submit" value="Entrar" />
+            </form>
+          </div>
+        ) : (
+          <div className="cadastro_container">
+            <h2>Cadastre-se</h2>
+            <form className="form_padrao" onSubmit={cadastrarUser}>
+              <Input label="Nome:" tipo="string" placeholder="Digite seu Nome" setValor={(valor) => setNome(valor)} obrigatório={true} valor={nome} />
+              <Input
+                label="Login:"
+                tipo="string"
+                placeholder="Digite seu Login"
+                setValor={(valor) => setLogin(valor)}
+                obrigatório={true}
+                valor={login}
+              />
+              <Input
+                label="Senha:"
+                tipo="password"
+                placeholder="Digite sua Senha"
+                setValor={(valor) => setSenha(valor)}
+                obrigatório={true}
+                valor={senha}
+              />
+              <div>
+                <span>
+                  Já tem conta?{' '}
+                  <span
+                    className="link"
+                    onClick={() => {
+                      {
+                        setShowCadastro(false);
+                        limparInputs();
+                      }
+                    }}
+                  >
+                    Entre
+                  </span>
+                  !
+                </span>
+              </div>
+              <input type="submit" value="Criar" />
+            </form>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

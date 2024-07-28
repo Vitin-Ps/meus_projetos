@@ -1,6 +1,7 @@
 package com.example.my_chat.controller;
 
 import com.example.my_chat.domain.usuario.DadosAutentication;
+import com.example.my_chat.domain.usuario.DadosUsuario;
 import com.example.my_chat.domain.usuario.TipoUsuario;
 import com.example.my_chat.domain.usuario.Usuario;
 import com.example.my_chat.infra.security.DadosTokenJWT;
@@ -34,16 +35,16 @@ public class AutenticacaoController {
     }
 
     @PostMapping("cad/user")
-    public ResponseEntity cadFuncionario(@RequestBody @Valid DadosAutentication dados) {
+    public ResponseEntity cadFuncionario(@RequestBody @Valid DadosUsuario dados) {
         String senhaCodificada = new BCryptPasswordEncoder().encode(dados.senha());
-        Usuario usuario = new Usuario(dados.login(), senhaCodificada, TipoUsuario.USER);
+        Usuario usuario = new Usuario(dados.nome(), dados.login(), senhaCodificada, TipoUsuario.USER);
         repository.save(usuario);
         return ResponseEntity.ok().build();
     }
     @PostMapping("cad/admin")
-    public ResponseEntity cadAdmin(@RequestBody @Valid DadosAutentication dados) {
+    public ResponseEntity cadAdmin(@RequestBody @Valid DadosUsuario dados) {
         String senhaCodificada = new BCryptPasswordEncoder().encode(dados.senha());
-        Usuario usuario = new Usuario(dados.login(), senhaCodificada, TipoUsuario.ADMIN);
+        Usuario usuario = new Usuario(dados.nome(), dados.login(), senhaCodificada, TipoUsuario.ADMIN);
         repository.save(usuario);
         return ResponseEntity.ok().build();
     }

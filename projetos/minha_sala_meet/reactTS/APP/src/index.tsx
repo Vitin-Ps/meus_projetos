@@ -5,7 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 // configurando o router
-import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Navigate, RouterProvider, useNavigate } from 'react-router-dom';
 import Home from './pages/Home';
 import Contacts from './pages/Contacts';
 import ErrorPage from './pages/ErrorPage';
@@ -22,6 +22,12 @@ import ContactsDetails from './pages/ContactsDetails';
 //   },
 // ]);
 
+const Private = ({ Item }: any) => {
+  const signed: boolean = false; // Substitua isso pela sua lógica de autenticação
+
+  return signed ? <Item /> : <Home />;
+};
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -34,7 +40,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/contacts',
-        element: <Contacts />,
+        element: <Private item={Contacts} />,
       },
       {
         path: '/contacts/:id',
