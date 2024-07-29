@@ -1,11 +1,16 @@
 import '../css/Contacts.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Mensagem } from '../interfaces/Mensagem';
 import { addCodigoUser, addMensagem, entrarSala } from '../services/wss';
 import socket from '../services/socket';
 import CardMensagem from './components/CardMensagem';
+import Dasborad from './components/Dasborad';
+import { AuthContext } from '../contexts/Auth/AuthContext';
+import { Grupo } from '../interfaces/Grupo';
+import { listarGruposPorUser } from '../services/GrupoService';
+import CardConversa from './components/CardConversa';
 
 const cod_sala: string = 'dfghjjjj';
 const conversas2: Mensagem[] = [
@@ -85,19 +90,23 @@ const socketIO = socket;
 
 const Contacts = () => {
   const [nomeGrupo, setNomeGrupo] = useState('Nenhum');
+  const [seusGrupos, setSeusGrupos] = useState<Grupo[]>();
   const [idUser, setIdUser] = useState<number>();
   const [mensagem, setMensagem] = useState('');
   const [conversas, setConversas] = useState<Mensagem[]>(conversas2);
   const [showConversa, setShowConversa] = useState(false);
 
-  // useEffect(() => {
-  //   // socket.on('receberMensagem', (data: Mensagem) => {
-  //   //   console.log('A mensagem chegou: ', data.mensagem);
-  //   //   setConversas((prevConversas) => [...prevConversas, data]);
-  //   // });
-  // }, []);
+  const auth = useContext(AuthContext);
 
-  const entrarGrupo = () => {
+  useEffect(() => {
+    const carregaDados = async () => {
+      const grupos = await listarGruposPorUser(auth.user!.id!);
+      setSeusGrupos(grupos);
+    };
+    carregaDados();
+  }, []);
+
+  const entrarGrupo = (id: number) => {
     setNomeGrupo('Teste Grupo 1');
     entrarSala(socketIO, cod_sala);
     setShowConversa(true);
@@ -157,6 +166,7 @@ const Contacts = () => {
 
   return (
     <>
+      <Dasborad nome={auth.user?.nome!} />
       <section className="contatos_container">
         <div className="conversas_container">
           <aside>
@@ -180,10 +190,7 @@ const Contacts = () => {
           <div className="conversas_main_container">
             <input type="text" placeholder="Pesquisar grupos" className="input_pesquisar_grupos" />
             <div className="grupos_container">
-              <div className="card_conversa" onClick={entrarGrupo}>
-                <img src="./images/avatar.jpg" alt="avatar" />
-                <h2>Fulano</h2>
-              </div>
+              {seusGrupos && seusGrupos.map((grupo) => <CardConversa entrarGrupo={entrarGrupo} nome={grupo.nome} id={grupo.id!} />)}
             </div>
           </div>
         </div>

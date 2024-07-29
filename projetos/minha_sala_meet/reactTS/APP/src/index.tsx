@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 
 // configurando o router
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
-import Home from './pages/Home';
+import Login from './pages/Login';
 import Contacts from './pages/Contacts';
 import ErrorPage from './pages/ErrorPage';
 import ContactsDetails from './pages/ContactsDetails';
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <Home />,
+        element: <Login />,
       },
       {
         path: '/contacts',

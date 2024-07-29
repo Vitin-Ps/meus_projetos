@@ -1,12 +1,13 @@
 import { FormEvent, useContext, useState } from 'react';
-import '../css/Home.css';
+import '../css/Login.css';
 import Input from './components/Input';
 import { Usuario } from '../interfaces/Usuario';
 import { cadastrarUsuario } from '../services/UsuarioService';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/Auth/AuthContext';
+import { getToken, removeToken } from '../services/TokenService';
 
-const Home = () => {
+const Login = () => {
   const [showCadastro, setShowCadastro] = useState(false);
   const [login, setLogin] = useState('');
   const [senha, setSenha] = useState('');
@@ -41,9 +42,13 @@ const Home = () => {
 
   const fazerLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     if (!login || !senha) {
       alert('Preencha todos os Campos');
+    }
+
+    if (getToken()) {
+      removeToken();
     }
 
     const isLogged: boolean = await auth.signin(login, senha);
@@ -149,4 +154,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Login;

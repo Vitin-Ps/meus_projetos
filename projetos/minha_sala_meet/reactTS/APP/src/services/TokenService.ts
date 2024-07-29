@@ -1,4 +1,4 @@
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from 'jwt-decode';
 
 export interface MeuJwtPayload {
   sub: string;
@@ -35,7 +35,19 @@ export function infoToken(token: string): MeuJwtPayload | null {
     const infoToken: MeuJwtPayload = jwtDecode(token);
     return infoToken;
   } catch (error) {
-    console.error("Erro ao decodificar o token:", error);
+    console.error('Erro ao decodificar o token:', error);
     return null;
   }
 }
+
+export const removeToken = () => {
+  localStorage.removeItem('token');
+};
+
+export const addToken = (token: string) => {
+  localStorage.setItem('token', token);
+};
+
+export const getToken = () => {
+  return localStorage.getItem('token');
+};

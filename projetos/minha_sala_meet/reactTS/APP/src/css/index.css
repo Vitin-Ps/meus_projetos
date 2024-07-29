@@ -29,4 +29,5 @@ body {
 
   --degrade001: linear-gradient(145deg, #0084ff, #46a5fd, #77baf9);
   --degrade002: linear-gradient(145deg, #0084ff, #6cb8ff, #9ecffd);
+  --degrade003: linear-gradient(145deg, #ffffff 40%, #e4f0fb, #cae5ff);
 }

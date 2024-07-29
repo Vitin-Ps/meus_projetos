@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { AuthContext } from './AuthContext';
 import { Usuario } from '../../interfaces/Usuario';
 import { fazerLogin } from '../../services/AuthService';
-import { infoToken, MeuJwtPayload, validadeToken } from '../../services/TokenService';
+import { addToken, getToken, infoToken, MeuJwtPayload, removeToken, validadeToken } from '../../services/TokenService';
 import { detalhaUsuario } from '../../services/UsuarioService';
 import api from '../../services/api';
 
@@ -11,7 +11,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     const validaToken = async () => {
-      const token = localStorage.getItem('token');
+      const token = getToken();
 
       if (token) {
         try {
@@ -41,7 +41,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const validaToken = validadeToken(data.token);
 
       if (validaToken) {
-        localStorage.setItem('token', data.token);
+        addToken(data.token);
         const dadosToken = infoToken(data.token);
         if (dadosToken) {
           try {
@@ -60,7 +60,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const sigout = () => {
-    localStorage.removeItem('token');
+    removeToken();
     setUser(null);
   };
 

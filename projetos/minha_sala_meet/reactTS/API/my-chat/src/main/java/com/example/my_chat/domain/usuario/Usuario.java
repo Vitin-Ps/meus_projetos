@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Table(name = "tbl_usuario")
-@Entity(name = "TblUsuario")
+@Entity(name = "Usuario")
 @Component
 @Getter
 @NoArgsConstructor

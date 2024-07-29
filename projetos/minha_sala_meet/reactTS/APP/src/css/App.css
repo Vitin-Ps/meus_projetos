@@ -59,9 +59,9 @@ header.header_estilo_new p {
 }
 
 .main {
-  min-height: 75vh;
-  /* background-image: var(--degrade001);
-  padding: .5em; */
+  min-height: 100vh;
+  background-image: var(--degrade003);
+  /* padding: .5em; */
 }
 
 .container_branco {
