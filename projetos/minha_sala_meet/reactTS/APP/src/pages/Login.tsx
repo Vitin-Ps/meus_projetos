@@ -55,8 +55,6 @@ const Login = () => {
 
     if (isLogged) {
       navigate('/contacts');
-    } else {
-      alert('Login falhou');
     }
   };
 

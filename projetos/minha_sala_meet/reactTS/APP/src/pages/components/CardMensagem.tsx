@@ -11,7 +11,7 @@ const CardMensagem: React.FC<CardMensagemProps> = ({ conversa, tipoMsg }) => {
     <div className={`card_msg ${tipoMsg}`}>
       <p>{conversa.mensagem}</p>
       <span>
-        {new Date(conversa.data_hora).getHours()}:{new Date(conversa.data_hora).getMinutes()}
+        {new Date(conversa.data).getHours()}:{new Date(conversa.data).getMinutes()}
       </span>
     </div>
   );

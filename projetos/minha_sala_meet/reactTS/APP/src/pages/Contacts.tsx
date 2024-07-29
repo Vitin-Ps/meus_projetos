@@ -11,79 +11,7 @@ import { AuthContext } from '../contexts/Auth/AuthContext';
 import { Grupo } from '../interfaces/Grupo';
 import { detalharGrupo, listarGruposPorUser } from '../services/GrupoService';
 import CardConversa from './components/CardConversa';
-
-const conversas2: Mensagem[] = [
-  {
-    id: 1,
-    grupo: {
-      id: 5,
-      uuid: 'dfghjjjj',
-      nome: 'Os brabo da progamação',
-    },
-    usuario_remetente: {
-      id: 2,
-      nome: 'Victin',
-    },
-    mensagem: 'JONAS FOI A PRAIA',
-    data_hora: new Date(),
-  },
-  {
-    id: 2,
-    grupo: {
-      id: 5,
-      uuid: 'dfghjjjj',
-      nome: 'Os brabo da progamação',
-    },
-    usuario_remetente: {
-      id: 3,
-      nome: 'Marcos',
-    },
-    mensagem: 'JONAS FOI A PRAIA',
-    data_hora: new Date(),
-  },
-  {
-    id: 3,
-    grupo: {
-      id: 5,
-      uuid: 'dfghjjjj',
-      nome: 'Os brabo da progamação',
-    },
-    usuario_remetente: {
-      id: 3,
-      nome: 'mateus',
-    },
-    mensagem: 'JONAS FOI A PRAIA',
-    data_hora: new Date(),
-  },
-  {
-    id: 4,
-    grupo: {
-      id: 5,
-      uuid: 'dfghjjjj',
-      nome: 'Os brabo da progamação',
-    },
-    usuario_remetente: {
-      id: 2,
-      nome: 'Victin',
-    },
-    mensagem: 'JONAS FOI A PRAIA',
-    data_hora: new Date(),
-  },
-  {
-    id: 5,
-    grupo: {
-      id: 5,
-      uuid: 'dfghjjjj',
-      nome: 'Os brabo da progamação',
-    },
-    usuario_remetente: {
-      id: 3,
-      nome: 'MAteus',
-    },
-    mensagem: 'JONAS FOI A PRAIA',
-    data_hora: new Date(),
-  },
-];
+import { inserirMensagem, listarMensagensPorGrupo } from '../services/MensagemService';
 
 const socketIO = socket;
 
@@ -91,21 +19,17 @@ const Contacts = () => {
   const [grupoSelecionado, setGrupoSelecionado] = useState<Grupo>();
   const [seusGrupos, setSeusGrupos] = useState<Grupo[]>();
   const [mensagem, setMensagem] = useState('');
-  const [conversas, setConversas] = useState<Mensagem[]>(conversas2);
+  const [conversas, setConversas] = useState<Mensagem[]>([]);
   const [showConversa, setShowConversa] = useState(false);
 
   const auth = useContext(AuthContext);
 
   useEffect(() => {
     const handleMensagem = (data: Mensagem) => {
-      console.log('chegou aqui na mensagem', data);
       setConversas((prevConversas) => [...prevConversas, data]);
     };
 
-    // Registrar o listener para o evento
     socketIO.on('receberMensagem', handleMensagem);
-
-    // Limpeza para remover o listener quando o componente for desmontado
 
     const carregaDados = async () => {
       const grupos = await listarGruposPorUser(auth.user!.id!);
@@ -119,28 +43,57 @@ const Contacts = () => {
 
   const entrarGrupo = async (id: number) => {
     const grupo: Grupo = await detalharGrupo(id);
+
+    const res = await listarMensagensPorGrupo(id);
+
+    if (res.error) {
+      alert(res.error.message);
+    }
+
+    const mensagens: Mensagem[] = res;
+
     if (grupo) {
       setGrupoSelecionado(grupo);
       entrarSala(socketIO, grupo.uuid);
 
       // implementar lógica de mensagens antigas
+      setConversas(mensagens);
       setShowConversa(true);
     } else {
       alert('Grupo não encontrado');
     }
   };
 
-  const enviarMensagem = () => {
-    console.log(mensagem);
+  const handleInputMensagem = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      await enviarMensagem();
+    }
+  };
+
+  const enviarMensagem = async () => {
+    // console.log(mensagem);
+
+    if (mensagem === '') {
+      return;
+    }
 
     const novaMensagem: Mensagem = {
-      id: conversas.length + 1,
-      data_hora: new Date(),
+      data: new Date(),
       grupo: grupoSelecionado!,
-      usuario_remetente: auth.user!,
+      usuario: auth.user!,
       mensagem,
     };
 
+    const res = await inserirMensagem(novaMensagem);
+
+    if (res.error) {
+      alert(res.message);
+      return;
+    }
+    const ids = conversas.map((conversa) => conversa.id).filter((id) => id !== undefined) as number[];
+    const maiorId = ids.length > 0 ? Math.max(...ids) : undefined;
+
+    novaMensagem.id = maiorId! + 1;
     addMensagem(socketIO, novaMensagem);
     setConversas([...conversas, novaMensagem]);
     setMensagem('');
@@ -175,20 +128,24 @@ const Contacts = () => {
               {showConversa &&
                 conversas.length > 0 &&
                 conversas.map((conversa) => (
-                  <div key={conversa.id} className="card_msg_pai">
-                    {conversa.usuario_remetente.id === auth.user!.id! ? (
-                      <CardMensagem key={`user-${conversa.id}`} conversa={conversa} tipoMsg="msg_user" />
-                    ) : (
-                      <div className="card_msg_integrante" key={`integrante-${conversa.id}`}>
-                        <span>{conversa.usuario_remetente.nome}</span>
-                        <CardMensagem key={`msg-${conversa.id}`} conversa={conversa} tipoMsg="msg_integrante" />
+                  <>
+                    {conversa.grupo.id === grupoSelecionado!.id! && (
+                      <div key={conversa.id} className="card_msg_pai">
+                        {conversa.usuario.id === auth.user!.id! ? (
+                          <CardMensagem key={`user-${conversa.id}`} conversa={conversa} tipoMsg="msg_user" />
+                        ) : (
+                          <div className="card_msg_integrante" key={`integrante-${conversa.id}`}>
+                            <span>{conversa.usuario.nome}</span>
+                            <CardMensagem key={`msg-${conversa.id}`} conversa={conversa} tipoMsg="msg_integrante" />
+                          </div>
+                        )}
                       </div>
                     )}
-                  </div>
+                  </>
                 ))}
             </div>
             <div className="nova_mensagem_container">
-              <input type="text" id="nova_mensagem" value={mensagem} onChange={(e) => setMensagem(e.target.value)} />
+              <input type="text" id="nova_mensagem" value={mensagem} onChange={(e) => setMensagem(e.target.value)} onKeyDown={handleInputMensagem} />
               <button onClick={enviarMensagem}>
                 <FontAwesomeIcon icon={faPaperPlane} />
               </button>

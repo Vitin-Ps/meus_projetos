@@ -1,0 +1,1 @@
+ALTER TABLE tbl_mensagem MODIFY data DATETIME NOT NULL;

@@ -48,6 +48,10 @@
   margin-bottom: 1em;
 }
 
+.conversas_container .conversas_main_container .input_pesquisar_grupos:focus {
+  outline: none; /* Remove o contorno padrão */
+}
+
 .conversas_container .conversas_main_container .grupos_container {
   background-color: var(--cor002);
   width: 95%;
@@ -208,6 +212,10 @@
   border-radius: 5px;
   border: 1px solid var(--cor009);
   color: var(--cor001);
+}
+
+.mensagens_container .mensagens_main_container .nova_mensagem_container input:focus {
+  outline: none; /* Remove o contorno padrão */
 }
 
 .mensagens_container .mensagens_main_container .nova_mensagem_container button {

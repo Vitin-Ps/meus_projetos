@@ -1,10 +1,18 @@
-import { Grupo } from "./Grupo";
-import { Usuario } from "./Usuario";
+import { Grupo } from './Grupo';
+import { Usuario } from './Usuario';
 
+// Interface Mensagem
 export interface Mensagem {
   id?: number;
   grupo: Grupo;
-  usuario_remetente: Usuario;
+  usuario: Usuario;
   mensagem: string;
-  data_hora: Date;
+  data: Date;
+}
+
+export interface MensagemJSON {
+  grupo_id: number;
+  usuario_id: number;
+  mensagem: string;
+  data: string;
 }

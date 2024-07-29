@@ -1,5 +1,5 @@
 
-import api from './api';
+import api, { verificaErroApi } from './api';
 
 // export async function cadastrarUsuario(usuario: Usuario) {
 //   if (!usuario) {
@@ -28,8 +28,7 @@ export async function listarGruposPorUser(id: number) {
     const res = await api.get(`/group/user/${id}`);
     return res.data;
   } catch (error) {
-    console.log('Error: ', error);
-    return null;
+    return verificaErroApi(error);
   }
 }
 
@@ -42,7 +41,6 @@ export async function detalharGrupo(id: number) {
     const res = await api.get(`/group/${id}`);
     return res.data;
   } catch (error) {
-    console.log('Error: ', error);
-    return null;
+    return verificaErroApi(error);
   }
 }

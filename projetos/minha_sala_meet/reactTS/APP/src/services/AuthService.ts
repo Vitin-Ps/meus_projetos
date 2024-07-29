@@ -1,4 +1,7 @@
-import api from './api';
+import axios, { AxiosError } from 'axios';
+import api, { verificaErroApi } from './api';
+import { ErrorMessage } from '../interfaces/ErrorMessage';
+import { errorMonitor } from 'events';
 
 export async function fazerLogin(login: string, senha: string) {
   if (!login || !senha) {
@@ -9,10 +12,9 @@ export async function fazerLogin(login: string, senha: string) {
   try {
     // Tenta fazer a conexão com a API
     const resultado = await api.post('/login', { login, senha });
-    console.log("chegou: ", resultado.data);
+    console.log('chegou: ', resultado.data);
     return resultado.data;
   } catch (error) {
-    console.log('Erro ao fazer login:', error);
-    return null;
+    return verificaErroApi(error);
   }
 }

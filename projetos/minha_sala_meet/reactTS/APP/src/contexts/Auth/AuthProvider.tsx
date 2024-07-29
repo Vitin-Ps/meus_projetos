@@ -37,6 +37,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signin = async (login: string, senha: string): Promise<boolean> => {
     const data = await fazerLogin(login, senha);
+
+    if (data.error) {
+      alert(data.message);
+      return false;
+    }
+
     if (data?.token) {
       const validaToken = validadeToken(data.token);
 
