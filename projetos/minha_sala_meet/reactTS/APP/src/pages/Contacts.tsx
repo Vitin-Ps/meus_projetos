@@ -9,11 +9,52 @@ import CardMensagem from './components/CardMensagem';
 import Dasborad from './components/Dasborad';
 import { AuthContext } from '../contexts/Auth/AuthContext';
 import { Grupo } from '../interfaces/Grupo';
-import { listarGruposPorUser } from '../services/GrupoService';
+import { detalharGrupo, listarGruposPorUser } from '../services/GrupoService';
 import CardConversa from './components/CardConversa';
 
-const cod_sala: string = 'dfghjjjj';
 const conversas2: Mensagem[] = [
+  {
+    id: 1,
+    grupo: {
+      id: 5,
+      uuid: 'dfghjjjj',
+      nome: 'Os brabo da progamação',
+    },
+    usuario_remetente: {
+      id: 2,
+      nome: 'Victin',
+    },
+    mensagem: 'JONAS FOI A PRAIA',
+    data_hora: new Date(),
+  },
+  {
+    id: 2,
+    grupo: {
+      id: 5,
+      uuid: 'dfghjjjj',
+      nome: 'Os brabo da progamação',
+    },
+    usuario_remetente: {
+      id: 3,
+      nome: 'Marcos',
+    },
+    mensagem: 'JONAS FOI A PRAIA',
+    data_hora: new Date(),
+  },
+  {
+    id: 3,
+    grupo: {
+      id: 5,
+      uuid: 'dfghjjjj',
+      nome: 'Os brabo da progamação',
+    },
+    usuario_remetente: {
+      id: 3,
+      nome: 'mateus',
+    },
+    mensagem: 'JONAS FOI A PRAIA',
+    data_hora: new Date(),
+  },
   {
     id: 4,
     grupo: {
@@ -37,48 +78,6 @@ const conversas2: Mensagem[] = [
     },
     usuario_remetente: {
       id: 3,
-      nome: 'Marcos',
-    },
-    mensagem: 'JONAS FOI A PRAIA',
-    data_hora: new Date(),
-  },
-  {
-    id: 6,
-    grupo: {
-      id: 5,
-      uuid: 'dfghjjjj',
-      nome: 'Os brabo da progamação',
-    },
-    usuario_remetente: {
-      id: 3,
-      nome: 'mateus',
-    },
-    mensagem: 'JONAS FOI A PRAIA',
-    data_hora: new Date(),
-  },
-  {
-    id: 7,
-    grupo: {
-      id: 5,
-      uuid: 'dfghjjjj',
-      nome: 'Os brabo da progamação',
-    },
-    usuario_remetente: {
-      id: 2,
-      nome: 'Victin',
-    },
-    mensagem: 'JONAS FOI A PRAIA',
-    data_hora: new Date(),
-  },
-  {
-    id: 8,
-    grupo: {
-      id: 5,
-      uuid: 'dfghjjjj',
-      nome: 'Os brabo da progamação',
-    },
-    usuario_remetente: {
-      id: 3,
       nome: 'MAteus',
     },
     mensagem: 'JONAS FOI A PRAIA',
@@ -89,9 +88,8 @@ const conversas2: Mensagem[] = [
 const socketIO = socket;
 
 const Contacts = () => {
-  const [nomeGrupo, setNomeGrupo] = useState('Nenhum');
+  const [grupoSelecionado, setGrupoSelecionado] = useState<Grupo>();
   const [seusGrupos, setSeusGrupos] = useState<Grupo[]>();
-  const [idUser, setIdUser] = useState<number>();
   const [mensagem, setMensagem] = useState('');
   const [conversas, setConversas] = useState<Mensagem[]>(conversas2);
   const [showConversa, setShowConversa] = useState(false);
@@ -99,26 +97,37 @@ const Contacts = () => {
   const auth = useContext(AuthContext);
 
   useEffect(() => {
+    const handleMensagem = (data: Mensagem) => {
+      console.log('chegou aqui na mensagem', data);
+      setConversas((prevConversas) => [...prevConversas, data]);
+    };
+
+    // Registrar o listener para o evento
+    socketIO.on('receberMensagem', handleMensagem);
+
+    // Limpeza para remover o listener quando o componente for desmontado
+
     const carregaDados = async () => {
       const grupos = await listarGruposPorUser(auth.user!.id!);
       setSeusGrupos(grupos);
     };
     carregaDados();
+    return () => {
+      socketIO.off('receberMensagem', handleMensagem);
+    };
   }, []);
 
-  const entrarGrupo = (id: number) => {
-    setNomeGrupo('Teste Grupo 1');
-    entrarSala(socketIO, cod_sala);
-    setShowConversa(true);
-  };
+  const entrarGrupo = async (id: number) => {
+    const grupo: Grupo = await detalharGrupo(id);
+    if (grupo) {
+      setGrupoSelecionado(grupo);
+      entrarSala(socketIO, grupo.uuid);
 
-  const entrarUser = (id: string) => {
-    setIdUser(Number(id));
-    socketIO.on('receberMensagem', (data: Mensagem) => {
-      console.log('A mensagem chegou: ', data.mensagem);
-      setConversas((prevConversas) => [...prevConversas, data]);
-    });
-    addCodigoUser(socket, id);
+      // implementar lógica de mensagens antigas
+      setShowConversa(true);
+    } else {
+      alert('Grupo não encontrado');
+    }
   };
 
   const enviarMensagem = () => {
@@ -127,41 +136,14 @@ const Contacts = () => {
     const novaMensagem: Mensagem = {
       id: conversas.length + 1,
       data_hora: new Date(),
-      grupo: {
-        id: 5,
-        uuid: 'dfghjjjj',
-        nome: 'Os brabo da progamação',
-      },
-      usuario_remetente: {
-        id: idUser as number,
-        nome: 'Victin',
-      },
+      grupo: grupoSelecionado!,
+      usuario_remetente: auth.user!,
       mensagem,
     };
 
     addMensagem(socketIO, novaMensagem);
     setConversas([...conversas, novaMensagem]);
     setMensagem('');
-  };
-
-  const teste = () => {
-    const novaMensagem: Mensagem = {
-      id: conversas.length + 1,
-      grupo: {
-        id: 5,
-        uuid: 'dfghjjjj',
-        nome: 'Os brabo da progamação',
-      },
-      usuario_remetente: {
-        id: 2,
-        nome: 'Victin',
-      },
-      mensagem: 'JONAS FOI A PRAIA',
-      data_hora: new Date(),
-    };
-
-    setConversas([...conversas, novaMensagem]);
-    console.log(conversas);
   };
 
   return (
@@ -171,35 +153,22 @@ const Contacts = () => {
         <div className="conversas_container">
           <aside>
             <h2>Conversas</h2>
-            {/* <button
-              onClick={() => {
-                entrarUser('1');
-              }}
-            >
-              user 01
-            </button>
-            <button
-              onClick={() => {
-                entrarUser('2');
-              }}
-            >
-              user 02
-            </button>
-            <button onClick={teste}>teste</button> */}
           </aside>
           <div className="conversas_main_container">
             <input type="text" placeholder="Pesquisar grupos" className="input_pesquisar_grupos" />
             <div className="grupos_container">
-              {seusGrupos && seusGrupos.map((grupo) => <CardConversa entrarGrupo={entrarGrupo} nome={grupo.nome} id={grupo.id!} />)}
+              {seusGrupos && seusGrupos.map((grupo) => <CardConversa key={grupo.id} entrarGrupo={entrarGrupo} nome={grupo.nome} id={grupo.id!} />)}
             </div>
           </div>
         </div>
         <div className="mensagens_container">
           <aside>
-            <div className="card_avatar">
-              <img src="./images/avatar.jpg" alt="avatar" />
-              <h2>{nomeGrupo}</h2>
-            </div>
+            {grupoSelecionado && (
+              <div className="card_avatar">
+                <img src="./images/avatar.jpg" alt="avatar" />
+                <h2>{grupoSelecionado.nome}</h2>
+              </div>
+            )}
           </aside>
           <div className="mensagens_main_container">
             <div className="conteudo_container">
@@ -207,12 +176,12 @@ const Contacts = () => {
                 conversas.length > 0 &&
                 conversas.map((conversa) => (
                   <div key={conversa.id} className="card_msg_pai">
-                    {conversa.usuario_remetente.id === idUser ? (
-                      <CardMensagem key={conversa.id} conversa={conversa} tipoMsg="msg_user" />
+                    {conversa.usuario_remetente.id === auth.user!.id! ? (
+                      <CardMensagem key={`user-${conversa.id}`} conversa={conversa} tipoMsg="msg_user" />
                     ) : (
-                      <div className="card_msg_integrante" key={conversa.id}>
+                      <div className="card_msg_integrante" key={`integrante-${conversa.id}`}>
                         <span>{conversa.usuario_remetente.nome}</span>
-                        <CardMensagem key={conversa.id} conversa={conversa} tipoMsg="msg_integrante" />
+                        <CardMensagem key={`msg-${conversa.id}`} conversa={conversa} tipoMsg="msg_integrante" />
                       </div>
                     )}
                   </div>

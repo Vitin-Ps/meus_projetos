@@ -32,3 +32,17 @@ export async function listarGruposPorUser(id: number) {
     return null;
   }
 }
+
+export async function detalharGrupo(id: number) {
+  if (!id) {
+    return;
+  }
+
+  try {
+    const res = await api.get(`/group/${id}`);
+    return res.data;
+  } catch (error) {
+    console.log('Error: ', error);
+    return null;
+  }
+}
