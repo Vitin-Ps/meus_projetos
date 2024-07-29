@@ -31,7 +31,8 @@ public class GrupoController {
 
     @GetMapping("/user/{id}")
     public ResponseEntity<List<DadosDetalhaGrupo>> listarPorId(@PathVariable Long id) {
-        List<DadosDetalhaGrupo> listaDeGrupos = listaRepository.findAllByUsuarioId(id).stream().map(DadosDetalhaGrupo::new).toList();
+        List<DadosDetalhaGrupo> listaDeGrupos = listaRepository.findAllByUsuarioId(id)
+                .stream().map(DadosDetalhaGrupo::new).toList();
 
         return ResponseEntity.ok(listaDeGrupos);
     }

@@ -33,7 +33,7 @@ public class ListaController {
     @Transactional
     public ResponseEntity cadastrar(@RequestBody @Valid DadosRegistraLista dados) {
         var usuario = usuarioRepository.getReferenceByIdAndAtivoTrue(dados.usuario_id());
-        var grupo = grupoRepository.getReferenceById(Long.valueOf(dados.grupo_id()));
+        var grupo = grupoRepository.getReferenceById(dados.grupo_id());
 
         if (usuario == null) {
             throw new ValidacaoException("Usuário ou Grupo inválidos");

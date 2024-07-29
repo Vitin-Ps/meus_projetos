@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.naming.AuthenticationException;
 import java.nio.file.AccessDeniedException;
+import java.time.format.DateTimeParseException;
 
 @RestControllerAdvice
 @ControllerAdvice
@@ -24,7 +25,7 @@ public class TratadorDeErros {
 
     }@ExceptionHandler(InternalAuthenticationServiceException.class)
     public ResponseEntity tratarErroDeLoginNaoCadastrado() {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário não Existe!");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário ou Senha incorretos!");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -45,7 +46,7 @@ public class TratadorDeErros {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity tratarErroBadCredentials() {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Senha Incorreta!");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário ou Senha incorretos!");
     }
 
     @ExceptionHandler(AuthenticationException.class)
@@ -62,6 +63,7 @@ public class TratadorDeErros {
     public ResponseEntity tratarErro500(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro: " +ex.getLocalizedMessage());
     }
+
 
     private record DadosErroValidacao(String campo, String mensagem) {
         public DadosErroValidacao(FieldError erro) {

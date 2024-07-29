@@ -1,22 +1,24 @@
-package com.example.my_chat.domain.lista;
+package com.example.my_chat.domain.mensagem;
 
 import com.example.my_chat.domain.grupo.Grupo;
 import com.example.my_chat.domain.usuario.TipoUsuario;
 import com.example.my_chat.domain.usuario.Usuario;
-import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Table(name = "tbl_lista")
-@Entity(name = "Lista")
+import java.time.LocalDateTime;
+import java.util.Date;
+
+@Table(name = "tbl_mensagem")
+@Entity(name = "Mensagem")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Lista {
+public class Mensagem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,16 +28,13 @@ public class Lista {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "grupo_id")
     private Grupo grupo;
-    @Enumerated(EnumType.STRING)
-    private TipoUsuario cargo;
+    private String mensagem;
+    private LocalDateTime data;
 
-    public Lista(Usuario usuario, Grupo grupo, TipoUsuario cargo) {
+    public Mensagem(Usuario usuario, Grupo grupo, String mensagem, LocalDateTime data) {
         this.usuario = usuario;
         this.grupo = grupo;
-        this.cargo = cargo;
-    }
-
-    public void alterarSituacao(TipoUsuario cargo) {
-            this.cargo = cargo;
+        this.mensagem = mensagem;
+        this.data = data;
     }
 }

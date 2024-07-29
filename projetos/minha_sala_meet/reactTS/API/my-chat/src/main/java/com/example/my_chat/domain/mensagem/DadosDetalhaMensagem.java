@@ -1,16 +1,22 @@
-package com.example.my_chat.domain.lista;
+package com.example.my_chat.domain.mensagem;
 
+import com.example.my_chat.domain.grupo.DadosDetalhaGrupo;
 import com.example.my_chat.domain.grupo.Grupo;
+import com.example.my_chat.domain.usuario.DadosDetalhamentoUser;
 import com.example.my_chat.domain.usuario.TipoUsuario;
 import com.example.my_chat.domain.usuario.Usuario;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-public record DadosDetalhaLista(
+import java.time.LocalDateTime;
+
+public record DadosDetalhaMensagem(
         Long id,
-        Usuario usuario,
-        Grupo grupo,
-        TipoUsuario cargo
+        DadosDetalhamentoUser usuario,
+        DadosDetalhaGrupo grupo,
+        String mensagem,
+        LocalDateTime data
 ) {
-    public DadosDetalhaLista(Lista lista) {
-        this(lista.getId(), lista.getUsuario(), lista.getGrupo(), lista.getCargo());
+    public DadosDetalhaMensagem(Mensagem mensagem) {
+        this(mensagem.getId(), new DadosDetalhamentoUser(mensagem.getUsuario()), new DadosDetalhaGrupo(mensagem.getGrupo()), mensagem.getMensagem(), mensagem.getData());
     }
 }
