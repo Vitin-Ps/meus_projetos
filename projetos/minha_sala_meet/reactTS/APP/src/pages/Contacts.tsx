@@ -2,7 +2,7 @@ import '../css/Contacts.css';
 import '../css/animations.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPaperPlane, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { FormEvent, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Mensagem } from '../interfaces/Mensagem';
 import { addMensagem, entrarSala } from '../services/wss';
 import socket from '../services/socket';
@@ -15,7 +15,7 @@ import CardConversa from './components/CardConversa';
 import { inserirMensagem, listarMensagensPorGrupo } from '../services/MensagemService';
 import FormularioGrupo from './components/FormularioGrupo';
 import InfoGrupo from './components/InfoGrupo';
-import AddMembro from './components/AddMembro';
+import Loading from './components/Loading';
 
 const socketIO = socket;
 
@@ -27,6 +27,7 @@ const Contacts = () => {
   const [showConversa, setShowConversa] = useState(false);
   const [showFormularioGrupo, setShowFormularioGrupo] = useState(false);
   const [showInfoGrupo, setShowInfoGrupo] = useState(false);
+  const [showLoading, setShowLoading] = useState(false);
 
   const auth = useContext(AuthContext);
 
@@ -40,14 +41,17 @@ const Contacts = () => {
     const carregaDados = async () => {
       const grupos = await listarGruposPorUser(auth.user!.id!);
       setSeusGrupos(grupos);
+      setShowLoading(true);
     };
     carregaDados();
+
     return () => {
       socketIO.off('receberMensagem', handleMensagem);
     };
   }, []);
 
   const entrarGrupo = async (id: number) => {
+    setShowLoading(false);
     const grupo: Grupo = await detalharGrupo(id);
 
     const res = await listarMensagensPorGrupo(id);
@@ -68,6 +72,7 @@ const Contacts = () => {
     } else {
       alert('Grupo não encontrado');
     }
+    setShowLoading(true);
   };
 
   const handleInputMensagem = async (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -106,7 +111,8 @@ const Contacts = () => {
   };
 
   return (
-    <>
+    <>    
+      {!showLoading && <Loading />}
       <Dasborad nome={auth.user?.nome!} />
       <section className="contatos_container">
         <div className="conversas_container">
@@ -117,7 +123,7 @@ const Contacts = () => {
             </button>
           </aside>
           <div className="conversas_main_container">
-            <FormularioGrupo cssClass={!showFormularioGrupo ? 'collapse' : 'expand'} usuarioId={auth.user!.id!} />
+            <FormularioGrupo cssClass={showFormularioGrupo ? 'expand' : 'collapse'} usuarioId={auth.user!.id!} />
             <input type="text" placeholder="Pesquisar grupos" className="input_pesquisar_grupos" />
             <div className="grupos_container">
               {seusGrupos && seusGrupos.map((grupo) => <CardConversa key={grupo.id} entrarGrupo={entrarGrupo} nome={grupo.nome} id={grupo.id!} />)}
@@ -170,7 +176,7 @@ const Contacts = () => {
             )}
           </div>
         </div>
-      </section>
+      </section>     
     </>
   );
 };

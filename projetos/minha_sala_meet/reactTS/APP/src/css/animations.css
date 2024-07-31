@@ -1,58 +1,22 @@
-/* styles.css */
-@keyframes slideDown {
-  from {
-    height: 90%;
+@keyframes loadingProgress {
+  0% {
+    stroke-dashoffset: 470; /* Começa com o círculo vazio */
   }
-  to {
-    height: 0;
+  50% {
+    stroke-dashoffset: 0; /* Chega ao círculo completo */
   }
-}
-
-@keyframes slideUp {
-  from {
-    height: 0;
+  100% {
+    stroke-dashoffset: -470; /* Volta ao estado vazio */
   }
-  to {
-    height: 90%;
-  }
-}
-
-/* styles.css */
-@keyframes slideDownMembros {
-  from {
-    height: 500px;
-  }
-  to {
-    height: 0;
-  }
-}
-
-@keyframes slideUpMebros {
-  from {
-    height: 0;
-  }
-  to {
-    height: 500px;
-  }
-}
-
-.collapse {
-  overflow: hidden;
-  animation: slideDown 0.5s forwards; /* 0.5s é o tempo da animação */
-}
-
-.expand {
-  overflow: auto;
-  animation: slideUp 0.5s forwards; /* 0.5s é o tempo da animação */
 }
 
 .collapse_membros {
-  overflow: hidden;
-  animation: slideDown 0.5s forwards; /* 0.5s é o tempo da animação */
+  overflow: hidden !important;
+  transition: height 0.5s;
+  height: 0 !important;
 }
 
-.expand_membros{
-  overflow: auto;
-  animation: slideUp 0.5s forwards; /* 0.5s é o tempo da animação */
+.expand_membros {
+  transition: height 2s;
+  height: 500px !important;
 }
-

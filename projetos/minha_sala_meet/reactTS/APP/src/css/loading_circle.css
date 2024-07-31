@@ -1,0 +1,69 @@
+.box_spinner_container {
+    position: absolute; 
+    width: 100%;
+    height: 100%;
+    background-color: #00000022;
+    backdrop-filter: blur(40px);
+    z-index: 10;
+    overflow: hidden; /* Adiciona esta linha */
+    display: flex; /* Exemplo, ajuste conforme necessário */
+  align-items: center;
+  justify-content: center;
+  }
+
+.box_spinner {
+  /* position: absolute;
+  top: 50%;
+  left: 50%; */
+  transform: translate(-50%, -50%);
+}
+
+.box_spinner svg {
+  width: 170px;
+  height: 170px;
+  position: relative;
+  transform: rotate(-90deg);
+  /* Rotação de -90 graus para iniciar na parte superior */
+}
+
+.box_spinner circle {
+  width: 170px;
+  height: 170px;
+  fill: none;
+  stroke: black;
+  stroke-width: 20;
+  stroke-linecap: round;
+  transform: translate(30px, 30px);
+  stroke-dasharray: 470;
+  stroke-dashoffset: 470;
+  animation: loadingProgress 3s infinite;
+}
+
+.box_spinner circle:nth-child(1) {
+  stroke: url(#gradient_padrao);
+  fill: transparent;
+  transition: stroke-dashoffset 0.8s;
+}
+
+.texto-gradiente {
+  font-size: 1.2em;
+  font-weight: bold;
+  background-image: linear-gradient(to right, #ff7e5f, #feb47b);
+  -webkit-background-clip: text; /* Suporte para navegadores WebKit */
+  background-clip: text; /* Suporte para outros navegadores */
+  color: transparent; /* Torna o texto transparente para que o gradiente seja visível */
+}
+
+.box_spinner .conteudo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  font-weight: bold;
+}

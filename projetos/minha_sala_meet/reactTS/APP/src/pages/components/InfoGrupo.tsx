@@ -15,13 +15,13 @@ interface InfoGrupoProps {
   userId: number;
 }
 
-const InfoGrupo: React.FC<InfoGrupoProps> = ({ grupo, setShowInfoGrupo, showInfoGrupo, userId }) => {
+const InfoGrupo: React.FC<InfoGrupoProps> = ({ grupo, setShowInfoGrupo, showInfoGrupo, userId }, ref) => {
   const [listaMembros, setlistaMembros] = useState<Usuario[]>([]);
   const [userListaSitucao, setUserListaSitucao] = useState<ListaMembros>();
   const [showAddMembro, setShowAddMembro] = useState(false);
 
   useEffect(() => {
-    const buscardados = async () => {
+    const buscarDados = async () => {
       if (grupo) {
         const res = await listarMembrosPorGrupo(grupo.id!);
 
@@ -42,7 +42,7 @@ const InfoGrupo: React.FC<InfoGrupoProps> = ({ grupo, setShowInfoGrupo, showInfo
         setUserListaSitucao(resUser);
       }
     };
-    buscardados();
+    buscarDados();
   }, [grupo]);
 
   const excluirMembro = async (membroSelecionado: Usuario) => {

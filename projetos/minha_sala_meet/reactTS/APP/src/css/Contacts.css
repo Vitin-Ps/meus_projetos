@@ -1,3 +1,7 @@
+.contacts_container {
+  position: relative;
+}
+
 .sair_login {
   cursor: pointer;
   font-size: 1.2em;
@@ -8,6 +12,7 @@
 }
 
 .contatos_container {
+  position: relative;
   min-height: 95vh;
   display: flex;
 }
@@ -73,6 +78,19 @@
   align-items: center;
   justify-content: flex-start;
   margin: 1em 0;
+}
+
+
+
+.conversas_container .conversas_main_container .form_grupo.collapse {
+  overflow: hidden;
+  height: 0; 
+  transition: height .5s;
+}
+
+.conversas_container .conversas_main_container .form_grupo.expand {
+  height: 90%; 
+  transition: height 2s;
 }
 
 .conversas_container .conversas_main_container .input_pesquisar_grupos {
