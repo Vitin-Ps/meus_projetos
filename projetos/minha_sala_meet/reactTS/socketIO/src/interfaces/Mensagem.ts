@@ -1,10 +1,12 @@
-import { Grupo } from "./Grupo";
-import { Usuario } from "./Usuario";
+import { Conversa } from './Conversa';
+import { Grupo } from './Grupo';
+import { Usuario } from './Usuario';
 
+// Interface Mensagem
 export interface Mensagem {
   id?: number;
-  grupo: Grupo;
-  usuario_remetente: Usuario;
+  conversa: Conversa;
+  userRemetente: Usuario;
   mensagem: string;
-  data_hora: Date;
+  data: Date;
 }

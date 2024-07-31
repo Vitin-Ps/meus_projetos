@@ -1,6 +1,7 @@
 package com.example.my_chat.domain.grupo;
 
 import com.example.my_chat.domain.conversa.Conversa;
+import com.example.my_chat.domain.conversa.TipoConversa;
 import com.example.my_chat.domain.membro.Membro;
 import com.example.my_chat.domain.usuario.TipoUsuario;
 import com.example.my_chat.infra.exception.ValidacaoException;
@@ -29,7 +30,7 @@ public class GrupoService {
     private ConversaRepository conversaRepository;
 
     public void cadastrarGrupo(DadosRegistroGrupo dados) {
-        Conversa conversa = new Conversa(dados.uuid());
+        Conversa conversa = new Conversa(dados.uuid(), TipoConversa.GRUPO);
         conversa = conversaRepository.save(conversa);
 
         Grupo grupo = new Grupo(dados.nome(), conversa);
@@ -62,7 +63,7 @@ public class GrupoService {
         Grupo grupo = grupoRepository.getReferenceById(dados.grupo_id());
 
         if(user.getCargo() == TipoUsuario.ADMIN) {
-            mensagemRepository.deleteAllByConversaId(dados.grupo_id());
+            mensagemRepository.deleteAllByConversaId(grupo.getConversa().getId());
             membroRepository.deleteAllByGrupoId(dados.grupo_id());
             grupoRepository.delete(grupo);
             conversaRepository.delete(grupo.getConversa());

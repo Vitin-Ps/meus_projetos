@@ -54,7 +54,7 @@ const Contacts = () => {
     setShowLoading(false);
     const grupo: Grupo = await detalharGrupo(id);
 
-    const res = await listarMensagensPorGrupo(id);
+    const res = await listarMensagensPorGrupo(grupo.conversa.id!);
 
     if (res.error) {
       alert(res.error.message);
@@ -64,7 +64,7 @@ const Contacts = () => {
 
     if (grupo) {
       setGrupoSelecionado(grupo);
-      entrarSala(socketIO, grupo.uuid);
+      entrarSala(socketIO, grupo.conversa.uuid);
 
       // implementar lógica de mensagens antigas
       setConversas(mensagens);
@@ -90,8 +90,8 @@ const Contacts = () => {
 
     const novaMensagem: Mensagem = {
       data: new Date(),
-      grupo: grupoSelecionado!,
-      usuario: auth.user!,
+      conversa: grupoSelecionado!.conversa,
+      userRemetente: auth.user!,
       mensagem,
     };
 
@@ -111,7 +111,7 @@ const Contacts = () => {
   };
 
   return (
-    <>    
+    <>
       {!showLoading && <Loading />}
       <Dasborad nome={auth.user?.nome!} />
       <section className="contatos_container">
@@ -146,13 +146,13 @@ const Contacts = () => {
                 conversas.length > 0 &&
                 conversas.map(
                   (conversa) =>
-                    conversa.grupo.id === grupoSelecionado!.id! && (
+                    conversa.conversa.id === grupoSelecionado!.conversa.id! && (
                       <div key={conversa.id} className="card_msg_pai">
-                        {conversa.usuario.id === auth.user!.id! ? (
+                        {conversa.userRemetente.id === auth.user!.id! ? (
                           <CardMensagem conversa={conversa} tipoMsg="msg_user" />
                         ) : (
                           <div className="card_msg_integrante">
-                            <span>{conversa.usuario.nome}</span>
+                            <span>{conversa.userRemetente.nome}</span>
                             <CardMensagem key={`msg-${conversa.id}`} conversa={conversa} tipoMsg="msg_integrante" />
                           </div>
                         )}
@@ -176,7 +176,7 @@ const Contacts = () => {
             )}
           </div>
         </div>
-      </section>     
+      </section>
     </>
   );
 };

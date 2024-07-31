@@ -41,7 +41,7 @@ io.on('connection', (socket) => {
     });
     // Lida com o evento 'addMensagem'
     socket.on('addMensagem', (data) => {
-        socket.to(data.grupo.uuid).emit('receberMensagem', data);
+        socket.to(data.conversa.uuid).emit('receberMensagem', data);
     });
     // Lida com o evento 'disconnect'
     socket.on('disconnect', () => {

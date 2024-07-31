@@ -20,8 +20,9 @@ public class Conversa {
     private String uuid;
     private TipoConversa tipo;
 
-    public Conversa(String uuid) {
+    public Conversa(String uuid, TipoConversa tipoConversa) {
         this.uuid = uuid;
+        this.tipo = tipoConversa;
     }
 
     public void alterar(String uuid) {

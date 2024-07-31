@@ -1,4 +1,4 @@
-import { Mensagem, MensagemJSON } from '../interfaces/Mensagem';
+import { Mensagem } from '../interfaces/Mensagem';
 import api, { verificaErroApi } from './api';
 
 export async function inserirMensagem(mensagem: Mensagem) {
@@ -6,14 +6,12 @@ export async function inserirMensagem(mensagem: Mensagem) {
     return;
   }
 
-  const mensagemEnvio: MensagemJSON = {
-    grupo_id: mensagem.grupo.id!,
-    usuario_id: mensagem.usuario.id!,
+  const mensagemJSON: string = JSON.stringify({
+    conversa_id: mensagem.conversa.id,
+    user_remetente_id: mensagem.userRemetente.id,
     mensagem: mensagem.mensagem,
     data: formatarData(mensagem.data),
-  };
-
-  const mensagemJSON: string = JSON.stringify(mensagemEnvio);
+  });
 
   try {
     const res = await api.post('/mensagem', mensagemJSON, {
@@ -31,7 +29,7 @@ export async function listarMensagensPorGrupo(id: number) {
   }
 
   try {
-    const res = await api.get(`/mensagem/group/${id}`);
+    const res = await api.get(`/mensagem/chat/${id}`);
     return res.data;
   } catch (error) {
     return verificaErroApi(error);
