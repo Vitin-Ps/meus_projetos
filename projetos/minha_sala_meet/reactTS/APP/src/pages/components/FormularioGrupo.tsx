@@ -24,12 +24,12 @@ const FormularioGrupo: React.FC<FormularioGrupoProps> = ({ cssClass, usuarioId }
     if (resGrupo.error) {
       alert(resGrupo.message);
       return;
-    }   
+    }
   };
 
   return (
     <form className={`form_padrao form_grupo  ${cssClass && cssClass}`} onSubmit={criarGrupo}>
-      <Input label="" placeholder="Nome do grupo..." tipo="text" obrigatório={true} setValor={setNome} valor={nome} />
+      <Input label="" placeholder="Nome do grupo..." tipo="text" obrigatorio={true} setValor={setNome} valor={nome} />
       <input type="submit" value="Criar" />
     </form>
   );

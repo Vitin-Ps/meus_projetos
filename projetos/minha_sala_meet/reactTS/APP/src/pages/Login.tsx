@@ -76,7 +76,7 @@ const Login = () => {
                 tipo="string"
                 placeholder="Digite seu Login"
                 setValor={(valor) => setLogin(valor)}
-                obrigatório={true}
+                obrigatorio={true}
                 valor={login}
               />
               <Input
@@ -84,7 +84,7 @@ const Login = () => {
                 tipo="password"
                 placeholder="Digite sua Senha"
                 setValor={(valor) => setSenha(valor)}
-                obrigatório={true}
+                obrigatorio={true}
                 valor={senha}
               />
               <div>
@@ -109,13 +109,13 @@ const Login = () => {
           <div className="cadastro_container">
             <h2>Cadastre-se</h2>
             <form className="form_padrao" onSubmit={cadastrarUser}>
-              <Input label="Nome:" tipo="string" placeholder="Digite seu Nome" setValor={(valor) => setNome(valor)} obrigatório={true} valor={nome} />
+              <Input label="Nome:" tipo="string" placeholder="Digite seu Nome" setValor={(valor) => setNome(valor)} obrigatorio={true} valor={nome} />
               <Input
                 label="Login:"
                 tipo="string"
                 placeholder="Digite seu Login"
                 setValor={(valor) => setLogin(valor)}
-                obrigatório={true}
+                obrigatorio={true}
                 valor={login}
               />
               <Input
@@ -123,7 +123,7 @@ const Login = () => {
                 tipo="password"
                 placeholder="Digite sua Senha"
                 setValor={(valor) => setSenha(valor)}
-                obrigatório={true}
+                obrigatorio={true}
                 valor={senha}
               />
               <div>

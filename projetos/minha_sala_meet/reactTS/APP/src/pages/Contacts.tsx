@@ -16,6 +16,7 @@ import { inserirMensagem, listarMensagensPorGrupo } from '../services/MensagemSe
 import FormularioGrupo from './components/FormularioGrupo';
 import InfoGrupo from './components/InfoGrupo';
 import Loading from './components/Loading';
+import AmigosElement from './components/AmigosElement';
 
 const socketIO = socket;
 
@@ -25,6 +26,7 @@ const Contacts = () => {
   const [mensagem, setMensagem] = useState('');
   const [conversas, setConversas] = useState<Mensagem[]>([]);
   const [showConversa, setShowConversa] = useState(false);
+  const [showInfoUser, setShowInfoUser] = useState(false);
   const [showFormularioGrupo, setShowFormularioGrupo] = useState(false);
   const [showInfoGrupo, setShowInfoGrupo] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
@@ -113,8 +115,10 @@ const Contacts = () => {
   return (
     <>
       {!showLoading && <Loading />}
-      <Dasborad nome={auth.user?.nome!} />
+      <Dasborad nome={auth.user?.nome!} setShowInfoUser={setShowInfoUser} showInfoUser={showInfoUser}/>
+
       <section className="contatos_container">
+        <AmigosElement showInfoUser={showInfoUser}/>        
         <div className="conversas_container">
           <aside>
             <h2>Conversas</h2>

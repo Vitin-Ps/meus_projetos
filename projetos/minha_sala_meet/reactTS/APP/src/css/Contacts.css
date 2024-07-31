@@ -2,14 +2,139 @@
   position: relative;
 }
 
-.sair_login {
+.text_decoration_blue {
   cursor: pointer;
-  font-size: 1.2em;
+  font-size: 1em;
 }
 
-.sair_login:hover {
+.text_decoration_blue:hover {
   text-decoration: underline;
 }
+
+/* ------------- INFO USER ------------- */
+
+.info_user {
+  position: absolute;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  display: flex;
+}
+
+.info_user aside {
+  width: 30%;
+  min-width: 400px;
+  background-color: var(--cor002);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border-right: 1px solid var(--cor009);
+}
+
+.img_container {
+  border: 1px solid var(--cor009);
+  background-color: var(--cor007);
+  position: relative;
+  border-radius: 20px;
+  box-shadow: 10px 10px 20px #0000001f;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.img_container img {
+  max-width: 250px;
+  padding: 0;
+}
+
+.img_container .icon_edit {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 1.3em;
+  border-radius: 50%;
+  backdrop-filter: blur(90px);
+  background-color: #0000001b;
+  color: var(--cor001);
+  padding: 7px;
+  transition: 0.4s;
+}
+
+.img_container .icon_edit:hover {
+  color: var(--cor009);
+}
+
+.info_user aside h2 {
+  margin-top: 1em;
+  font-size: 2em;
+}
+
+.info_user section {
+  position: relative;
+  background-color: var(--cor023);
+  flex-grow: 1;
+}
+
+.info_user section .lista_amigos_container {
+  position: relative;
+  max-width: 600px;
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  padding: 0 1em;
+}
+
+.info_user section .lista_amigos_container > h2 {
+  margin-top: 1em;
+}
+
+.info_user section .lista_amigos_container .lista_mebros {
+  max-height: 600px;
+}
+
+.info_user section .lista_add_amigos_container {
+  background-color: var(--cor002);
+  position: absolute;
+  width: 100%;
+  padding: 0 1em;
+  height: 100%;
+  overflow: hidden;
+}
+
+.info_user section .lista_add_amigos_container h2 {
+  margin-top: 1em;
+}
+
+.info_user section .lista_add_amigos_container .btn_fechar_info {
+  position: absolute;
+  top: 10px;
+  right: 30px;
+}
+
+.info_user section .lista_add_amigos_container .form-group input {
+  margin-top: 2em;
+}
+
+.info_user section .lista_add_amigos_container .lista_usuarios {
+  max-height: 450px;
+  overflow: auto;
+}
+
+
+.collapse_total { 
+  transition: height 0.5s;
+  height: 0 !important;
+}
+
+.expand_total {
+  transition: height 2s;
+  height: 100% !important;
+}
+
+/* ------------- ------------- */
 
 .contatos_container {
   position: relative;
@@ -80,16 +205,14 @@
   margin: 1em 0;
 }
 
-
-
 .conversas_container .conversas_main_container .form_grupo.collapse {
   overflow: hidden;
-  height: 0; 
-  transition: height .5s;
+  height: 0;
+  transition: height 0.5s;
 }
 
 .conversas_container .conversas_main_container .form_grupo.expand {
-  height: 90%; 
+  height: 90%;
   transition: height 2s;
 }
 
@@ -156,6 +279,7 @@
 }
 
 .mensagens_container {
+  position: relative;
   background-color: var(--cor005);
   flex-grow: 1;
   display: flex;
@@ -198,12 +322,12 @@
   z-index: 1;
 }
 
-.mensagens_container .mensagens_main_container .info_grupo_container .btn_fechar_info {
+.btn_fechar_info {
   background-color: var(--cor013);
   color: var(--cor004);
 }
 
-.mensagens_container .mensagens_main_container .info_grupo_container .btn_fechar_info:hover {
+.btn_fechar_info:hover {
   background-color: var(--cor014);
 }
 
@@ -258,7 +382,7 @@
 .card_membro button {
   position: absolute;
   top: 15px;
-  right: 15px; 
+  right: 15px;
   font-weight: bold;
 }
 

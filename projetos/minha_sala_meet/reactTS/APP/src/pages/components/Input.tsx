@@ -6,10 +6,10 @@ interface InputProps {
   placeholder: string;
   setValor?: (valor: string) => void;
   valor?: any;
-  obrigatório?: boolean;
+  obrigatorio?: boolean;
 }
 
-const Input: React.FC<InputProps> = ({ label, tipo, placeholder, setValor, valor, obrigatório = false }) => {
+const Input: React.FC<InputProps> = ({ label, tipo, placeholder, setValor, valor, obrigatorio: obrigatório = false }) => {
   return (
     <div className="form-group">
       {label && <label>{label}</label>}
