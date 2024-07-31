@@ -106,3 +106,13 @@ main > section > div.mesmalinha {
 }
 
 
+.foto_perfil {
+    width: 120px;
+    height: 160px;
+}
+
+.lista_competencias {
+    list-style-type: '-';
+    font-size: .9em;
+    margin-top: .5em;
+}
