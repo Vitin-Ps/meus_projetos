@@ -1,23 +1,25 @@
-
+import { Grupo } from '../interfaces/Grupo';
 import api, { verificaErroApi } from './api';
+import { gerarUUID } from './FuncionalidadesService';
 
-// export async function cadastrarUsuario(usuario: Usuario) {
-//   if (!usuario) {
-//     return;
-//   }
+export async function cadastrarGrupo(nome: string, user_id:number) {
 
-//   const usuarioJSON: string = JSON.stringify(usuario);
 
-//   try {
-//     const res = await api.post('/login/cad/user', usuarioJSON, {
-//       headers: { 'Content-Type': 'application/json' },
-//     });
-//     return res.data;
-//   } catch (error) {
-//     console.log('Error: ', error);
-//     return null;
-//   }
-// }
+  const grupoJSON: string = JSON.stringify({
+    nome,
+    uuid: gerarUUID(),
+    user_id
+  });
+
+  try {
+    const res = await api.post('/group', grupoJSON, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+    return res.data;
+  } catch (error) {
+    return verificaErroApi(error);
+  }
+}
 
 export async function listarGruposPorUser(id: number) {
   if (!id) {
@@ -39,6 +41,22 @@ export async function detalharGrupo(id: number) {
 
   try {
     const res = await api.get(`/group/${id}`);
+    return res.data;
+  } catch (error) {
+    return verificaErroApi(error);
+  }
+}
+
+export async function deletaGrupo(grupo_id: number, user_id: number) {
+  const grupoJSON: string = JSON.stringify({
+    grupo_id,
+    user_id,
+  });
+
+  try {
+    const res = await api.post('/group/del', grupoJSON, {
+      headers: { 'Content-Type': 'application/json' },
+    });
     return res.data;
   } catch (error) {
     return verificaErroApi(error);

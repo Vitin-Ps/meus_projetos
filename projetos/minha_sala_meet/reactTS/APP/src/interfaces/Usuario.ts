@@ -3,5 +3,5 @@ export interface Usuario {
   login?: string;
   senha?: string;
   nome: string;
-  imagem?: string;
+  imagem?: string;  
 }

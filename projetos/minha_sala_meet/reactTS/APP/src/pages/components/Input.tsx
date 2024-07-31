@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface InputProps {
-  label: string;
+  label?: string;
   tipo: string;
   placeholder: string;
   setValor?: (valor: string) => void;
@@ -12,7 +12,7 @@ interface InputProps {
 const Input: React.FC<InputProps> = ({ label, tipo, placeholder, setValor, valor, obrigatório = false }) => {
   return (
     <div className="form-group">
-      <label>{label}</label>
+      {label && <label>{label}</label>}
       <input
         type={tipo}
         placeholder={placeholder}

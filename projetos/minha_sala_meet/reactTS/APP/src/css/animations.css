@@ -1,0 +1,58 @@
+/* styles.css */
+@keyframes slideDown {
+  from {
+    height: 90%;
+  }
+  to {
+    height: 0;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    height: 0;
+  }
+  to {
+    height: 90%;
+  }
+}
+
+/* styles.css */
+@keyframes slideDownMembros {
+  from {
+    height: 500px;
+  }
+  to {
+    height: 0;
+  }
+}
+
+@keyframes slideUpMebros {
+  from {
+    height: 0;
+  }
+  to {
+    height: 500px;
+  }
+}
+
+.collapse {
+  overflow: hidden;
+  animation: slideDown 0.5s forwards; /* 0.5s é o tempo da animação */
+}
+
+.expand {
+  overflow: auto;
+  animation: slideUp 0.5s forwards; /* 0.5s é o tempo da animação */
+}
+
+.collapse_membros {
+  overflow: hidden;
+  animation: slideDown 0.5s forwards; /* 0.5s é o tempo da animação */
+}
+
+.expand_membros{
+  overflow: auto;
+  animation: slideUp 0.5s forwards; /* 0.5s é o tempo da animação */
+}
+

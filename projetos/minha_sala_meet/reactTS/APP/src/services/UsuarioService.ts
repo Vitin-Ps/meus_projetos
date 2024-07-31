@@ -30,3 +30,12 @@ export async function detalhaUsuario(id: number) {
     return verificaErroApi(error);
   }
 }
+
+export async function listarUsuarios() {
+  try {
+    const res = await api.get(`/user`);
+    return res.data;
+  } catch (error) {
+    return verificaErroApi(error);
+  }
+}

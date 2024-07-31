@@ -21,4 +21,10 @@ public class UsuarioController {
         Usuario usuario = usuarioRepository.getReferenceByIdAndAtivoTrue(id);
         return ResponseEntity.ok(new DadosDetalhamentoUser(usuario));
     }
+
+    @GetMapping
+    public ResponseEntity listar() {
+        var listaUser = usuarioRepository.findAll().stream().map(DadosDetalhamentoUser::new).toList();
+        return ResponseEntity.ok(listaUser);
+    }
 }

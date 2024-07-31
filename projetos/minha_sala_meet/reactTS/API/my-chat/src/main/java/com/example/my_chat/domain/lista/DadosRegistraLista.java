@@ -6,10 +6,10 @@ import jakarta.validation.constraints.NotNull;
 
 public record DadosRegistraLista(
         @NotNull(message = "ID do usuário é Obrigatório")
-        Long usuario_id,
+        Long user_id,
         @NotNull(message = "Grupo é Obrigatório")
         Long grupo_id,
-        @NotNull(message = "Cargo é Obrigatório")
-        TipoUsuario cargo
+        @NotNull(message = "ID do usuário é Obrigatório")
+        Long membro_id
 ) {
 }

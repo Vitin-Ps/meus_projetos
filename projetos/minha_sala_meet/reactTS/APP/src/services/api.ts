@@ -33,7 +33,7 @@ export const verificaErroApi = (error: any) => {
   if (axios.isAxiosError(error)) {
     errorMessage.error = error.code!;
     if (error.response && error.response.data) {
-      if(error.response.data.length > 0) {
+      if (error.response.data.length > 0) {
         errorMessage.message = construirMensagemDeErro(error.response.data);
       } else {
         errorMessage.message = error.response.data.toString();
@@ -46,11 +46,11 @@ export const verificaErroApi = (error: any) => {
 
   // Função para converter o array de erros em uma string de mensagens
   function construirMensagemDeErro(erros: { campo: string; mensagem: string }[]): string {
-    // Usar o método map para criar uma array de strings de erro
-    const mensagens = erros.map((erro) => `${erro.campo}: ${erro.mensagem}`);
-
-    // Usar o método join para unir todas as mensagens com quebra de linha
-    return mensagens.join('\n');
+    if (erros.map) {
+      const mensagens = erros.map((erro) => `${erro.campo}: ${erro.mensagem}`);
+      return mensagens.join('\n');
+    }
+    return erros.toString();
   }
 
   errorMessage.error = 'Erro desconhecido';

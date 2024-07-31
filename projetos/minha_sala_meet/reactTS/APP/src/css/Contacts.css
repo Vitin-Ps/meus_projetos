@@ -27,15 +27,52 @@
   display: flex;
   align-items: center;
   border-right: 1px solid var(--cor007);
+  display: flex;
+  justify-content: space-between;
+}
+
+.conversas_container aside button {
+  background-color: var(--cor013);
+  color: var(--cor004);
+  width: 25px;
+  height: 25px;
+  font-size: 1.1em;
+  margin-right: 1em;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.conversas_container aside button:hover {
+  background-color: var(--cor014);
 }
 
 .conversas_container .conversas_main_container {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 0.5em;
-  flex-grow: 1;
-  padding: 0.5em;
+  /* flex-grow: 1; */
+  height: 100%;
+  padding: 1em 0.5em;
+}
+
+.conversas_container .conversas_main_container.collapse {
+  height: 0%;
+}
+
+.conversas_container .conversas_main_container .form_grupo {
+  background-color: var(--cor002);
+  top: 0;
+  height: 0;
+  overflow: hidden;
+  width: 100%;
+  position: absolute;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 1em 0;
 }
 
 .conversas_container .conversas_main_container .input_pesquisar_grupos {
@@ -101,17 +138,140 @@
 }
 
 .mensagens_container {
-  background-color: aquamarine;
+  background-color: var(--cor005);
   flex-grow: 1;
   display: flex;
   flex-direction: column;
 }
 
 .mensagens_container .mensagens_main_container {
+  position: relative;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
 }
+
+/* ----------- Container de Info do Grupo ------------- */
+
+.mensagens_container .mensagens_main_container .info_grupo_container {
+  background-color: var(--cor002);
+  position: absolute;
+  top: 0;
+  left: 10px;
+  height: 500px;
+  width: 400px;
+  border-radius: 0px 0px 15px 15px;
+  box-shadow: 5px 5px 15px #0000001d;
+  overflow: hidden;
+}
+
+.btn_membros_container {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  display: flex;
+  gap: 10px;
+}
+
+.info_grupo_container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1;
+}
+
+.mensagens_container .mensagens_main_container .info_grupo_container .btn_fechar_info {
+  background-color: var(--cor013);
+  color: var(--cor004);
+}
+
+.mensagens_container .mensagens_main_container .info_grupo_container .btn_fechar_info:hover {
+  background-color: var(--cor014);
+}
+
+.btn_add_membro {
+  background-color: var(--cor020);
+  color: var(--cor019);
+}
+
+.btn_add_membro:hover {
+  background-color: var(--cor021);
+}
+
+.info_grupo_container > h2 {
+  color: var(--cor001);
+  padding-left: 0.5em;
+  margin-top: 0.5em;
+  font-size: 1.3em;
+}
+
+.lista_mebros {
+  padding: 0.5em;
+  flex-grow: 1;
+  max-height: 385px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.card_membro {
+  position: relative;
+
+  background-color: var(--cor018);
+  width: 95%;
+  padding: 0.5em;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  font-size: 0.8em;
+  border-radius: 5px;
+}
+
+.card_membro:hover {
+  background-color: var(--cor006);
+}
+
+.card_membro img {
+  max-width: 40px;
+  border-radius: 50%;
+}
+
+.card_membro button {
+  position: absolute;
+  top: 15px;
+  right: 15px; 
+  font-weight: bold;
+}
+
+.btn_apagar_grupo {
+  width: 150px;
+  margin: auto;
+  font-size: 1.2em;
+  padding: 0.2em 0;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  background-color: var(--cor015);
+  color: var(--cor002);
+  transition: 0.5s;
+}
+
+.btn_apagar_grupo:hover {
+  background-color: var(--cor002);
+  color: var(--cor015);
+  border-color: var(--cor015);
+}
+
+.btn_remover_membro {
+  background-color: var(--cor016);
+  color: var(--cor015);
+}
+
+.btn_remover_membro:hover {
+  background-color: var(--cor017);
+}
+
+/* -----------  ------------- */
 
 .mensagens_container aside {
   background-color: var(--cor008);
@@ -128,6 +288,7 @@
   max-width: 60px;
   border-radius: 50%;
   padding: 0.5em;
+  cursor: pointer;
 }
 
 .mensagens_container .mensagens_main_container .conteudo_container {
@@ -141,20 +302,20 @@
   overflow: auto;
 }
 
-.mensagens_container .mensagens_main_container .conteudo_container::-webkit-scrollbar {
+.scroll-bar::-webkit-scrollbar {
   width: 7px; /* Largura do scrollbar */
 }
 
-.mensagens_container .mensagens_main_container .conteudo_container::-webkit-scrollbar-track {
+.scroll-bar::-webkit-scrollbar-track {
   background: transparent; /* Cor do fundo do scrollbar */
 }
 
-.mensagens_container .mensagens_main_container .conteudo_container::-webkit-scrollbar-thumb {
+.scroll-bar::-webkit-scrollbar-thumb {
   background: var(--cor010); /* Cor do thumb (parte móvel) do scrollbar */
   border-radius: 5px;
 }
 
-.mensagens_container .mensagens_main_container .conteudo_container::-webkit-scrollbar-thumb:hover {
+.scroll-bar::-webkit-scrollbar-thumb:hover {
   background: var(--cor011); /* Cor do thumb ao passar o mouse */
 }
 
@@ -168,7 +329,7 @@
 }
 
 .card_msg span {
-  font-size: .7em;
+  font-size: 0.7em;
 }
 
 .card_msg_pai {
@@ -180,16 +341,14 @@
   background-image: var(--degrade001);
   color: var(--cor002);
   align-self: flex-end;
-  
 }
 
-
 .card_msg_integrante {
-  align-self: flex-start; 
+  align-self: flex-start;
 }
 
 .card_msg_integrante > span {
-  margin: .5em;
+  margin: 0.5em;
   font-weight: bold;
 }
 

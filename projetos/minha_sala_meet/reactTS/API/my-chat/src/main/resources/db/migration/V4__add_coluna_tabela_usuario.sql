@@ -1,1 +1,1 @@
-ALTER TABLE tbl_usuario ADD tipo_usuario CHAR(8) NOT NULL;
+ALTER TABLE tbl_usuario ADD COLUMN tipo_usuario CHAR(8) NOT NULL;

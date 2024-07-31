@@ -9,4 +9,6 @@ import java.util.List;
 public interface MensagemRepository extends JpaRepository<Mensagem, Long> {
 
     List<Mensagem> findAllByGrupoIdOrderByData(Long id);
+
+    void deleteAllByGrupoId(Long aLong);
 }

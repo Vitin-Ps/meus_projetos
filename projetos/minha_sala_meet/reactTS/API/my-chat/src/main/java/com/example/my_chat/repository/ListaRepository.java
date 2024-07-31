@@ -8,4 +8,10 @@ import java.util.List;
 
 public interface ListaRepository extends JpaRepository<Lista, Long> {
     List<Lista> findAllByUsuarioId(Long id);
+
+    List<Lista> findAllByGrupoId(Long id);
+
+    Lista getReferenceByUsuarioIdAndGrupoId(Long userId, Long grupoId);
+
+    void deleteAllByGrupoId(Long aLong);
 }
