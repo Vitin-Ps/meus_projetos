@@ -14,9 +14,9 @@ import java.util.Date;
 
 public record DadosRegistraMensagem(
         @NotNull(message = "Usuario é Obrigatório")
-        Long usuario_id,
-        @NotNull(message = "Grupo é Obrigatório")
-        Long grupo_id,
+        Long user_remetente_id,
+        @NotNull(message = "Conversa é Obrigatória")
+        Long conversa_id,
         @NotNull(message = "Mensagem é Obrigatório")
         String mensagem,
         @JsonFormat(pattern = "dd/MM/yyyy HH:mm")

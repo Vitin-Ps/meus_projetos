@@ -1,5 +1,6 @@
 package com.example.my_chat.domain.grupo;
 
+import com.example.my_chat.domain.conversa.Conversa;
 import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,20 +18,23 @@ public class Grupo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String uuid;
+    private String imagem;
     private String nome;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "conversa_id")
+    private Conversa conversa;
 
-    public Grupo(String uuid, String nome) {
+    public Grupo(String nome, Conversa conversa) {
         this.nome = nome;
-        this.uuid = uuid;
+        this.conversa = conversa;
     }
 
-    public void alterar(String uuid, String nome) {
+    public void alterar(String imagem, String nome) {
         if(!StringUtils.isBlank(nome)) {
             this.nome = nome;
         }
-        if(!StringUtils.isBlank(uuid)) {
-            this.uuid = uuid;
+        if(!StringUtils.isBlank(imagem)) {
+            this.imagem = imagem;
         }
     }
 }

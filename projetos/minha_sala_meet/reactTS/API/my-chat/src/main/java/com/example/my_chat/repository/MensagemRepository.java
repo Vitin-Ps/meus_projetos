@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface MensagemRepository extends JpaRepository<Mensagem, Long> {
 
-    List<Mensagem> findAllByGrupoIdOrderByData(Long id);
+    void deleteAllByConversaId(Long aLong);
 
-    void deleteAllByGrupoId(Long aLong);
+    List<Mensagem> findAllByConversaIdOrderByData(Long id);
 }

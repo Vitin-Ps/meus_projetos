@@ -1,4 +1,4 @@
-package com.example.my_chat.domain.lista;
+package com.example.my_chat.domain.membro;
 
 import com.example.my_chat.domain.usuario.TipoUsuario;
 import jakarta.validation.constraints.NotNull;

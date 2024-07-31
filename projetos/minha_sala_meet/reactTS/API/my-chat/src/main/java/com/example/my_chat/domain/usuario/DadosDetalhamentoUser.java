@@ -1,6 +1,6 @@
 package com.example.my_chat.domain.usuario;
 
-import com.example.my_chat.domain.lista.Lista;
+import com.example.my_chat.domain.membro.Membro;
 
 public record DadosDetalhamentoUser(
         Long id,
@@ -12,7 +12,7 @@ public record DadosDetalhamentoUser(
         this(usuario.getId(), usuario.getNome(), usuario.getImagem());
     }
 
-    public DadosDetalhamentoUser(Lista lista) {
+    public DadosDetalhamentoUser(Membro lista) {
         this(lista.getUsuario().getId(), lista.getUsuario().getNome(), lista.getUsuario().getImagem());
     }
 }

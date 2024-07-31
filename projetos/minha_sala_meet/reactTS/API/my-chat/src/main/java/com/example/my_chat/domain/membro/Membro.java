@@ -1,27 +1,26 @@
-package com.example.my_chat.domain.lista;
+package com.example.my_chat.domain.membro;
 
 import com.example.my_chat.domain.grupo.Grupo;
 import com.example.my_chat.domain.usuario.TipoUsuario;
 import com.example.my_chat.domain.usuario.Usuario;
-import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Table(name = "tbl_lista")
-@Entity(name = "Lista")
+@Table(name = "tbl_membro")
+@Entity(name = "Membro")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Lista {
+public class Membro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "user_id")
     private Usuario usuario;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "grupo_id")
@@ -29,7 +28,7 @@ public class Lista {
     @Enumerated(EnumType.STRING)
     private TipoUsuario cargo;
 
-    public Lista(Usuario usuario, Grupo grupo, TipoUsuario cargo) {
+    public Membro(Usuario usuario, Grupo grupo, TipoUsuario cargo) {
         this.usuario = usuario;
         this.grupo = grupo;
         this.cargo = cargo;
