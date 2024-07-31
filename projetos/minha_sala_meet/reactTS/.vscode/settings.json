@@ -1,0 +1,24 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "teste",
+            "database": "postgres",
+            "username": "user_admin",
+            "password": "1234"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "mychat",
+            "database": "my_chat",
+            "username": "user_admin",
+            "password": "1234"
+        }
+    ]
+}
