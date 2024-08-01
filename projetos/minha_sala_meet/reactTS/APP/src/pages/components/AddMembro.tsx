@@ -3,8 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import { Usuario } from '../../interfaces/Usuario';
 import { Grupo } from '../../interfaces/Grupo';
-import { detalhaUsuario, listarUsuarios } from '../../services/UsuarioService';
-import { addIntegranteGrupo, listarMembrosPorGrupo } from '../../services/ListaMembrosService';
+import { detalhaUsuario } from '../../services/UsuarioService';
+import { addIntegranteGrupo } from '../../services/ListaMembrosService';
+import { listarAmigos } from '../../services/AmigosService';
+import { Amigo } from '../../interfaces/Amigo';
 
 interface AddMembroProps {
   setShowAddMembro: React.Dispatch<React.SetStateAction<boolean>>;
@@ -15,15 +17,15 @@ interface AddMembroProps {
   setListaMembros: React.Dispatch<React.SetStateAction<Usuario[]>>;
 }
 
-const AddMembro: React.FC<AddMembroProps> = ({ setShowAddMembro, showAddMembro, grupo, userId, setListaMembros, listamembros }) => {
-  const [listaAmigos, setListaAmigos] = useState<Usuario[]>([]);
+const AddMembro: React.FC<AddMembroProps> = ({ setShowAddMembro, showAddMembro, grupo, userId, setListaMembros }) => {
+  const [listaAmigos, setListaAmigos] = useState<Amigo[]>([]);
 
   useEffect(() => {
     const buscaDados = async () => {
-      const res = await listarUsuarios();
+      const res = await listarAmigos(userId);
 
       if (res.error) {
-        alert(res.error);
+        alert(res.message);
         return;
       }
 
@@ -36,7 +38,8 @@ const AddMembro: React.FC<AddMembroProps> = ({ setShowAddMembro, showAddMembro, 
     const res = await addIntegranteGrupo(grupo.id!, id, userId);
 
     if (res.error) {
-      alert(res.error);
+      alert(res.message);
+      return;
     }
 
     const resUserMembro = await detalhaUsuario(id);
@@ -61,9 +64,9 @@ const AddMembro: React.FC<AddMembroProps> = ({ setShowAddMembro, showAddMembro, 
               amigo.id !== userId && (
                 <div className="card_conversa card_membro" key={amigo.id}>
                   <img src="./images/avatar.jpg" alt="avatar" />
-                  <h2>{amigo.nome}</h2>
+                  <h2>{amigo.amigo.nome}</h2>
                   {amigo.id !== userId && (
-                    <button className="btn_circle btn_add_membro" onClick={() => addmembro(amigo.id!)}>
+                    <button className="btn_circle btn_add_membro" onClick={() => addmembro(amigo.amigo.id!)}>
                       <FontAwesomeIcon icon={faPlus} />
                     </button>
                   )}

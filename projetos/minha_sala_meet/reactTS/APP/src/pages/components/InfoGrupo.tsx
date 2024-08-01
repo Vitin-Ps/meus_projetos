@@ -26,7 +26,7 @@ const InfoGrupo: React.FC<InfoGrupoProps> = ({ grupo, setShowInfoGrupo, showInfo
         const res = await listarMembrosPorGrupo(grupo.id!);
 
         if (res.error) {
-          alert(res.error);
+          alert(res.message);
           return;
         }
 
@@ -35,7 +35,7 @@ const InfoGrupo: React.FC<InfoGrupoProps> = ({ grupo, setShowInfoGrupo, showInfo
         const resUser = await detalharUserAutoridade(userId, grupo.id!);
 
         if (resUser.error) {
-          alert(res.error);
+          alert(res.message);
           return;
         }
 
@@ -54,7 +54,7 @@ const InfoGrupo: React.FC<InfoGrupoProps> = ({ grupo, setShowInfoGrupo, showInfo
       const res = await removeMembroGrupo(membroSelecionado.id!, userId, grupo.id!);
 
       if (res.error) {
-        alert(res.error);
+        alert(res.message);
         return;
       }
 
@@ -72,7 +72,7 @@ const InfoGrupo: React.FC<InfoGrupoProps> = ({ grupo, setShowInfoGrupo, showInfo
       const res = await deletaGrupo(grupo.id!, userId);
 
       if (res.error) {
-        alert(res.error);
+        alert(res.message);
         return;
       }
 

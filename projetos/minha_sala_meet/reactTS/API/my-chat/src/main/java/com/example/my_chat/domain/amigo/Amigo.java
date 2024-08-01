@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Table(name = "tbl_amigo")
+@Table(name = "tbl_amigos")
 @Entity(name = "Amigo")
 @Getter
 @NoArgsConstructor
@@ -19,12 +19,12 @@ public class Amigo {
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private Usuario usuario;
+    private Usuario user;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "amigo_id")
     private Usuario amigo;
     public Amigo(Usuario usuario, Usuario amigo) {
-        this.usuario = usuario;
+        this.user = usuario;
         this.amigo = amigo;
     }
 

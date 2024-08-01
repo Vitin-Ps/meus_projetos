@@ -1,0 +1,28 @@
+.dashboard_func {
+    display: flex;
+    gap: 1.5em;
+    padding-right: 1em;
+    align-items: center;
+}
+
+.notificacao_status_container{
+    font-size: 1.2em;
+    color: var(--cor009);
+    position: relative;
+}
+
+.notificacao_status_container .notificacao_count {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    font-size: .8em;
+    
+}
+
+.notificacao_status_container .icon_notificacao {
+    padding-right: 1em;
+}
+
+.com_notificacao {
+    color: var(--cor004);
+}

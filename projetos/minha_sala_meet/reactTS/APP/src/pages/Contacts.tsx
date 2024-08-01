@@ -59,7 +59,8 @@ const Contacts = () => {
     const res = await listarMensagensPorGrupo(grupo.conversa.id!);
 
     if (res.error) {
-      alert(res.error.message);
+      alert(res.message);
+      return
     }
 
     const mensagens: Mensagem[] = res;
@@ -115,10 +116,10 @@ const Contacts = () => {
   return (
     <>
       {!showLoading && <Loading />}
-      <Dasborad nome={auth.user?.nome!} setShowInfoUser={setShowInfoUser} showInfoUser={showInfoUser}/>
+      <Dasborad nome={auth.user?.nome!} setShowInfoUser={setShowInfoUser} showInfoUser={showInfoUser} />
 
       <section className="contatos_container">
-        <AmigosElement showInfoUser={showInfoUser}/>        
+        <AmigosElement showInfoUser={showInfoUser} user={auth.user!} />
         <div className="conversas_container">
           <aside>
             <h2>Conversas</h2>

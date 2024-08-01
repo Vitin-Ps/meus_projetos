@@ -19,9 +19,6 @@ export async function addIntegranteGrupo(grupo_id: number, membro_id: number, us
 }
 
 export async function listarMembrosPorGrupo(id: number) {
-  if (!id) {
-    return;
-  }
 
   try {
     const res = await api.get(`/list/group/${id}`);

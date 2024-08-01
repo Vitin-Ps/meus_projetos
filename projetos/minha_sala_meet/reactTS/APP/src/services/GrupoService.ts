@@ -22,9 +22,6 @@ export async function cadastrarGrupo(nome: string, user_id:number) {
 }
 
 export async function listarGruposPorUser(id: number) {
-  if (!id) {
-    return;
-  }
 
   try {
     const res = await api.get(`/group/user/${id}`);
@@ -35,9 +32,6 @@ export async function listarGruposPorUser(id: number) {
 }
 
 export async function detalharGrupo(id: number) {
-  if (!id) {
-    return;
-  }
 
   try {
     const res = await api.get(`/group/${id}`);
