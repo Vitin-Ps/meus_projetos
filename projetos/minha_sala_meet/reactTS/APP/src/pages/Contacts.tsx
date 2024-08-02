@@ -17,14 +17,19 @@ import FormularioGrupo from './components/FormularioGrupo';
 import InfoGrupo from './components/InfoGrupo';
 import Loading from './components/Loading';
 import AmigosElement from './components/AmigosElement';
+import { Solicitacao } from '../interfaces/Solicitacao';
+import { listarSolicitacoesPorUserId } from '../services/AmigosService';
 
 const socketIO = socket;
 
 const Contacts = () => {
   const [grupoSelecionado, setGrupoSelecionado] = useState<Grupo>();
-  const [seusGrupos, setSeusGrupos] = useState<Grupo[]>();
   const [mensagem, setMensagem] = useState('');
+
+  const [seusGrupos, setSeusGrupos] = useState<Grupo[]>();
   const [conversas, setConversas] = useState<Mensagem[]>([]);
+  const [countNotificacao, setCountNotificacao] = useState<number>(0);
+
   const [showConversa, setShowConversa] = useState(false);
   const [showInfoUser, setShowInfoUser] = useState(false);
   const [showFormularioGrupo, setShowFormularioGrupo] = useState(false);
@@ -38,7 +43,11 @@ const Contacts = () => {
       setConversas((prevConversas) => [...prevConversas, data]);
     };
 
+    socketIO.emit('conectar', auth.user!.id!);
     socketIO.on('receberMensagem', handleMensagem);
+    socketIO.on('receber-notificacao', () => {
+      setCountNotificacao(countNotificacao + 1);
+    });
 
     const carregaDados = async () => {
       const grupos = await listarGruposPorUser(auth.user!.id!);
@@ -60,7 +69,7 @@ const Contacts = () => {
 
     if (res.error) {
       alert(res.message);
-      return
+      return;
     }
 
     const mensagens: Mensagem[] = res;
@@ -116,10 +125,16 @@ const Contacts = () => {
   return (
     <>
       {!showLoading && <Loading />}
-      <Dasborad nome={auth.user?.nome!} setShowInfoUser={setShowInfoUser} showInfoUser={showInfoUser} />
+      <Dasborad nome={auth.user?.nome!} setShowInfoUser={setShowInfoUser} showInfoUser={showInfoUser} countNotificacao={countNotificacao} />
 
       <section className="contatos_container">
-        <AmigosElement showInfoUser={showInfoUser} user={auth.user!} />
+        <AmigosElement
+          showInfoUser={showInfoUser}
+          user={auth.user!}
+          setCountNotificacao={setCountNotificacao}
+          countNotificacao={countNotificacao}
+          socketIO={socketIO}
+        />
         <div className="conversas_container">
           <aside>
             <h2>Conversas</h2>

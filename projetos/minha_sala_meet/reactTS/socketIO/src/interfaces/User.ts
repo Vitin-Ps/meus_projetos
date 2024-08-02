@@ -1,4 +1,4 @@
 export interface User {
-  codigo: string;
+  user_id: number;
   peer: string;
 }

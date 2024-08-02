@@ -7,29 +7,25 @@ import { Usuario } from '../../interfaces/Usuario';
 import { cadastrarAmigo, desfazerAmizade, listarAmigos, listarSolicitacoesPorUserId, rejeitarSolicitacao } from '../../services/AmigosService';
 import { Solicitacao } from '../../interfaces/Solicitacao';
 import { Amigo } from '../../interfaces/Amigo';
+import { enviarNotificacao } from '../../services/wss';
+import { Socket } from 'socket.io-client';
 
 interface AmigosElementProps {
-  showInfoUser: React.SetStateAction<boolean>;
+  showInfoUser: boolean;
   user: Usuario;
+  setCountNotificacao: React.Dispatch<React.SetStateAction<number>>;
+  countNotificacao: number;
+  socketIO: Socket
 }
 
-const AmigosElement: React.FC<AmigosElementProps> = ({ showInfoUser, user }) => {
+const AmigosElement: React.FC<AmigosElementProps> = ({ showInfoUser, user, setCountNotificacao, countNotificacao, socketIO }) => {
+  const [notificacoes, setNotificacoes] = useState<Solicitacao[]>([]);
+
   const [showAddAmigo, setShowAddAmigo] = useState(false);
   const [amigos, setAmigos] = useState<Amigo[]>([]);
-  const [notificacoes, setNotificacoes] = useState<Solicitacao[]>([]);
-  //   const [amigosAll, setAmigosAll] = useState<Usuario[]>([]);
 
   useEffect(() => {
     const buscaDados = async () => {
-      const resNotificacao = await listarSolicitacoesPorUserId(user.id!);
-
-      if (resNotificacao.error) {
-        alert(resNotificacao.message);
-        return;
-      }
-
-      setNotificacoes(resNotificacao);
-
       const resAmigos = await listarAmigos(user.id!);
 
       if (resAmigos.error) {
@@ -38,6 +34,17 @@ const AmigosElement: React.FC<AmigosElementProps> = ({ showInfoUser, user }) => 
       }
 
       setAmigos(resAmigos);
+
+      const resNotificacao = await listarSolicitacoesPorUserId(user.id!);
+      setNotificacoes(resNotificacao);
+      setCountNotificacao(resNotificacao.length);
+
+      if (resNotificacao.error) {
+        alert(resNotificacao.message);
+        return;
+      }
+
+      setNotificacoes(resNotificacao);
     };
     buscaDados();
   }, []);
@@ -50,7 +57,6 @@ const AmigosElement: React.FC<AmigosElementProps> = ({ showInfoUser, user }) => 
       return;
     }
 
-
     setNotificacoes(notificacoes.filter((solicitacao) => solicitacao.id !== notificacaoAdd.id));
     const resAmigos = await listarAmigos(user.id!);
 
@@ -60,6 +66,7 @@ const AmigosElement: React.FC<AmigosElementProps> = ({ showInfoUser, user }) => 
     }
 
     setAmigos(resAmigos);
+    setCountNotificacao(countNotificacao - 1);
   };
 
   const apagarSolicitacao = async (notificacaoDel: Solicitacao) => {
@@ -71,6 +78,7 @@ const AmigosElement: React.FC<AmigosElementProps> = ({ showInfoUser, user }) => 
     }
 
     setNotificacoes(notificacoes.filter((solicitacao) => solicitacao.id !== notificacaoDel.id));
+    setCountNotificacao(countNotificacao - 1);    
   };
 
   const desfazerAmigo = async (amigoDel: Amigo) => {
@@ -125,7 +133,7 @@ const AmigosElement: React.FC<AmigosElementProps> = ({ showInfoUser, user }) => 
           <div className="lista_membros scroll-bar">
             {notificacoes &&
               notificacoes.map((notificacao) => (
-                <div className="card_membro card_notificacao">
+                <div className="card_membro card_notificacao" key={notificacao.id}>
                   <img src="./images/avatar.jpg" alt="avatar" />
                   <h2>{notificacao.userRemetente.nome}</h2>
                   <div className="btn_notificacao_container">

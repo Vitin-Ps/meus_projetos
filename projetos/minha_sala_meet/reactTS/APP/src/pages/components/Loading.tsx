@@ -1,4 +1,4 @@
-import React from 'react'
+
 import '../../css/animations.css';
 import '../../css/loading_circle.css';
 

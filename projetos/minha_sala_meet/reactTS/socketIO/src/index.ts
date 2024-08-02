@@ -15,29 +15,18 @@ const io = new Server(server, {
 });
 
 let users: User[] = [];
-let peersConectados: String[] = [];
 
 io.on('connection', (socket: Socket) => {
-  console.log('Usuários: ', users);
-  // Lida com o evento 'addCodigoUser'
-  peersConectados.push(socket.id);
-  console.log('Peers: ', peersConectados);
-
-  socket.on('addCodigoUser', (codigo: string) => {
-    let user: User | undefined = users.find((user) => user.codigo === codigo);
+  socket.on('conectar', (user_id: number) => {
+    let user: User | undefined = users.find((user) => user.user_id === user_id);
 
     if (!user) {
-      user = {
-        codigo,
+      users.push({
+        user_id,
         peer: socket.id,
-      };
-
-      users.push(user);
-
-      console.log('Usuário Conectado: ', users);
-    } else {
-      console.log('usuário já conectado');
-    }
+      });
+      console.log('Users Conectados: ', users);
+    } else console.log('usuário já conectado');
   });
 
   socket.on('entrarSala', (codSala: string) => {
@@ -50,13 +39,19 @@ io.on('connection', (socket: Socket) => {
     socket.to(data.conversa.uuid).emit('receberMensagem', data);
   });
 
+  socket.on('enviar-notificacao', (user_id: number) => {
+    const user: User = users.filter((user) => user.user_id === user_id)[0];
+    if (user) {
+      socket.to(user.peer).emit('receber-notificacao');
+    }
+  });
+
   // Lida com o evento 'disconnect'
   socket.on('disconnect', () => {
     console.log('Usuário desconectado');
 
-    peersConectados = peersConectados.filter((peerSocketId) => peerSocketId !== socket.id);
     users = users.filter((user) => user.peer !== socket.id);
-    // console.log('Peers Conectados: ', peersConectados);
+    console.log('Users Conectados: ', users);
   });
 });
 

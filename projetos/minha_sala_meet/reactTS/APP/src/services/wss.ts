@@ -12,3 +12,7 @@ export const addMensagem = (socket: Socket, data: Mensagem) => {
 export const entrarSala = (socket: Socket, codSala: String) => {
   socket.emit('entrarSala', codSala);
 };
+
+export const enviarNotificacao = (socket: Socket, user_id: number) => {
+  socket.emit('enviar-notificacao', user_id);
+};

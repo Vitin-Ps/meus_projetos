@@ -8,10 +8,12 @@ import { addIntegranteGrupo, listarMembrosPorGrupo } from '../../services/ListaM
 import Input from './Input';
 import { removerAcentuacoes } from '../../services/FuncionalidadesService';
 import { enviarSoliticatacao } from '../../services/AmigosService';
+import socket from '../../services/socket';
+import { enviarNotificacao } from '../../services/wss';
 
 interface AddAmigoProps {
   setShowAddAmigo: React.Dispatch<React.SetStateAction<boolean>>;
-  showAddAmigo: React.SetStateAction<boolean>;
+  showAddAmigo: boolean;
   user: Usuario;
 }
 
@@ -54,6 +56,7 @@ const AddAmigo: React.FC<AddAmigoProps> = ({ setShowAddAmigo, showAddAmigo, user
 
     alert('Solicitação enviada!');
     setShowAddAmigo(false);
+    enviarNotificacao(socket, id);
   };
 
   return (
@@ -71,7 +74,7 @@ const AddAmigo: React.FC<AddAmigoProps> = ({ setShowAddAmigo, showAddAmigo, user
           usuarios.map(
             (usuario) =>
               usuario.id !== user.id && (
-                <div className="card_membro card_notificacao">
+                <div className="card_membro card_notificacao" key={usuario.id!}>
                   <img src="./images/avatar.jpg" alt="avatar" />
                   <h2>{usuario.nome}</h2>
 

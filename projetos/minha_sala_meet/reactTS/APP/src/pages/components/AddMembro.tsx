@@ -10,10 +10,10 @@ import { Amigo } from '../../interfaces/Amigo';
 
 interface AddMembroProps {
   setShowAddMembro: React.Dispatch<React.SetStateAction<boolean>>;
-  showAddMembro: React.SetStateAction<boolean>;
+  showAddMembro: boolean;
   grupo: Grupo;
   userId: number;
-  listamembros: React.SetStateAction<Usuario[]>;
+  listamembros: Usuario[];
   setListaMembros: React.Dispatch<React.SetStateAction<Usuario[]>>;
 }
 

@@ -10,7 +10,7 @@ import AddMembro from './AddMembro';
 
 interface InfoGrupoProps {
   setShowInfoGrupo: React.Dispatch<React.SetStateAction<boolean>>;
-  showInfoGrupo: React.SetStateAction<boolean>;
+  showInfoGrupo: boolean;
   grupo: Grupo;
   userId: number;
 }

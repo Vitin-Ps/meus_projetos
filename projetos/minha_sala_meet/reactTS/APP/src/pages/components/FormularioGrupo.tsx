@@ -1,7 +1,6 @@
 import React, { FormEvent, useState } from 'react';
 import Input from './Input';
 import { cadastrarGrupo } from '../../services/GrupoService';
-import { addIntegranteGrupo } from '../../services/ListaMembrosService';
 
 interface FormularioGrupoProps {
   usuarioId: number;
