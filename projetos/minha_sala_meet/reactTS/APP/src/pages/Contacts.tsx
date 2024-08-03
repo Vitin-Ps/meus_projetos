@@ -20,6 +20,7 @@ import Input from './components/Input';
 import { removerAcentuacoes } from '../services/FuncionalidadesService';
 import { socket } from '../services/socket';
 import { addMensagem, entrarSala } from '../services/wss';
+import { Usuario } from '../interfaces/Usuario';
 
 const Contacts = () => {
   const [grupoSelecionado, setGrupoSelecionado] = useState<Grupo>();
@@ -30,6 +31,7 @@ const Contacts = () => {
   const [conversas, setConversas] = useState<Mensagem[]>([]);
   const [countNotificacao, setCountNotificacao] = useState<number>(0);
   const [notificacoes, setNotificacoes] = useState<Solicitacao[]>([]);
+  const [membros, setMembros] = useState<Usuario[]>([]);
 
   const [showConversa, setShowConversa] = useState(false);
   const [showInfoUser, setShowInfoUser] = useState(false);
@@ -65,7 +67,6 @@ const Contacts = () => {
     });
 
     socket.on('receber-grupo-event', (data) => {
-      console.log('chegou');
       if (data.type === 'add') {
         setSeusGrupos((prevSeusGrupos) => {
           if (!prevSeusGrupos.includes(data.grupo)) {
@@ -73,6 +74,8 @@ const Contacts = () => {
           }
           return prevSeusGrupos;
         });
+      } else if (data.user && data.type === 'remover-membro') {
+        setMembros((prevMembros) => prevMembros.filter((membro) => membro.id !== data.user.id!));
       } else {
         setSeusGrupos((prevSeusGrupos) => prevSeusGrupos.filter((grupo) => grupo.id !== data.grupo.id));
         setGrupoSelecionado(undefined);
@@ -91,7 +94,7 @@ const Contacts = () => {
       setSeusGruposAll(grupos);
       setShowLoading(true);
     };
-    carregaDados();   
+    carregaDados();
   }, []);
 
   const entrarGrupo = async (id: number) => {
@@ -209,7 +212,14 @@ const Contacts = () => {
             )}
           </aside>
           <div className="mensagens_main_container">
-            <InfoGrupo setShowInfoGrupo={setShowInfoGrupo} showInfoGrupo={showInfoGrupo} grupo={grupoSelecionado!} userId={auth.user!.id!} />
+            <InfoGrupo
+              setShowInfoGrupo={setShowInfoGrupo}
+              showInfoGrupo={showInfoGrupo}
+              grupo={grupoSelecionado!}
+              user={auth.user!}
+              setMembros={setMembros}
+              membros={membros}
+            />
             <div className="conteudo_container">
               {showConversa &&
                 conversas.length > 0 &&

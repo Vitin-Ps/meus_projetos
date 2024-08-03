@@ -3,15 +3,10 @@ package com.example.my_chat.controller;
 import com.example.my_chat.domain.grupo.DadosInfoGrupoUser;
 import com.example.my_chat.domain.membro.*;
 import com.example.my_chat.domain.usuario.DadosDetalhamentoUser;
-import com.example.my_chat.domain.usuario.TipoUsuario;
-import com.example.my_chat.infra.exception.ValidacaoException;
-import com.example.my_chat.repository.GrupoRepository;
 import com.example.my_chat.repository.MembroRepository;
-import com.example.my_chat.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,6 +54,13 @@ public class MembroController {
     @Transactional
     public ResponseEntity deletar(@RequestBody @Valid DadosDeletaMembroLista dados) {
         service.delintegrante(dados);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity sairGrupo(@PathVariable Long id) {
+        membroRepository.deleteByUsuarioId(id);
         return ResponseEntity.noContent().build();
     }
 

@@ -2,7 +2,7 @@ import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import { Grupo } from '../../interfaces/Grupo';
-import { detalharUserAutoridade, listarMembrosPorGrupo, removeMembroGrupo } from '../../services/ListaMembrosService';
+import { detalharUserAutoridade, listarMembrosPorGrupo, removeMembroGrupo, sairGrupo } from '../../services/MembroService';
 import { ListaMembros } from '../../interfaces/ListaMembros';
 import { Usuario } from '../../interfaces/Usuario';
 import { deletaGrupo } from '../../services/GrupoService';
@@ -11,14 +11,15 @@ import { grupoEvent } from '../../services/wss';
 
 interface InfoGrupoProps {
   setShowInfoGrupo: React.Dispatch<React.SetStateAction<boolean>>;
+  membros: Usuario[];
+  setMembros: React.Dispatch<React.SetStateAction<Usuario[]>>;
   showInfoGrupo: boolean;
   grupo: Grupo;
-  userId: number;
+  user: Usuario;
 }
 
-const InfoGrupo: React.FC<InfoGrupoProps> = ({ grupo, setShowInfoGrupo, showInfoGrupo, userId }) => {
-  const [listaMembros, setlistaMembros] = useState<Usuario[]>([]);
-  const [userListaSitucao, setUserListaSitucao] = useState<ListaMembros>();
+const InfoGrupo: React.FC<InfoGrupoProps> = ({ grupo, setShowInfoGrupo, showInfoGrupo, user, setMembros, membros }) => {
+  const [userListaSituacao, setUserListaSituacao] = useState<ListaMembros>();
   const [showAddMembro, setShowAddMembro] = useState(false);
 
   useEffect(() => {
@@ -31,16 +32,16 @@ const InfoGrupo: React.FC<InfoGrupoProps> = ({ grupo, setShowInfoGrupo, showInfo
           return;
         }
 
-        setlistaMembros(res);
+        setMembros(res);
 
-        const resUser = await detalharUserAutoridade(userId, grupo.id!);
+        const resUser = await detalharUserAutoridade(user.id!, grupo.id!);
 
         if (resUser.error) {
           alert(res.message);
           return;
         }
 
-        setUserListaSitucao(resUser);
+        setUserListaSituacao(resUser);
       }
     };
     buscarDados();
@@ -52,14 +53,14 @@ const InfoGrupo: React.FC<InfoGrupoProps> = ({ grupo, setShowInfoGrupo, showInfo
     /* eslint-enable no-restricted-globals */
 
     if (deleteConfig) {
-      const res = await removeMembroGrupo(membroSelecionado.id!, userId, grupo.id!);
+      const res = await removeMembroGrupo(membroSelecionado.id!, user.id!, grupo.id!);
 
       if (res.error) {
         alert(res.message);
         return;
       }
 
-      setlistaMembros(listaMembros.filter((membro) => membro.id !== membroSelecionado.id));
+      setMembros(membros.filter((membro) => membro.id !== membroSelecionado.id));
       setShowInfoGrupo(false);
 
       grupoEvent(String(membroSelecionado.id!), grupo, 'del');
@@ -72,7 +73,7 @@ const InfoGrupo: React.FC<InfoGrupoProps> = ({ grupo, setShowInfoGrupo, showInfo
     /* eslint-enable no-restricted-globals */
 
     if (deleteConfig) {
-      const res = await deletaGrupo(grupo.id!, userId);
+      const res = await deletaGrupo(grupo.id!, user.id!);
 
       if (res.error) {
         alert(res.message);
@@ -84,19 +85,37 @@ const InfoGrupo: React.FC<InfoGrupoProps> = ({ grupo, setShowInfoGrupo, showInfo
     }
   };
 
+  const sairMembroGrupo = async () => {
+    /* eslint-disable no-restricted-globals */
+    const deleteConfig = confirm(`Deseja realmente sair deste grupo?`);
+    /* eslint-enable no-restricted-globals */
+
+    if (deleteConfig) {
+      const res = await sairGrupo(user.id!);
+
+      if (res.error) {
+        alert(res.message);
+        return;
+      }
+
+      setShowInfoGrupo(false);
+      grupoEvent(grupo.conversa.uuid, grupo, 'sair-group', user);
+    }
+  };
+
   return showAddMembro ? (
     <AddMembro
       grupo={grupo}
-      userId={userId}
+      userId={user.id!}
       setShowAddMembro={setShowAddMembro}
       showAddMembro={showAddMembro}
-      setListaMembros={setlistaMembros}
-      listamembros={listaMembros}
+      setListaMembros={setMembros}
+      listamembros={membros}
     />
   ) : (
     <div className={`info_grupo_container ${showInfoGrupo ? 'expand_membros' : 'collapse_membros'}`}>
       <div className="btn_membros_container">
-        {userListaSitucao?.cargo === 'ADMIN' && (
+        {userListaSituacao?.cargo === 'ADMIN' && (
           <button className="btn_circle btn_add_membro" onClick={() => setShowAddMembro(true)}>
             <FontAwesomeIcon icon={faPlus} />
           </button>
@@ -108,13 +127,13 @@ const InfoGrupo: React.FC<InfoGrupoProps> = ({ grupo, setShowInfoGrupo, showInfo
       </div>
       <h2>Membros</h2>
       <div className="lista_mebros scroll-bar">
-        {listaMembros &&
-          listaMembros.length > 0 &&
-          listaMembros.map((membro) => (
+        {membros &&
+          membros.length > 0 &&
+          membros.map((membro) => (
             <div className="card_conversa card_membro" key={membro.id}>
               <img src="./images/avatar.jpg" alt="avatar" />
               <h2>{membro.nome}</h2>
-              {membro.id !== userId && userListaSitucao?.cargo === 'ADMIN' && (
+              {membro.id !== user.id! && userListaSituacao?.cargo === 'ADMIN' && (
                 <button className="btn_circle btn_remover_membro" onClick={() => excluirMembro(membro)}>
                   <FontAwesomeIcon icon={faMinus} />
                 </button>
@@ -122,9 +141,15 @@ const InfoGrupo: React.FC<InfoGrupoProps> = ({ grupo, setShowInfoGrupo, showInfo
             </div>
           ))}
       </div>
-      <button className="btn_apagar_grupo" onClick={apagarGrupo}>
-        Apagar grupo
-      </button>
+      {userListaSituacao?.cargo === 'ADMIN' ? (
+        <button className="btn_apagar_grupo" onClick={apagarGrupo}>
+          Apagar grupo
+        </button>
+      ) : (
+        <button className="btn_apagar_grupo" onClick={sairMembroGrupo}>
+          Sair do grupo
+        </button>
+      )}
     </div>
   );
 };

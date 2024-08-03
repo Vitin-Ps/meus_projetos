@@ -14,4 +14,6 @@ public interface MembroRepository extends JpaRepository<Membro, Long> {
     Membro getReferenceByUsuarioIdAndGrupoId(Long userId, Long grupoId);
 
     void deleteAllByGrupoId(Long aLong);
+
+    void deleteByUsuarioId(Long id);
 }

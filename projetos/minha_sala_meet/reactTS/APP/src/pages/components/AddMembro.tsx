@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Usuario } from '../../interfaces/Usuario';
 import { Grupo } from '../../interfaces/Grupo';
 import { detalhaUsuario } from '../../services/UsuarioService';
-import { addIntegranteGrupo } from '../../services/ListaMembrosService';
+import { addIntegranteGrupo } from '../../services/MembroService';
 import { listarAmigos } from '../../services/AmigosService';
 import { Amigo } from '../../interfaces/Amigo';
 import { grupoEvent } from '../../services/wss';

@@ -1,7 +1,6 @@
 import api, { verificaErroApi } from './api';
 
-export async function addIntegranteGrupo(grupo_id: number, membro_id: number, user_id: number) { 
-
+export async function addIntegranteGrupo(grupo_id: number, membro_id: number, user_id: number) {
   const listaJson: string = JSON.stringify({
     user_id,
     grupo_id,
@@ -19,7 +18,6 @@ export async function addIntegranteGrupo(grupo_id: number, membro_id: number, us
 }
 
 export async function listarMembrosPorGrupo(id: number) {
-
   try {
     const res = await api.get(`/list/group/${id}`);
     return res.data;
@@ -39,6 +37,15 @@ export async function removeMembroGrupo(membro_id: number, user_id: number, grup
     const res = await api.post('/list/del', membroJSON, {
       headers: { 'Content-Type': 'application/json' },
     });
+    return res.data;
+  } catch (error) {
+    return verificaErroApi(error);
+  }
+}
+
+export async function sairGrupo(user_id: number) {
+  try {
+    const res = await api.delete(`/list/${user_id}`);
     return res.data;
   } catch (error) {
     return verificaErroApi(error);

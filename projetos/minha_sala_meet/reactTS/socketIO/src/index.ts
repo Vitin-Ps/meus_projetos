@@ -57,11 +57,17 @@ io.on('connection', (socket: Socket) => {
   });
 
   socket.on('grupo-event', (data) => {
+    const user: User = users.filter((user) => user.user_id === Number(data.uuid))[0];
     if (data.type === 'del-group') {
       socket.to(data.uuid).emit('receber-grupo-event', data);
       socket.emit('receber-grupo-event', data);
+    } else if (data.type === 'sair-group') {
+      socket.emit('receber-grupo-event', data);
+
+      const dataGrupo = data;
+      dataGrupo.type = 'remover-membro';
+      socket.to(data.uuid).emit('receber-grupo-event', dataGrupo);
     } else {
-      const user: User = users.filter((user) => user.user_id === Number(data.uuid))[0];
       if (user) {
         socket.to(user.peer).emit('receber-grupo-event', data);
       }
