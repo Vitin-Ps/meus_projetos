@@ -16,6 +16,7 @@ const io = new socket_io_1.Server(server, {
 });
 let users = [];
 io.on('connection', (socket) => {
+    console.log(socket.id);
     socket.on('conectar', (user_id) => {
         let user = users.find((user) => user.user_id === user_id);
         if (!user) {
@@ -36,12 +37,38 @@ io.on('connection', (socket) => {
     socket.on('addMensagem', (data) => {
         socket.to(data.conversa.uuid).emit('receberMensagem', data);
     });
-    socket.on('enviar-notificacao', (user_id) => {
-        const user = users.filter((user) => user.user_id === user_id)[0];
+    socket.on('enviar-notificacao', (notificacao) => {
+        const user = users.filter((user) => user.user_id === notificacao.userDestinatario.id)[0];
         if (user) {
-            socket.to(user.peer).emit('receber-notificacao');
+            socket.to(user.peer).emit('receber-notificacao', notificacao);
         }
     });
+    socket.on('amigo-event', (data) => {
+        const user = users.filter((user) => user.user_id === data.amigo.user.id)[0];
+        if (user) {
+            socket.to(user.peer).emit('receber-amigo-event', data);
+        }
+    });
+    socket.on('grupo-event', (data) => {
+        if (data.type === 'del-group') {
+            socket.to(data.uuid).emit('receber-grupo-event', data);
+            socket.emit('receber-grupo-event', data);
+        }
+        else {
+            const user = users.filter((user) => user.user_id === Number(data.uuid))[0];
+            if (user) {
+                socket.to(user.peer).emit('receber-grupo-event', data);
+            }
+        }
+    });
+    // socket.on('grupo-event', (data) => {
+    //   console.log('Received grupo-event data:', data);
+    //   const user: User = users.filter((user) => user.user_id === Number(data.uuid))[0];
+    //   if (user) {
+    //     socket.to(user.peer).emit('teste-chegou', { message: 'Hello from server!' });
+    //   }
+    //   // socket.emit('teste-chegou', { message: 'Hello from server!' });
+    // });
     // Lida com o evento 'disconnect'
     socket.on('disconnect', () => {
         console.log('Usuário desconectado');

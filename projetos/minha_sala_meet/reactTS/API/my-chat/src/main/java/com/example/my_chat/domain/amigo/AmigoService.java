@@ -1,5 +1,6 @@
 package com.example.my_chat.domain.amigo;
 
+import com.example.my_chat.domain.solicitacao.DadosDetalhaSolicitacao;
 import com.example.my_chat.domain.solicitacao.DadosRegistroSolicitacao;
 import com.example.my_chat.domain.solicitacao.Solicitacao;
 import com.example.my_chat.domain.usuario.Usuario;
@@ -22,7 +23,7 @@ public class AmigoService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public void enviarSolicitacaoAmizade(DadosRegistroSolicitacao dados) {
+    public DadosDetalhaSolicitacao enviarSolicitacaoAmizade(DadosRegistroSolicitacao dados) {
         if (Objects.equals(dados.user_remetente_id(), dados.user_destinatario_id())) {
             throw new ValidacaoException("Erro. Você não pode pedir solicitação para si mesmo.");
         }
@@ -56,10 +57,12 @@ public class AmigoService {
 
         var solicitacao = new Solicitacao(userRemetente, userDestinatario);
 
-        solicitacaoRepository.save(solicitacao);
+        solicitacao = solicitacaoRepository.save(solicitacao);
+
+        return new DadosDetalhaSolicitacao(solicitacao);
     }
 
-    public void addAmigo(DadosInfoAmigo dados) {
+    public DadosDetalhaAmigo addAmigo(DadosInfoAmigo dados) {
         if (Objects.equals(dados.user_id(), dados.amigo_id())) {
             throw new ValidacaoException("Erro. Você não pode adicionar a si mesmo.");
         }
@@ -83,7 +86,7 @@ public class AmigoService {
         amigoRespository.save(novoAmigo);
 
         novoAmigo = new Amigo(userTwo, userOne);
-        amigoRespository.save(novoAmigo);
+        novoAmigo = amigoRespository.save(novoAmigo);
 
         var solicitacaoExistente = solicitacaoRepository.getReferenceByUserRemetenteIdAndUserDestinatarioId(dados.user_id(), dados.amigo_id());
         if(solicitacaoExistente != null) {
@@ -94,6 +97,8 @@ public class AmigoService {
         if(solicitacaoExistente != null) {
             solicitacaoRepository.delete((solicitacaoExistente));
         }
+
+        return new DadosDetalhaAmigo(novoAmigo);
     }
 
     public void rejeitarSolicitacaoAmizade(Long id) {
@@ -101,7 +106,7 @@ public class AmigoService {
         solicitacaoRepository.delete(solicitacao);
     }
 
-    public void deletarAmigo(DadosInfoAmigo dados) {
+    public DadosDetalhaAmigo deletarAmigo(DadosInfoAmigo dados) {
         Amigo amigo = amigoRespository.getReferenceByUserIdAndAmigoId(dados.user_id(), dados.amigo_id());
         if(amigo != null) {
             amigoRespository.delete((amigo));
@@ -110,6 +115,8 @@ public class AmigoService {
         amigo = amigoRespository.getReferenceByUserIdAndAmigoId(dados.amigo_id(), dados.user_id());
         if(amigo != null) {
             amigoRespository.delete((amigo));
+            return new DadosDetalhaAmigo(amigo);
         }
+        return null;
     }
 }

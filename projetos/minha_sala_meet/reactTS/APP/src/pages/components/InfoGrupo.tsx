@@ -7,6 +7,7 @@ import { ListaMembros } from '../../interfaces/ListaMembros';
 import { Usuario } from '../../interfaces/Usuario';
 import { deletaGrupo } from '../../services/GrupoService';
 import AddMembro from './AddMembro';
+import { grupoEvent } from '../../services/wss';
 
 interface InfoGrupoProps {
   setShowInfoGrupo: React.Dispatch<React.SetStateAction<boolean>>;
@@ -15,7 +16,7 @@ interface InfoGrupoProps {
   userId: number;
 }
 
-const InfoGrupo: React.FC<InfoGrupoProps> = ({ grupo, setShowInfoGrupo, showInfoGrupo, userId }, ref) => {
+const InfoGrupo: React.FC<InfoGrupoProps> = ({ grupo, setShowInfoGrupo, showInfoGrupo, userId }) => {
   const [listaMembros, setlistaMembros] = useState<Usuario[]>([]);
   const [userListaSitucao, setUserListaSitucao] = useState<ListaMembros>();
   const [showAddMembro, setShowAddMembro] = useState(false);
@@ -60,6 +61,8 @@ const InfoGrupo: React.FC<InfoGrupoProps> = ({ grupo, setShowInfoGrupo, showInfo
 
       setlistaMembros(listaMembros.filter((membro) => membro.id !== membroSelecionado.id));
       setShowInfoGrupo(false);
+
+      grupoEvent(String(membroSelecionado.id!), grupo, 'del');
     }
   };
 
@@ -76,7 +79,8 @@ const InfoGrupo: React.FC<InfoGrupoProps> = ({ grupo, setShowInfoGrupo, showInfo
         return;
       }
 
-      window.location.href = '/contacts';
+      setShowInfoGrupo(false);
+      grupoEvent(grupo.conversa.uuid, grupo, 'del-group');
     }
   };
 

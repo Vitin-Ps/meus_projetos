@@ -2,13 +2,10 @@ import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import { Usuario } from '../../interfaces/Usuario';
-import { Grupo } from '../../interfaces/Grupo';
-import { detalhaUsuario, listarUsuarios } from '../../services/UsuarioService';
-import { addIntegranteGrupo, listarMembrosPorGrupo } from '../../services/ListaMembrosService';
+import {  listarUsuarios } from '../../services/UsuarioService';
 import Input from './Input';
 import { removerAcentuacoes } from '../../services/FuncionalidadesService';
 import { enviarSoliticatacao } from '../../services/AmigosService';
-import socket from '../../services/socket';
 import { enviarNotificacao } from '../../services/wss';
 
 interface AddAmigoProps {
@@ -56,7 +53,7 @@ const AddAmigo: React.FC<AddAmigoProps> = ({ setShowAddAmigo, showAddAmigo, user
 
     alert('Solicitação enviada!');
     setShowAddAmigo(false);
-    enviarNotificacao(socket, id);
+    enviarNotificacao(res);
   };
 
   return (

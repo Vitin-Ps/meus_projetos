@@ -18,8 +18,8 @@ public class GrupoController {
     private GrupoService service;
     @PostMapping
     public ResponseEntity cadastrar(@RequestBody @Valid DadosRegistroGrupo dados) {
-        service.cadastrarGrupo(dados);
-        return ResponseEntity.ok().build();
+        DadosDetalhaGrupo grupo = service.cadastrarGrupo(dados);
+        return ResponseEntity.ok(grupo);
     }
 
     @GetMapping("/user/{id}")

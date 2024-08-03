@@ -1,18 +1,38 @@
-import { Socket } from 'socket.io-client';
 import { Mensagem } from '../interfaces/Mensagem';
+import { Solicitacao } from '../interfaces/Solicitacao';
+import { Amigo } from '../interfaces/Amigo';
+import { Grupo } from '../interfaces/Grupo';
+import { socket } from './socket';
 
-export const addCodigoUser = (socket: Socket, codigo: string) => {
+export const addCodigoUser = (codigo: string) => {
   socket.emit('addCodigoUser', codigo);
 };
 
-export const addMensagem = (socket: Socket, data: Mensagem) => {
+export const addMensagem = (data: Mensagem) => {
   socket.emit('addMensagem', data);
 };
 
-export const entrarSala = (socket: Socket, codSala: String) => {
+export const entrarSala = (codSala: String) => {
   socket.emit('entrarSala', codSala);
 };
 
-export const enviarNotificacao = (socket: Socket, user_id: number) => {
-  socket.emit('enviar-notificacao', user_id);
+export const enviarNotificacao = (notificacao: Solicitacao) => {
+  socket.emit('enviar-notificacao', notificacao);
+};
+
+export const amigoEvent = (type: string, amigo: Amigo) => {
+  socket.emit('amigo-event', {
+    type,
+    amigo,
+  });
+  
+};
+
+export const grupoEvent = (uuid: string, grupo: Grupo, type: string) => {
+  socket.emit('grupo-event', {
+    uuid,
+    grupo,
+    type
+  });
+  
 };

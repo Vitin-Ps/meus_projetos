@@ -34,22 +34,8 @@ public class AmigosController {
     @PostMapping
     @Transactional
     public ResponseEntity addAmigo (@RequestBody @Valid DadosInfoAmigo dados) {
-        service.addAmigo(dados);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("preoffer")
-    @Transactional
-    public ResponseEntity enviarPedido (@RequestBody @Valid DadosRegistroSolicitacao dados) {
-       service.enviarSolicitacaoAmizade(dados);
-        return ResponseEntity.ok().build();
-    }
-
-
-    @GetMapping("preoffer/{id}")
-    public ResponseEntity<List<DadosDetalhaSolicitacao>> listarSolicitacoesPorUserId(@PathVariable Long id) {
-        List<DadosDetalhaSolicitacao> listaSolicitacao = solicitacaoRepository.findAllByUserDestinatarioId(id).stream().map(DadosDetalhaSolicitacao::new).toList();
-        return ResponseEntity.ok(listaSolicitacao);
+        DadosDetalhaAmigo amigo = service.addAmigo(dados);
+        return ResponseEntity.ok(amigo);
     }
 
     @GetMapping("{id}")
@@ -58,17 +44,39 @@ public class AmigosController {
         return ResponseEntity.ok(listaAmigos);
     }
 
+    @PostMapping("del")
+    @Transactional
+    public ResponseEntity desfazerAmizado (@RequestBody @Valid DadosInfoAmigo dados) {
+        DadosDetalhaAmigo amigo = service.deletarAmigo(dados);
+        return ResponseEntity.ok(amigo);
+    }
+
+    // Solicitação
+
+    @PostMapping("preoffer")
+    @Transactional
+    public ResponseEntity enviarPedido (@RequestBody @Valid DadosRegistroSolicitacao dados) {
+        DadosDetalhaSolicitacao solicitacao = service.enviarSolicitacaoAmizade(dados);
+        return ResponseEntity.ok(solicitacao);
+    }
+
+
+    @GetMapping("preoffer/all/{id}")
+    public ResponseEntity<List<DadosDetalhaSolicitacao>> listarSolicitacoesPorUserId(@PathVariable Long id) {
+        List<DadosDetalhaSolicitacao> listaSolicitacao = solicitacaoRepository.findAllByUserDestinatarioId(id).stream().map(DadosDetalhaSolicitacao::new).toList();
+        return ResponseEntity.ok(listaSolicitacao);
+    }
+
+//    @GetMapping("preoffer/all/{id}")
+//    public ResponseEntity<List<DadosDetalhaSolicitacao>> detalhaSolicitacao(@PathVariable Long id) {
+//        List<DadosDetalhaSolicitacao> listaSolicitacao = solicitacaoRepository.findAllByUserDestinatarioId(id).stream().map(DadosDetalhaSolicitacao::new).toList();
+//        return ResponseEntity.ok(listaSolicitacao);
+//    }
+
     @DeleteMapping("preoffer/{id}")
     @Transactional
     public ResponseEntity cancelarSolicitacao (@PathVariable Long id) {
         service.rejeitarSolicitacaoAmizade(id);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("del")
-    @Transactional
-    public ResponseEntity desfazerAmizado (@RequestBody @Valid DadosInfoAmigo dados) {
-        service.deletarAmigo(dados);
         return ResponseEntity.ok().build();
     }
 

@@ -7,6 +7,7 @@ import { detalhaUsuario } from '../../services/UsuarioService';
 import { addIntegranteGrupo } from '../../services/ListaMembrosService';
 import { listarAmigos } from '../../services/AmigosService';
 import { Amigo } from '../../interfaces/Amigo';
+import { grupoEvent } from '../../services/wss';
 
 interface AddMembroProps {
   setShowAddMembro: React.Dispatch<React.SetStateAction<boolean>>;
@@ -45,6 +46,8 @@ const AddMembro: React.FC<AddMembroProps> = ({ setShowAddMembro, showAddMembro, 
     const resUserMembro = await detalhaUsuario(id);
     setListaMembros((listamembros) => [...listamembros, resUserMembro]);
     setShowAddMembro(false);
+
+    grupoEvent(String(id), grupo, 'add');
   };
 
   return (

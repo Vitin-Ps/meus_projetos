@@ -7,20 +7,26 @@ import { Usuario } from '../../interfaces/Usuario';
 import { cadastrarAmigo, desfazerAmizade, listarAmigos, listarSolicitacoesPorUserId, rejeitarSolicitacao } from '../../services/AmigosService';
 import { Solicitacao } from '../../interfaces/Solicitacao';
 import { Amigo } from '../../interfaces/Amigo';
-import { enviarNotificacao } from '../../services/wss';
-import { Socket } from 'socket.io-client';
+import { amigoEvent } from '../../services/wss';
+import { socket } from '../../services/socket';
 
 interface AmigosElementProps {
   showInfoUser: boolean;
   user: Usuario;
   setCountNotificacao: React.Dispatch<React.SetStateAction<number>>;
   countNotificacao: number;
-  socketIO: Socket
+  notificacoes: Solicitacao[];
+  setNotificacoes: React.Dispatch<React.SetStateAction<Solicitacao[]>>;
 }
 
-const AmigosElement: React.FC<AmigosElementProps> = ({ showInfoUser, user, setCountNotificacao, countNotificacao, socketIO }) => {
-  const [notificacoes, setNotificacoes] = useState<Solicitacao[]>([]);
-
+const AmigosElement: React.FC<AmigosElementProps> = ({
+  showInfoUser,
+  user,
+  setCountNotificacao,
+  countNotificacao,
+  notificacoes,
+  setNotificacoes,
+}) => {
   const [showAddAmigo, setShowAddAmigo] = useState(false);
   const [amigos, setAmigos] = useState<Amigo[]>([]);
 
@@ -45,6 +51,21 @@ const AmigosElement: React.FC<AmigosElementProps> = ({ showInfoUser, user, setCo
       }
 
       setNotificacoes(resNotificacao);
+
+      socket.on('receber-amigo-event', (data) => {
+        if (data.type === 'add') {
+          setAmigos((prevAmigos) => {
+            if (!prevAmigos.includes(data.amigo)) {
+              return [...prevAmigos, data.amigo];
+            }
+            return prevAmigos;
+          });
+        } else {
+          setAmigos((prevAmigos) => {
+            return prevAmigos.filter((amigo) => amigo.id !== data.amigo.id!);
+          });
+        }
+      });
     };
     buscaDados();
   }, []);
@@ -58,6 +79,8 @@ const AmigosElement: React.FC<AmigosElementProps> = ({ showInfoUser, user, setCo
     }
 
     setNotificacoes(notificacoes.filter((solicitacao) => solicitacao.id !== notificacaoAdd.id));
+    amigoEvent('add', res);
+
     const resAmigos = await listarAmigos(user.id!);
 
     if (resAmigos.error) {
@@ -78,7 +101,7 @@ const AmigosElement: React.FC<AmigosElementProps> = ({ showInfoUser, user, setCo
     }
 
     setNotificacoes(notificacoes.filter((solicitacao) => solicitacao.id !== notificacaoDel.id));
-    setCountNotificacao(countNotificacao - 1);    
+    setCountNotificacao(countNotificacao - 1);
   };
 
   const desfazerAmigo = async (amigoDel: Amigo) => {
@@ -94,6 +117,7 @@ const AmigosElement: React.FC<AmigosElementProps> = ({ showInfoUser, user, setCo
       }
 
       setAmigos(amigos.filter((amigo) => amigo.id !== amigoDel.id));
+      amigoEvent('del', res);
     }
   };
 
@@ -104,7 +128,7 @@ const AmigosElement: React.FC<AmigosElementProps> = ({ showInfoUser, user, setCo
           <img src="./images/avatar.jpg" alt="img_user" />
           <FontAwesomeIcon icon={faEdit} className="icon_edit" />
         </div>
-        <h2>Victor Soares</h2>
+        <h2>{user.nome}</h2>
       </aside>
       <section>
         <AddAmigo showAddAmigo={showAddAmigo} setShowAddAmigo={setShowAddAmigo} user={user} />

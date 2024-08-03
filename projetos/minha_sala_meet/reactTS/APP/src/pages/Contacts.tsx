@@ -4,8 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPaperPlane, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useContext, useEffect, useState } from 'react';
 import { Mensagem } from '../interfaces/Mensagem';
-import { addMensagem, entrarSala } from '../services/wss';
-import socket from '../services/socket';
 import CardMensagem from './components/CardMensagem';
 import Dasborad from './components/Dasborad';
 import { AuthContext } from '../contexts/Auth/AuthContext';
@@ -18,17 +16,20 @@ import InfoGrupo from './components/InfoGrupo';
 import Loading from './components/Loading';
 import AmigosElement from './components/AmigosElement';
 import { Solicitacao } from '../interfaces/Solicitacao';
-import { listarSolicitacoesPorUserId } from '../services/AmigosService';
-
-const socketIO = socket;
+import Input from './components/Input';
+import { removerAcentuacoes } from '../services/FuncionalidadesService';
+import { socket } from '../services/socket';
+import { addMensagem, entrarSala } from '../services/wss';
 
 const Contacts = () => {
   const [grupoSelecionado, setGrupoSelecionado] = useState<Grupo>();
   const [mensagem, setMensagem] = useState('');
 
-  const [seusGrupos, setSeusGrupos] = useState<Grupo[]>();
+  const [seusGrupos, setSeusGrupos] = useState<Grupo[]>([]);
+  const [seusGruposAll, setSeusGruposAll] = useState<Grupo[]>([]);
   const [conversas, setConversas] = useState<Mensagem[]>([]);
   const [countNotificacao, setCountNotificacao] = useState<number>(0);
+  const [notificacoes, setNotificacoes] = useState<Solicitacao[]>([]);
 
   const [showConversa, setShowConversa] = useState(false);
   const [showInfoUser, setShowInfoUser] = useState(false);
@@ -39,26 +40,58 @@ const Contacts = () => {
   const auth = useContext(AuthContext);
 
   useEffect(() => {
-    const handleMensagem = (data: Mensagem) => {
-      setConversas((prevConversas) => [...prevConversas, data]);
-    };
+    socket.emit('conectar', auth.user!.id!);
 
-    socketIO.emit('conectar', auth.user!.id!);
-    socketIO.on('receberMensagem', handleMensagem);
-    socketIO.on('receber-notificacao', () => {
+    // socket.on('teste-chegou', (data) => {
+    //   console.log('Received teste-chegou event:', data);
+    // });
+
+    socket.on('receberMensagem', (mensagem: Mensagem) => {
+      setConversas((prevConversas) => {
+        if (!prevConversas.includes(mensagem)) {
+          return [...prevConversas, mensagem];
+        }
+        return prevConversas;
+      });
+    });
+    socket.on('receber-notificacao', (notificacao) => {
+      setNotificacoes((prevNotificacoes) => {
+        if (!prevNotificacoes.includes(notificacao)) {
+          return [...prevNotificacoes, notificacao];
+        }
+        return prevNotificacoes;
+      });
       setCountNotificacao(countNotificacao + 1);
+    });
+
+    socket.on('receber-grupo-event', (data) => {
+      console.log('chegou');
+      if (data.type === 'add') {
+        setSeusGrupos((prevSeusGrupos) => {
+          if (!prevSeusGrupos.includes(data.grupo)) {
+            return [...prevSeusGrupos, data.grupo];
+          }
+          return prevSeusGrupos;
+        });
+      } else {
+        setSeusGrupos((prevSeusGrupos) => prevSeusGrupos.filter((grupo) => grupo.id !== data.grupo.id));
+        setGrupoSelecionado(undefined);
+      }
     });
 
     const carregaDados = async () => {
       const grupos = await listarGruposPorUser(auth.user!.id!);
+
+      if (grupos.error) {
+        alert(grupos.message);
+        return;
+      }
+
       setSeusGrupos(grupos);
+      setSeusGruposAll(grupos);
       setShowLoading(true);
     };
-    carregaDados();
-
-    return () => {
-      socketIO.off('receberMensagem', handleMensagem);
-    };
+    carregaDados();   
   }, []);
 
   const entrarGrupo = async (id: number) => {
@@ -76,7 +109,7 @@ const Contacts = () => {
 
     if (grupo) {
       setGrupoSelecionado(grupo);
-      entrarSala(socketIO, grupo.conversa.uuid);
+      entrarSala(grupo.conversa.uuid);
 
       // implementar lógica de mensagens antigas
       setConversas(mensagens);
@@ -117,9 +150,19 @@ const Contacts = () => {
     const maiorId = ids.length > 0 ? Math.max(...ids) : undefined;
 
     novaMensagem.id = maiorId! + 1;
-    addMensagem(socketIO, novaMensagem);
+    addMensagem(novaMensagem);
     setConversas([...conversas, novaMensagem]);
     setMensagem('');
+  };
+
+  const pesquisaGrupo = (pesquisa: string) => {
+    const valor = removerAcentuacoes(pesquisa);
+    setSeusGrupos(
+      seusGruposAll.filter((grupo) => {
+        const nome = removerAcentuacoes(grupo.nome);
+        return nome.includes(valor);
+      }),
+    );
   };
 
   return (
@@ -133,7 +176,8 @@ const Contacts = () => {
           user={auth.user!}
           setCountNotificacao={setCountNotificacao}
           countNotificacao={countNotificacao}
-          socketIO={socketIO}
+          notificacoes={notificacoes}
+          setNotificacoes={setNotificacoes}
         />
         <div className="conversas_container">
           <aside>
@@ -143,8 +187,13 @@ const Contacts = () => {
             </button>
           </aside>
           <div className="conversas_main_container">
-            <FormularioGrupo cssClass={showFormularioGrupo ? 'expand' : 'collapse'} usuarioId={auth.user!.id!} />
-            <input type="text" placeholder="Pesquisar grupos" className="input_pesquisar_grupos" />
+            <FormularioGrupo
+              cssClass={showFormularioGrupo ? 'expand' : 'collapse'}
+              usuarioId={auth.user!.id!}
+              setSeusGrupos={setSeusGrupos}
+              setShowFormularioGrupo={setShowFormularioGrupo}
+            />
+            <Input tipo="text" placeholder="Pesquisar grupos..." onInput={(valor) => pesquisaGrupo(valor)} />
             <div className="grupos_container">
               {seusGrupos && seusGrupos.map((grupo) => <CardConversa key={grupo.id} entrarGrupo={entrarGrupo} nome={grupo.nome} id={grupo.id!} />)}
             </div>

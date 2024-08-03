@@ -20,7 +20,7 @@ export async function enviarSoliticatacao(user_remetente_id: number, user_destin
 export async function listarSolicitacoesPorUserId(id: number) {
 
   try {
-    const res = await api.get(`/friends/preoffer/${id}`);
+    const res = await api.get(`/friends/preoffer/all/${id}`);
     return res.data;
   } catch (error) {
     return verificaErroApi(error);

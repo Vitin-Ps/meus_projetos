@@ -1,17 +1,20 @@
 import React, { FormEvent, useState } from 'react';
 import Input from './Input';
 import { cadastrarGrupo } from '../../services/GrupoService';
+import { Grupo } from '../../interfaces/Grupo';
 
 interface FormularioGrupoProps {
   usuarioId: number;
   cssClass?: string;
+  setSeusGrupos: React.Dispatch<React.SetStateAction<Grupo[]>>;
+  setShowFormularioGrupo: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const FormularioGrupo: React.FC<FormularioGrupoProps> = ({ cssClass, usuarioId }) => {
+const FormularioGrupo: React.FC<FormularioGrupoProps> = ({ cssClass, usuarioId, setSeusGrupos, setShowFormularioGrupo }) => {
   const [nome, setNome] = useState('');
 
   const criarGrupo = async (e: FormEvent<HTMLFormElement>) => {
-    // e.preventDefault();
+    e.preventDefault();
 
     if (!nome) {
       alert('Nome é obrigatório');
@@ -24,6 +27,9 @@ const FormularioGrupo: React.FC<FormularioGrupoProps> = ({ cssClass, usuarioId }
       alert(resGrupo.message);
       return;
     }
+
+    setSeusGrupos((prevGrupos) => [...prevGrupos, resGrupo]);
+    setShowFormularioGrupo(false);
   };
 
   return (

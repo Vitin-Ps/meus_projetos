@@ -29,7 +29,7 @@ public class GrupoService {
     @Autowired
     private ConversaRepository conversaRepository;
 
-    public void cadastrarGrupo(DadosRegistroGrupo dados) {
+    public DadosDetalhaGrupo cadastrarGrupo(DadosRegistroGrupo dados) {
         Conversa conversa = new Conversa(dados.uuid(), TipoConversa.GRUPO);
         conversa = conversaRepository.save(conversa);
 
@@ -47,6 +47,8 @@ public class GrupoService {
         } catch (DataIntegrityViolationException ex) {
             throw new ValidacaoException("Não foi possivel adicionar Intergrante na lista pois ele já está na lista");
         }
+
+        return new DadosDetalhaGrupo(grupo);
     }
 
     public List<DadosDetalhaGrupo> listarPorId(Long id) {
