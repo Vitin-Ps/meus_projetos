@@ -16,3 +16,6 @@ npm install axios
 
 npm install jwt-decode
 
+git rm --cached .env
+
+git check-ignore -v .env
