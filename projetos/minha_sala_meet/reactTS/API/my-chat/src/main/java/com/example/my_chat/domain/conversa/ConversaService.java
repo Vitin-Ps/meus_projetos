@@ -3,6 +3,7 @@ package com.example.my_chat.domain.conversa;
 
 import com.example.my_chat.domain.grupo.DadosDetalhaGrupo;
 import com.example.my_chat.domain.grupo.GrupoService;
+import com.example.my_chat.domain.privado.DadosInfoPrivado;
 import com.example.my_chat.domain.privado.DadosRegistroPrivado;
 import com.example.my_chat.domain.privado.Privado;
 import com.example.my_chat.domain.usuario.Usuario;
@@ -109,4 +110,18 @@ public class ConversaService {
         }
     }
 
+    public void deletarPrivado(DadosInfoPrivado dados) {
+        Privado privadoOne = privadoRepository.getReferenceByUserOneIdAndUserTwoId(dados.user_one_id(), dados.user_two_id());
+        Privado privadoTwo = privadoRepository.getReferenceByUserOneIdAndUserTwoId(dados.user_two_id(), dados.user_one_id());
+
+        if(privadoTwo == null || privadoOne == null) {
+            throw new ValidacaoException("Está conversa não existe!");
+        }
+        mensagemRepository.deleteAllByConversaId(privadoOne.getConversa().getId());
+
+        privadoRepository.delete(privadoOne);
+        privadoRepository.delete(privadoTwo);
+
+        conversaRepository.delete(privadoOne.getConversa());
+    }
 }

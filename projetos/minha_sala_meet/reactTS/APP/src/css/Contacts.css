@@ -164,6 +164,11 @@
   overflow: hidden;
 }
 
+
+.mensagens_container .mensagens_main_container .info_grupo_container.info_sair_conversa button{
+  margin: 1em 2em;
+}
+
 .btn_membros_container {
   position: absolute;
   top: 15px;

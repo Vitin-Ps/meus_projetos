@@ -9,6 +9,7 @@ import { Solicitacao } from '../../interfaces/Solicitacao';
 import { Amigo } from '../../interfaces/Amigo';
 import { amigoEvent } from '../../services/wss';
 import { socket } from '../../services/socket';
+import { cadastrarPrivado } from '../../services/ConversaService';
 
 interface AmigosElementProps {
   showInfoUser: boolean;
@@ -121,6 +122,15 @@ const AmigosElement: React.FC<AmigosElementProps> = ({
     }
   };
 
+  const conversarComAmigo = async (amigoDestino: Amigo) => {
+    const resPrivado = await cadastrarPrivado(user.id!, amigoDestino.amigo.id!);
+
+    if (resPrivado.error) {
+      alert(resPrivado.message);
+      return;
+    }
+  };
+
   return (
     <div className={`info_user ${showInfoUser ? 'expand_total' : 'collapse_total'}`}>
       <aside className="display_none">
@@ -146,7 +156,7 @@ const AmigosElement: React.FC<AmigosElementProps> = ({
                   <img src="./images/avatar.jpg" alt="avatar" />
                   <h2>{amigo.amigo.nome}</h2>
                   <div className="btn_card_user_container">
-                    <button className="btn_message" onClick={() => desfazerAmigo(amigo)}>
+                    <button className="btn_message" onClick={() => conversarComAmigo(amigo)}>
                       <FontAwesomeIcon icon={faMessage} />
                     </button>
                     <button className="btn_circle btn_remover_membro" onClick={() => desfazerAmigo(amigo)}>

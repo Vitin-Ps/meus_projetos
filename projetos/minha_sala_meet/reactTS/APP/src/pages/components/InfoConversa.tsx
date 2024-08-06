@@ -9,6 +9,7 @@ import { deletaGrupo } from '../../services/GrupoService';
 import AddMembro from './AddMembro';
 import { grupoEvent } from '../../services/wss';
 import { ConversaTipos } from '../../interfaces/Conversa';
+import { deletaPrivado } from '../../services/ConversaService';
 
 interface InfoGrupoProps {
   setShowInfoConversa: React.Dispatch<React.SetStateAction<boolean>>;
@@ -104,6 +105,23 @@ const InfoConversa: React.FC<InfoGrupoProps> = ({ conversa, setShowInfoConversa,
     }
   };
 
+  const sairConversa = async () => {
+    /* eslint-disable no-restricted-globals */
+    const deleteConfig = confirm(`Deseja realmente apagar a conversa com ${conversa.privado?.userTwo.nome!}?`);
+    /* eslint-enable no-restricted-globals */
+
+    if (deleteConfig) {
+      const resConversa = await deletaPrivado(user.id!, conversa.privado!.userTwo.id!);
+
+      if (resConversa.error) {
+        alert(resConversa.message);
+        return;
+      }
+
+      window.location.href = '/contacts';
+    }
+  };
+
   return conversa.grupo ? (
     showAddMembro ? (
       <AddMembro
@@ -157,7 +175,17 @@ const InfoConversa: React.FC<InfoGrupoProps> = ({ conversa, setShowInfoConversa,
       </div>
     )
   ) : (
-    <div></div>
+    <div className={`info_grupo_container info_sair_conversa ${showInfoConversa ? 'expand_del_conversa' : 'collapse_del_conversa'}`}>
+      <div className="btn_membros_container">
+        <button className="btn_circle btn_fechar_info" onClick={() => setShowInfoConversa(false)}>
+          <FontAwesomeIcon icon={faMinus} />
+        </button>
+      </div>
+
+      <button className="btn_apagar_grupo" onClick={sairConversa}>
+        Apagar Conversa
+      </button>
+    </div>
   );
 };
 

@@ -4,6 +4,7 @@ import com.example.my_chat.domain.conversa.ConversaService;
 import com.example.my_chat.domain.conversa.DadosDetalhaConversaTipos;
 import com.example.my_chat.domain.conversa.DadosInfoConversaUser;
 import com.example.my_chat.domain.grupo.*;
+import com.example.my_chat.domain.privado.DadosInfoPrivado;
 import com.example.my_chat.domain.privado.DadosRegistroPrivado;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -32,7 +33,7 @@ public class ConversaController {
     }
 
     @PostMapping
-    public ResponseEntity detalarConversaPorId(@RequestBody @Valid DadosInfoConversaUser dados) {
+    public ResponseEntity detalharConversaPorId(@RequestBody @Valid DadosInfoConversaUser dados) {
         DadosDetalhaConversaTipos conversa = conversaService.detalharConversaPorId(dados);
         return ResponseEntity.ok(conversa);
     }
@@ -72,6 +73,13 @@ public class ConversaController {
     public ResponseEntity cadastrarConversaPrivada(@RequestBody @Valid DadosRegistroPrivado dados) {
         conversaService.cadastraPrivado(dados);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/privateuser/del")
+    @Transactional
+    public ResponseEntity deletarConversaPrivada(@RequestBody @Valid DadosInfoPrivado dados) {
+        conversaService.deletarPrivado(dados);
+        return ResponseEntity.noContent().build();
     }
 
 
