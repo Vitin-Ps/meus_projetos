@@ -133,26 +133,6 @@
   background: var(--cor011); /* Cor do thumb ao passar o mouse */
 }
 
-.conversas_container .conversas_main_container .grupos_container .card_conversa {
-  background-color: var(--cor007);
-  width: 90%;
-  padding: 0.5em;
-  display: flex;
-  gap: 15px;
-  align-items: center;
-  font-size: 0.8em;
-  border-radius: 5px;
-}
-
-.conversas_container .conversas_main_container .grupos_container .card_conversa:hover {
-  background-color: var(--cor006);
-}
-
-.conversas_container .conversas_main_container .grupos_container .card_conversa img {
-  max-width: 55px;
-  border-radius: 50%;
-}
-
 .mensagens_container {
   position: relative;
   background-color: var(--cor005);
@@ -230,35 +210,6 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
-}
-
-.card_membro {
-  position: relative;
-
-  background-color: var(--cor018);
-  width: 95%;
-  padding: 0.5em;
-  display: flex;
-  gap: 15px;
-  align-items: center;
-  font-size: 0.8em;
-  border-radius: 5px;
-}
-
-.card_membro:hover {
-  background-color: var(--cor006);
-}
-
-.card_membro img {
-  max-width: 40px;
-  border-radius: 50%;
-}
-
-.card_membro button {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  font-weight: bold;
 }
 
 .btn_apagar_grupo {

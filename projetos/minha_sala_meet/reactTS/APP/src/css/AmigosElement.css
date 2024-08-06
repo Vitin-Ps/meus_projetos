@@ -7,6 +7,7 @@
   height: 100%;
   z-index: 5;
   display: flex;
+  flex-wrap: wrap;
 }
 
 .info_user aside {
@@ -64,9 +65,12 @@
   background-color: var(--cor023);
   flex-grow: 1;
   display: flex;
+  min-width: 300px;
+  flex-wrap: wrap;
 }
 
 .info_user section > div {
+  background-color: var(--cor023);
   position: relative;
   max-width: 500px;
   display: flex;
@@ -78,11 +82,6 @@
 
 .info_user section > div > h2 {
   margin-top: .5em;
-}
-
-.info_user section .lista_membros {
-  max-height: 600px;
-  overflow: auto;
 }
 
 .info_user section .lista_add_amigos_container {
@@ -107,18 +106,6 @@
 
 .info_user section .lista_add_amigos_container .form-group input {
   margin-top: 2em;
-}
-
-.info_user section .lista_add_amigos_container .lista_usuarios {
-  max-height: 450px;
-  overflow: auto;
-}
-
-.info_user section .lista_notificacao {
-  align-items: flex-end;
-}
-.info_user section .lista_notificacao .lista_membros {
-  width: 400px;
 }
 
 .info_user section .lista_notificacao .card_notificacao {
@@ -147,3 +134,7 @@
 }
 
 /* ------------- ------------- */
+
+@media(max-width: 600px) {
+
+}

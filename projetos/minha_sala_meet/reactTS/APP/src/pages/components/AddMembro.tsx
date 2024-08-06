@@ -59,19 +59,21 @@ const AddMembro: React.FC<AddMembroProps> = ({ setShowAddMembro, showAddMembro, 
         </button>
       </div>
       <h2>Amigos</h2>
-      <div className="lista_mebros scroll-bar">
+      <div className="lista_users scroll-bar">
         {listaAmigos &&
           listaAmigos.length > 0 &&
           listaAmigos.map(
             (amigo) =>
               amigo.id !== userId && (
-                <div className="card_conversa card_membro" key={amigo.id}>
+                <div className="card_user" key={amigo.id}>
                   <img src="./images/avatar.jpg" alt="avatar" />
                   <h2>{amigo.amigo.nome}</h2>
                   {amigo.id !== userId && (
-                    <button className="btn_circle btn_add_membro" onClick={() => addmembro(amigo.amigo.id!)}>
-                      <FontAwesomeIcon icon={faPlus} />
-                    </button>
+                    <div className='btn_card_user_container'>
+                      <button className="btn_circle btn_add_membro" onClick={() => addmembro(amigo.amigo.id!)}>
+                        <FontAwesomeIcon icon={faPlus} />
+                      </button>
+                    </div>
                   )}
                 </div>
               ),

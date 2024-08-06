@@ -3,7 +3,7 @@ import { getToken } from './TokenService';
 import { ErrorMessage } from '../interfaces/ErrorMessage';
 
 export function getBaseUrl() {
-  return process.env.REACT_APP_API;
+  return process.env.REACT_APP_API || 'http://localhost:8081';
 }
 
 const api = axios.create({
@@ -13,6 +13,8 @@ const api = axios.create({
 api.interceptors.request.use(
   async (config) => {
     try {
+      config.headers['bypass-tunnel-reminder'] = 'true';
+
       const token = getToken();
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;

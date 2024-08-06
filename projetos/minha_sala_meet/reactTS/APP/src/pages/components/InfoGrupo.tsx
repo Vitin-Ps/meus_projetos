@@ -126,11 +126,11 @@ const InfoGrupo: React.FC<InfoGrupoProps> = ({ grupo, setShowInfoGrupo, showInfo
         </button>
       </div>
       <h2>Membros</h2>
-      <div className="lista_mebros scroll-bar">
+      <div className="lista_users scroll-bar">
         {membros &&
           membros.length > 0 &&
           membros.map((membro) => (
-            <div className="card_conversa card_membro" key={membro.id}>
+            <div className="card_user card_membro" key={membro.id}>
               <img src="./images/avatar.jpg" alt="avatar" />
               <h2>{membro.nome}</h2>
               {membro.id !== user.id! && userListaSituacao?.cargo === 'ADMIN' && (

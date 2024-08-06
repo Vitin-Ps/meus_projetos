@@ -1,4 +1,4 @@
-import { faEdit, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faMessage, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import AddAmigo from './AddAmigo';
@@ -123,7 +123,7 @@ const AmigosElement: React.FC<AmigosElementProps> = ({
 
   return (
     <div className={`info_user ${showInfoUser ? 'expand_total' : 'collapse_total'}`}>
-      <aside>
+      <aside className="display_none">
         <div className="img_container">
           <img src="./images/avatar.jpg" alt="img_user" />
           <FontAwesomeIcon icon={faEdit} className="icon_edit" />
@@ -139,28 +139,33 @@ const AmigosElement: React.FC<AmigosElementProps> = ({
             </button>
           </div>
           <h2>Amigos</h2>
-          <div className="lista_membros scroll-bar">
+          <div className="lista_users scroll-bar">
             {amigos &&
               amigos.map((amigo) => (
-                <div className="card_conversa card_membro" key={amigo.id}>
+                <div className="card_user" key={amigo.id}>
                   <img src="./images/avatar.jpg" alt="avatar" />
                   <h2>{amigo.amigo.nome}</h2>
-                  <button className="btn_circle btn_remover_membro" onClick={() => desfazerAmigo(amigo)}>
-                    <FontAwesomeIcon icon={faMinus} />
-                  </button>
+                  <div className="btn_card_user_container">
+                    <button className="btn_message" onClick={() => desfazerAmigo(amigo)}>
+                      <FontAwesomeIcon icon={faMessage} />
+                    </button>
+                    <button className="btn_circle btn_remover_membro" onClick={() => desfazerAmigo(amigo)}>
+                      <FontAwesomeIcon icon={faMinus} />
+                    </button>
+                  </div>
                 </div>
               ))}
           </div>
         </div>
         <div className="lista_notificacao">
           <h2>Notificações</h2>
-          <div className="lista_membros scroll-bar">
+          <div className="lista_users scroll-bar">
             {notificacoes &&
               notificacoes.map((notificacao) => (
-                <div className="card_membro card_notificacao" key={notificacao.id}>
+                <div className="card_user" key={notificacao.id}>
                   <img src="./images/avatar.jpg" alt="avatar" />
                   <h2>{notificacao.userRemetente.nome}</h2>
-                  <div className="btn_notificacao_container">
+                  <div className="btn_card_user_container">
                     <button className="btn_circle btn_add_membro" onClick={() => aceitarSolicitacao(notificacao)}>
                       <FontAwesomeIcon icon={faPlus} />
                     </button>

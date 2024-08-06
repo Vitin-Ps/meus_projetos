@@ -24,7 +24,9 @@ export async function detalhaUsuario(id: number) {
   }
 
   try {
-    const res = await api.get(`/user/${id}`);
+    const res = await api.get(`/user/${id}`, {
+      headers: { 'Content-Type': 'application/json' },
+    });
     return res.data;
   } catch (error) {
     return verificaErroApi(error);

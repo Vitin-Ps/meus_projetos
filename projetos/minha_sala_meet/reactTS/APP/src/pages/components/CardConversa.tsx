@@ -8,7 +8,7 @@ interface CardConversaProps {
 
 const CardConversa: React.FC<CardConversaProps> = ({ entrarGrupo, nome, id }) => {
   return (
-    <div className="card_conversa" onClick={() => entrarGrupo(id)}>
+    <div className="card_user" onClick={() => entrarGrupo(id)}>
       <img src="./images/avatar.jpg" alt="avatar" />
       <h2>{nome}</h2>
     </div>

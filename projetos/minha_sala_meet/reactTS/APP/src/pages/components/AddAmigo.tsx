@@ -66,18 +66,20 @@ const AddAmigo: React.FC<AddAmigoProps> = ({ setShowAddAmigo, showAddAmigo, user
       </div>
       <h2>Adicionar Amigo</h2>
       <Input placeholder="Digite o nome do usuário" label="" tipo="text" onInput={(valor) => pesquisaUsuarios(valor)} />
-      <div className="lista_usuarios lista_usuarios scroll-bar">
+      <div className="lista_users scroll-bar">
         {usuarios &&
           usuarios.map(
             (usuario) =>
               usuario.id !== user.id && (
-                <div className="card_membro card_notificacao" key={usuario.id!}>
+                <div className="card_user" key={usuario.id!}>
                   <img src="./images/avatar.jpg" alt="avatar" />
                   <h2>{usuario.nome}</h2>
 
-                  <button className="btn_circle btn_add_membro" onClick={() => envarSolicitacaoAmigo(usuario.id!)}>
-                    <FontAwesomeIcon icon={faPlus} />
-                  </button>
+                  <div className='btn_card_user_container'>
+                    <button className="btn_circle btn_add_membro" onClick={() => envarSolicitacaoAmigo(usuario.id!)}>
+                      <FontAwesomeIcon icon={faPlus} />
+                    </button>
+                  </div>
                 </div>
               ),
           )}
