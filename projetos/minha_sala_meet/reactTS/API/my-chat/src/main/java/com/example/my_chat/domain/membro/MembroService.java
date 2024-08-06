@@ -19,7 +19,7 @@ public class MembroService {
     private GrupoRepository grupoRepository;
 
 
-    public void addIntegranteMembro(DadosRegistraLista dados) {
+    public void addIntegranteMembro(DadosRegistraMembro dados) {
         var user = membroRepository.getReferenceByUsuarioIdAndGrupoId(dados.user_id(), dados.grupo_id());
         var membro = usuarioRepository.getReferenceByIdAndAtivoTrue(dados.membro_id());
         var grupo = grupoRepository.getReferenceById(dados.grupo_id());

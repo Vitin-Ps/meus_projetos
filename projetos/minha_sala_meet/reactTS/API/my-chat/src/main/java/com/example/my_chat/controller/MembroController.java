@@ -14,7 +14,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/list")
-@CrossOrigin(origins = "*")
 public class MembroController {
     @Autowired
     private MembroRepository membroRepository;
@@ -25,7 +24,7 @@ public class MembroController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity cadastrar(@RequestBody @Valid DadosRegistraLista dados) {
+    public ResponseEntity cadastrar(@RequestBody @Valid DadosRegistraMembro dados) {
         service.addIntegranteMembro(dados);
         return ResponseEntity.ok().build();
     }
@@ -33,7 +32,7 @@ public class MembroController {
     @GetMapping("/{id}")
     public ResponseEntity detalharPorId(@PathVariable Long id) {
         var lista = membroRepository.getReferenceById(id);
-        return ResponseEntity.ok(new DadosDetalhaLista(lista));
+        return ResponseEntity.ok(new DadosDetalhaMembro(lista));
     }
 
     @PutMapping
@@ -68,6 +67,6 @@ public class MembroController {
     @Transactional
     public ResponseEntity detalharPorUserAndGrupo(@RequestBody @Valid DadosInfoGrupoUser dados) {
         Membro userMembro = membroRepository.getReferenceByUsuarioIdAndGrupoId(dados.user_id(), dados.grupo_id());
-        return ResponseEntity.ok(new DadosDetalhaLista(userMembro));
+        return ResponseEntity.ok(new DadosDetalhaMembro(userMembro));
     }
 }

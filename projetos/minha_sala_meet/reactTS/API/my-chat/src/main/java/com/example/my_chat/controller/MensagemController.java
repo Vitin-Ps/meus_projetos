@@ -17,7 +17,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/mensagem")
-@CrossOrigin(origins = "*")
 public class MensagemController {
     @Autowired
     private MensagemRepository mensagemRepository;

@@ -20,7 +20,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/friends")
-@CrossOrigin(origins = {"*"})
 public class AmigosController {
     @Autowired
     private SolicitacaoRepository solicitacaoRepository;

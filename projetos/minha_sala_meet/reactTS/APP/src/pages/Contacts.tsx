@@ -8,11 +8,11 @@ import CardMensagem from './components/CardMensagem';
 import Dasborad from './components/Dasborad';
 import { AuthContext } from '../contexts/Auth/AuthContext';
 import { Grupo } from '../interfaces/Grupo';
-import { detalharGrupo, listarGruposPorUser } from '../services/GrupoService';
+import { detalharGrupo } from '../services/GrupoService';
 import CardConversa from './components/CardConversa';
 import { inserirMensagem, listarMensagensPorGrupo } from '../services/MensagemService';
 import FormularioGrupo from './components/FormularioGrupo';
-import InfoGrupo from './components/InfoGrupo';
+import InfoConversa from './components/InfoConversa';
 import Loading from './components/Loading';
 import AmigosElement from './components/AmigosElement';
 import { Solicitacao } from '../interfaces/Solicitacao';
@@ -21,22 +21,24 @@ import { removerAcentuacoes } from '../services/FuncionalidadesService';
 import { socket } from '../services/socket';
 import { addMensagem, entrarSala } from '../services/wss';
 import { Usuario } from '../interfaces/Usuario';
+import { detalhaConversaPorUserId, listarConversasPorUserId } from '../services/ConversaService';
+import { Conversa, ConversaTipos } from '../interfaces/Conversa';
 
 const Contacts = () => {
-  const [grupoSelecionado, setGrupoSelecionado] = useState<Grupo>();
+  const [conversaSelecionada, setConversaSelecionada] = useState<ConversaTipos>();
   const [mensagem, setMensagem] = useState('');
 
-  const [seusGrupos, setSeusGrupos] = useState<Grupo[]>([]);
-  const [seusGruposAll, setSeusGruposAll] = useState<Grupo[]>([]);
-  const [conversas, setConversas] = useState<Mensagem[]>([]);
+  const [conversas, setConversas] = useState<ConversaTipos[]>([]);
+  const [conversasAll, setConversasAll] = useState<ConversaTipos[]>([]);
+  const [mensagens, setMensagens] = useState<Mensagem[]>([]);
   const [countNotificacao, setCountNotificacao] = useState<number>(0);
   const [notificacoes, setNotificacoes] = useState<Solicitacao[]>([]);
   const [membros, setMembros] = useState<Usuario[]>([]);
 
-  const [showConversa, setShowConversa] = useState(false);
+  const [showMensagem, setShowMensagem] = useState(false);
   const [showInfoUser, setShowInfoUser] = useState(false);
   const [showFormularioGrupo, setShowFormularioGrupo] = useState(false);
-  const [showInfoGrupo, setShowInfoGrupo] = useState(false);
+  const [showInfoConversa, setShowInfoConversa] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
 
   const auth = useContext(AuthContext);
@@ -49,7 +51,7 @@ const Contacts = () => {
     // });
 
     socket.on('receberMensagem', (mensagem: Mensagem) => {
-      setConversas((prevConversas) => {
+      setMensagens((prevConversas) => {
         if (!prevConversas.includes(mensagem)) {
           return [...prevConversas, mensagem];
         }
@@ -66,57 +68,64 @@ const Contacts = () => {
       setCountNotificacao(countNotificacao + 1);
     });
 
-    socket.on('receber-grupo-event', (data) => {
+    socket.on('receber-conversa-event', (data) => {
       if (data.type === 'add') {
-        setSeusGrupos((prevSeusGrupos) => {
-          if (!prevSeusGrupos.includes(data.grupo)) {
-            return [...prevSeusGrupos, data.grupo];
+        setConversas((prevConversas) => {
+          if (!prevConversas.includes(data.conversa)) {
+            return [...prevConversas, data.conversa];
           }
-          return prevSeusGrupos;
+          return prevConversas;
         });
       } else if (data.user && data.type === 'remover-membro') {
         setMembros((prevMembros) => prevMembros.filter((membro) => membro.id !== data.user.id!));
       } else {
-        setSeusGrupos((prevSeusGrupos) => prevSeusGrupos.filter((grupo) => grupo.id !== data.grupo.id));
-        setGrupoSelecionado(undefined);
+        setConversas((prevConversas) => prevConversas.filter((conversa) => conversa.id !== data.conversa.id));
+        setConversaSelecionada(undefined);
       }
     });
 
     const carregaDados = async () => {
-      const grupos = await listarGruposPorUser(auth.user!.id!);
+      const resConversas = await listarConversasPorUserId(auth.user!.id!);
 
-      if (grupos.error) {
-        alert(grupos.message);
+      if (resConversas.error) {
+        alert(resConversas.message);
         return;
       }
 
-      setSeusGrupos(grupos);
-      setSeusGruposAll(grupos);
+      setConversas(resConversas);
+      setConversasAll(resConversas);
       setShowLoading(true);
     };
     carregaDados();
   }, []);
 
-  const entrarGrupo = async (id: number) => {
+  const entrarConversa = async (id: number) => {
     setShowLoading(false);
-    const grupo: Grupo = await detalharGrupo(id);
+    const resConversa = await detalhaConversaPorUserId(auth.user!.id!, id);
 
-    const res = await listarMensagensPorGrupo(grupo.conversa.id!);
+    if (resConversa.error) {
+      alert(resConversa.message);
+      return;
+    }
+
+    const res = await listarMensagensPorGrupo(resConversa.id!);
 
     if (res.error) {
       alert(res.message);
       return;
     }
 
-    const mensagens: Mensagem[] = res;
-
-    if (grupo) {
-      setGrupoSelecionado(grupo);
-      entrarSala(grupo.conversa.uuid);
+    if (resConversa) {
+      setConversaSelecionada(resConversa);
+      if (resConversa.tipo === 'GRUPO') {
+        entrarSala(resConversa.grupo.conversa.uuid);
+      } else {
+        entrarSala(resConversa.privado.conversa.uuid);
+      }
 
       // implementar lógica de mensagens antigas
-      setConversas(mensagens);
-      setShowConversa(true);
+      setMensagens(res);
+      setShowMensagem(true);
     } else {
       alert('Grupo não encontrado');
     }
@@ -138,7 +147,7 @@ const Contacts = () => {
 
     const novaMensagem: Mensagem = {
       data: new Date(),
-      conversa: grupoSelecionado!.conversa,
+      conversa: conversaSelecionada!.grupo ? conversaSelecionada?.grupo!.conversa! : conversaSelecionada?.privado!.conversa!,
       userRemetente: auth.user!,
       mensagem,
     };
@@ -154,15 +163,15 @@ const Contacts = () => {
 
     novaMensagem.id = maiorId! + 1;
     addMensagem(novaMensagem);
-    setConversas([...conversas, novaMensagem]);
+    setMensagens((prevMensagens) => [...prevMensagens, novaMensagem]);
     setMensagem('');
   };
 
   const pesquisaGrupo = (pesquisa: string) => {
     const valor = removerAcentuacoes(pesquisa);
-    setSeusGrupos(
-      seusGruposAll.filter((grupo) => {
-        const nome = removerAcentuacoes(grupo.nome);
+    setConversas(
+      conversasAll.filter((conversa) => {
+        const nome = removerAcentuacoes(conversa.grupo ? conversa.grupo.nome! : conversa.privado?.userTwo.nome!);
         return nome.includes(valor);
       }),
     );
@@ -193,53 +202,63 @@ const Contacts = () => {
             <FormularioGrupo
               cssClass={showFormularioGrupo ? 'expand' : 'collapse'}
               usuarioId={auth.user!.id!}
-              setSeusGrupos={setSeusGrupos}
+              setConversas={setConversas}
               setShowFormularioGrupo={setShowFormularioGrupo}
             />
             <Input tipo="text" placeholder="Pesquisar grupos..." onInput={(valor) => pesquisaGrupo(valor)} />
             <div className="grupos_container">
-              {seusGrupos && seusGrupos.map((grupo) => <CardConversa key={grupo.id} entrarGrupo={entrarGrupo} nome={grupo.nome} id={grupo.id!} />)}
+              {conversas &&
+                conversas.map((conversa) => (
+                  <CardConversa
+                    key={conversa.id}
+                    entrarConversa={entrarConversa}
+                    nome={conversa.grupo ? conversa.grupo.nome! : conversa.privado?.userTwo.nome!}
+                    id={conversa.id!}
+                  />
+                ))}
             </div>
           </div>
         </div>
         <div className="mensagens_container scroll-bar">
           <aside>
-            {grupoSelecionado && (
+            {conversaSelecionada && (
               <div className="card_avatar">
-                <img src="./images/avatar.jpg" alt="avatar" onClick={() => setShowInfoGrupo(true)} />
-                <h2>{grupoSelecionado.nome}</h2>
+                <img src="./images/avatar.jpg" alt="avatar" onClick={() => setShowInfoConversa(true)} />
+                <h2>{conversaSelecionada.grupo ? conversaSelecionada.grupo.nome! : conversaSelecionada.privado?.userTwo.nome!}</h2>
               </div>
             )}
           </aside>
           <div className="mensagens_main_container">
-            <InfoGrupo
-              setShowInfoGrupo={setShowInfoGrupo}
-              showInfoGrupo={showInfoGrupo}
-              grupo={grupoSelecionado!}
-              user={auth.user!}
-              setMembros={setMembros}
-              membros={membros}
-            />
+            {conversaSelecionada && (
+              <InfoConversa
+                setShowInfoConversa={setShowInfoConversa}
+                showInfoConversa={showInfoConversa}
+                conversa={conversaSelecionada}
+                user={auth.user!}
+                setMembros={setMembros}
+                membros={membros}
+              />
+            )}
             <div className="conteudo_container">
-              {showConversa &&
-                conversas.length > 0 &&
-                conversas.map(
-                  (conversa) =>
-                    conversa.conversa.id === grupoSelecionado!.conversa.id! && (
-                      <div key={conversa.id} className="card_msg_pai">
-                        {conversa.userRemetente.id === auth.user!.id! ? (
-                          <CardMensagem conversa={conversa} tipoMsg="msg_user" />
+              {showMensagem &&
+                mensagens.length > 0 &&
+                mensagens.map(
+                  (mensagem) =>
+                    mensagem.conversa.id === conversaSelecionada!.id! && (
+                      <div key={mensagem.id} className="card_msg_pai">
+                        {mensagem.userRemetente.id === auth.user!.id! ? (
+                          <CardMensagem conversa={mensagem} tipoMsg="msg_user" />
                         ) : (
                           <div className="card_msg_integrante">
-                            <span>{conversa.userRemetente.nome}</span>
-                            <CardMensagem key={`msg-${conversa.id}`} conversa={conversa} tipoMsg="msg_integrante" />
+                            <span>{mensagem.userRemetente.nome}</span>
+                            <CardMensagem key={`msg-${mensagem.id}`} conversa={mensagem} tipoMsg="msg_integrante" />
                           </div>
                         )}
                       </div>
                     ),
                 )}
             </div>
-            {grupoSelecionado && (
+            {conversaSelecionada && (
               <div className="nova_mensagem_container">
                 <input
                   type="text"

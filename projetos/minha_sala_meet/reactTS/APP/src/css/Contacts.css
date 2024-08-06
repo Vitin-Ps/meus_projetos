@@ -15,6 +15,7 @@
   position: relative;
   min-height: 95vh;
   display: flex;
+  flex-wrap: wrap;
 }
 
 .conversas_container {
@@ -78,6 +79,7 @@
   align-items: center;
   justify-content: flex-start;
   margin: 1em 0;
+  z-index: 2;
 }
 
 .conversas_container .conversas_main_container .form_grupo.collapse {

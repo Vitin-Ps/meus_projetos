@@ -6,14 +6,14 @@ import com.example.my_chat.domain.usuario.TipoUsuario;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
-public record DadosDetalhaLista(
+public record DadosDetalhaMembro(
         Long id,
         DadosDetalhamentoUser usuario,
         DadosDetalhaGrupo grupo,
         @Enumerated(EnumType.STRING)
         TipoUsuario cargo
 ) {
-    public DadosDetalhaLista(Membro lista) {
+    public DadosDetalhaMembro(Membro lista) {
         this(lista.getId(), new DadosDetalhamentoUser(lista.getUsuario()), new DadosDetalhaGrupo(lista.getGrupo()), lista.getCargo());
     }
 }

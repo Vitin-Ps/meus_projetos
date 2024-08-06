@@ -2,15 +2,16 @@ import React, { FormEvent, useState } from 'react';
 import Input from './Input';
 import { cadastrarGrupo } from '../../services/GrupoService';
 import { Grupo } from '../../interfaces/Grupo';
+import { ConversaTipos } from '../../interfaces/Conversa';
 
 interface FormularioGrupoProps {
   usuarioId: number;
   cssClass?: string;
-  setSeusGrupos: React.Dispatch<React.SetStateAction<Grupo[]>>;
+  setConversas: React.Dispatch<React.SetStateAction<ConversaTipos[]>>;
   setShowFormularioGrupo: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const FormularioGrupo: React.FC<FormularioGrupoProps> = ({ cssClass, usuarioId, setSeusGrupos, setShowFormularioGrupo }) => {
+const FormularioGrupo: React.FC<FormularioGrupoProps> = ({ cssClass, usuarioId, setConversas, setShowFormularioGrupo }) => {
   const [nome, setNome] = useState('');
 
   const criarGrupo = async (e: FormEvent<HTMLFormElement>) => {
@@ -28,7 +29,7 @@ const FormularioGrupo: React.FC<FormularioGrupoProps> = ({ cssClass, usuarioId, 
       return;
     }
 
-    setSeusGrupos((prevGrupos) => [...prevGrupos, resGrupo]);
+    setConversas((prevConversas) => [...prevConversas, resGrupo]);
     setShowFormularioGrupo(false);
   };
 

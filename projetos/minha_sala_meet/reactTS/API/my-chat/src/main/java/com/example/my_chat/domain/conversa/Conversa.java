@@ -18,6 +18,7 @@ public class Conversa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String uuid;
+    @Enumerated(EnumType.STRING)
     private TipoConversa tipo;
 
     public Conversa(String uuid, TipoConversa tipoConversa) {

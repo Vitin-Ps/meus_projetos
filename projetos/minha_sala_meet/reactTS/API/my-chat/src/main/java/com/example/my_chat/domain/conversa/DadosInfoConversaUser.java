@@ -2,10 +2,10 @@ package com.example.my_chat.domain.conversa;
 
 import jakarta.validation.constraints.NotNull;
 
-public record DadosInfoGrupoUser(
+public record DadosInfoConversaUser(
         @NotNull
-        Long user_id,
+        Long user_one_id,
         @NotNull
-        Long grupo_id
+        Long conversa_id
 ) {
 }

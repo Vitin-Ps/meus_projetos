@@ -1,6 +1,7 @@
 package com.example.my_chat.domain.grupo;
 
 import com.example.my_chat.domain.conversa.Conversa;
+import com.example.my_chat.domain.conversa.DadosDetalhaConversaTipos;
 import com.example.my_chat.domain.conversa.TipoConversa;
 import com.example.my_chat.domain.membro.Membro;
 import com.example.my_chat.domain.usuario.TipoUsuario;
@@ -29,7 +30,7 @@ public class GrupoService {
     @Autowired
     private ConversaRepository conversaRepository;
 
-    public DadosDetalhaGrupo cadastrarGrupo(DadosRegistroGrupo dados) {
+    public DadosDetalhaConversaTipos cadastrarGrupo(DadosRegistroGrupo dados) {
         Conversa conversa = new Conversa(dados.uuid(), TipoConversa.GRUPO);
         conversa = conversaRepository.save(conversa);
 
@@ -48,14 +49,8 @@ public class GrupoService {
             throw new ValidacaoException("Não foi possivel adicionar Intergrante na lista pois ele já está na lista");
         }
 
-        return new DadosDetalhaGrupo(grupo);
+        return new DadosDetalhaConversaTipos(new DadosDetalhaGrupo(grupo));
     }
-
-    public List<DadosDetalhaGrupo> listarPorId(Long id) {
-        return membroRepository.findAllByUsuarioId(id)
-                .stream().map(DadosDetalhaGrupo::new).toList();
-    }
-
     public Grupo detalharPorId(Long id) {
         return grupoRepository.getReferenceById(id);
     }

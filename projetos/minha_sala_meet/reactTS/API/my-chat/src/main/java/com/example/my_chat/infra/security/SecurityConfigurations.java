@@ -13,6 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -26,12 +28,12 @@ public class SecurityConfigurations {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.GET, "/hello").permitAll()
+                        .requestMatchers("/favicon.ico").permitAll()  // Permitir acesso público ao /favicon.ico
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "login/cad/admin").permitAll()
                         .requestMatchers(HttpMethod.POST, "login/cad/user").permitAll()
-                        .requestMatchers(HttpMethod.POST, "funcionarios").hasAnyRole("ADMIN", "FUNCIONARIO")
-                        .requestMatchers("/vendas").hasRole("ADMIN") // Bloqueia o acesso à "/home" apenas para ADMIN
                         .requestMatchers(HttpMethod.GET, "/arquivos/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/chat/dellall").hasRole("ADMIN")
                         .requestMatchers("/v3/api-docs/**", "*/swagger-ui.html", "swagger-ui/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
@@ -47,6 +49,20 @@ public class SecurityConfigurations {
     @Bean
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("*") // Permite todas as origens
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Permite métodos específicos
+                        .allowedHeaders("*") // Permite todos os cabeçalhos
+                        .allowCredentials(false); // Permite credenciais
+            }
+        };
     }
 
 }

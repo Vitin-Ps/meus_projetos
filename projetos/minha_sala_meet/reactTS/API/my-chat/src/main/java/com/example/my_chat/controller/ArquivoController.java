@@ -17,7 +17,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("arquivos")
-@CrossOrigin(origins = {"*"})
 public class ArquivoController {
 
     @Autowired
