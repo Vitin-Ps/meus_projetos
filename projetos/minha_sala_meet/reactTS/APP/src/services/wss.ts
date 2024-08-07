@@ -4,6 +4,7 @@ import { Amigo } from '../interfaces/Amigo';
 import { Grupo } from '../interfaces/Grupo';
 import { socket } from './socket';
 import { Usuario } from '../interfaces/Usuario';
+import { ConversaTipos } from '../interfaces/Conversa';
 
 export const addCodigoUser = (codigo: string) => {
   socket.emit('addCodigoUser', codigo);
@@ -28,10 +29,10 @@ export const amigoEvent = (type: string, amigo: Amigo) => {
   });
 };
 
-export const grupoEvent = (uuid: string, grupo: Grupo, type: string, user?: Usuario) => {
-  socket.emit('grupo-event', {
+export const conversaEvent = (uuid: string, conversa: ConversaTipos, type: string, user?: Usuario) => {
+  socket.emit('conversa-event', {
     uuid,
-    grupo,
+    conversa,
     type,
     user,
   });

@@ -2,13 +2,11 @@ import '../css/Contacts.css';
 import '../css/animations.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPaperPlane, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Mensagem } from '../interfaces/Mensagem';
 import CardMensagem from './components/CardMensagem';
 import Dasborad from './components/Dasborad';
 import { AuthContext } from '../contexts/Auth/AuthContext';
-import { Grupo } from '../interfaces/Grupo';
-import { detalharGrupo } from '../services/GrupoService';
 import CardConversa from './components/CardConversa';
 import { inserirMensagem, listarMensagensPorGrupo } from '../services/MensagemService';
 import FormularioGrupo from './components/FormularioGrupo';
@@ -25,7 +23,7 @@ import { detalhaConversaPorUserId, listarConversasPorUserId } from '../services/
 import { Conversa, ConversaTipos } from '../interfaces/Conversa';
 
 const Contacts = () => {
-  const [conversaSelecionada, setConversaSelecionada] = useState<ConversaTipos>();
+  const [conversaSelecionada, setConversaSelecionada] = useState<ConversaTipos | null>();
   const [mensagem, setMensagem] = useState('');
 
   const [conversas, setConversas] = useState<ConversaTipos[]>([]);
@@ -42,6 +40,7 @@ const Contacts = () => {
   const [showLoading, setShowLoading] = useState(false);
 
   const auth = useContext(AuthContext);
+  const inputEnviarMensagem = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     socket.emit('conectar', auth.user!.id!);
@@ -80,7 +79,7 @@ const Contacts = () => {
         setMembros((prevMembros) => prevMembros.filter((membro) => membro.id !== data.user.id!));
       } else {
         setConversas((prevConversas) => prevConversas.filter((conversa) => conversa.id !== data.conversa.id));
-        setConversaSelecionada(undefined);
+        setConversaSelecionada(null);
       }
     });
 
@@ -130,6 +129,8 @@ const Contacts = () => {
       alert('Grupo não encontrado');
     }
     setShowLoading(true);
+
+    inputEnviarMensagem.current && inputEnviarMensagem.current.focus();
   };
 
   const handleInputMensagem = async (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -177,6 +178,23 @@ const Contacts = () => {
     );
   };
 
+  const comecarConversa = async (conversa: ConversaTipos) => {
+    setShowInfoUser(false);
+    setConversas((prevConversas) => {
+      if (!prevConversas.includes(conversa)) {
+        return [...prevConversas, conversa];
+      }
+      return prevConversas;
+    });
+    await entrarConversa(conversa.id!);
+  };
+
+  const apagarConversa = async (conversa: ConversaTipos) => {
+    setShowInfoConversa(false);
+    setConversaSelecionada(null);
+    setConversas((prevConversas) => prevConversas.filter((conversaObject) => conversaObject.id !== conversa.id));
+  };
+
   return (
     <>
       {!showLoading && <Loading />}
@@ -190,6 +208,7 @@ const Contacts = () => {
           countNotificacao={countNotificacao}
           notificacoes={notificacoes}
           setNotificacoes={setNotificacoes}
+          comecarConversa={comecarConversa}
         />
         <div className="conversas_container">
           <aside>
@@ -237,6 +256,7 @@ const Contacts = () => {
                 user={auth.user!}
                 setMembros={setMembros}
                 membros={membros}
+                apagarConversa={apagarConversa}
               />
             )}
             <div className="conteudo_container">
@@ -260,12 +280,12 @@ const Contacts = () => {
             </div>
             {conversaSelecionada && (
               <div className="nova_mensagem_container">
-                <input
-                  type="text"
-                  id="nova_mensagem"
-                  value={mensagem}
-                  onChange={(e) => setMensagem(e.target.value)}
-                  onKeyDown={handleInputMensagem}
+                <Input
+                  tipo="text"
+                  valor={mensagem}
+                  setValor={(valor) => setMensagem(valor)}
+                  onKeyDown={(valor) => handleInputMensagem(valor)}
+                  inputRef={inputEnviarMensagem}
                 />
                 <button onClick={enviarMensagem}>
                   <FontAwesomeIcon icon={faPaperPlane} />

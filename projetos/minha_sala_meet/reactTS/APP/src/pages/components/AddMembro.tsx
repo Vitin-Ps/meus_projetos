@@ -7,18 +7,19 @@ import { detalhaUsuario } from '../../services/UsuarioService';
 import { addIntegranteGrupo } from '../../services/MembroService';
 import { listarAmigos } from '../../services/AmigosService';
 import { Amigo } from '../../interfaces/Amigo';
-import { grupoEvent } from '../../services/wss';
+import { conversaEvent } from '../../services/wss';
+import { ConversaTipos } from '../../interfaces/Conversa';
 
 interface AddMembroProps {
   setShowAddMembro: React.Dispatch<React.SetStateAction<boolean>>;
   showAddMembro: boolean;
-  grupo: Grupo;
+  conversa: ConversaTipos;
   userId: number;
   listamembros: Usuario[];
   setListaMembros: React.Dispatch<React.SetStateAction<Usuario[]>>;
 }
 
-const AddMembro: React.FC<AddMembroProps> = ({ setShowAddMembro, showAddMembro, grupo, userId, setListaMembros }) => {
+const AddMembro: React.FC<AddMembroProps> = ({ setShowAddMembro, showAddMembro, conversa, userId, setListaMembros }) => {
   const [listaAmigos, setListaAmigos] = useState<Amigo[]>([]);
 
   useEffect(() => {
@@ -36,7 +37,7 @@ const AddMembro: React.FC<AddMembroProps> = ({ setShowAddMembro, showAddMembro, 
   }, [showAddMembro]);
 
   const addmembro = async (id: number) => {
-    const res = await addIntegranteGrupo(grupo.id!, id, userId);
+    const res = await addIntegranteGrupo(conversa.grupo!.id!, id, userId);
 
     if (res.error) {
       alert(res.message);
@@ -47,7 +48,7 @@ const AddMembro: React.FC<AddMembroProps> = ({ setShowAddMembro, showAddMembro, 
     setListaMembros((listamembros) => [...listamembros, resUserMembro]);
     setShowAddMembro(false);
 
-    grupoEvent(String(id), grupo, 'add');
+    conversaEvent(String(id), conversa, 'add');
   };
 
   return (
@@ -69,7 +70,7 @@ const AddMembro: React.FC<AddMembroProps> = ({ setShowAddMembro, showAddMembro, 
                   <img src="./images/avatar.jpg" alt="avatar" />
                   <h2>{amigo.amigo.nome}</h2>
                   {amigo.id !== userId && (
-                    <div className='btn_card_user_container'>
+                    <div className="btn_card_user_container">
                       <button className="btn_circle btn_add_membro" onClick={() => addmembro(amigo.amigo.id!)}>
                         <FontAwesomeIcon icon={faPlus} />
                       </button>

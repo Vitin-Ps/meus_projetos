@@ -49,21 +49,21 @@ io.on('connection', (socket) => {
             socket.to(user.peer).emit('receber-amigo-event', data);
         }
     });
-    socket.on('grupo-event', (data) => {
+    socket.on('conversa-event', (data) => {
         const user = users.filter((user) => user.user_id === Number(data.uuid))[0];
-        if (data.type === 'del-group') {
-            socket.to(data.uuid).emit('receber-grupo-event', data);
-            socket.emit('receber-grupo-event', data);
+        if (data.type === 'del-chat') {
+            socket.to(data.uuid).emit('receber-conversa-event', data);
+            socket.emit('receber-conversa-event', data);
         }
-        else if (data.type === 'sair-group') {
-            socket.emit('receber-grupo-event', data);
+        else if (data.type === 'sair-chat') {
+            socket.emit('receber-conversa-event', data);
             const dataGrupo = data;
             dataGrupo.type = 'remover-membro';
-            socket.to(data.uuid).emit('receber-grupo-event', dataGrupo);
+            socket.to(data.uuid).emit('receber-conversa-event', dataGrupo);
         }
         else {
             if (user) {
-                socket.to(user.peer).emit('receber-grupo-event', data);
+                socket.to(user.peer).emit('receber-conversa-event', data);
             }
         }
     });

@@ -1,13 +1,12 @@
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
-import { Grupo } from '../../interfaces/Grupo';
 import { detalharUserAutoridade, listarMembrosPorGrupo, removeMembroGrupo, sairGrupo } from '../../services/MembroService';
 import { ListaMembros } from '../../interfaces/ListaMembros';
 import { Usuario } from '../../interfaces/Usuario';
 import { deletaGrupo } from '../../services/GrupoService';
 import AddMembro from './AddMembro';
-import { grupoEvent } from '../../services/wss';
+import { conversaEvent } from '../../services/wss';
 import { ConversaTipos } from '../../interfaces/Conversa';
 import { deletaPrivado } from '../../services/ConversaService';
 
@@ -18,9 +17,10 @@ interface InfoGrupoProps {
   setMembros: React.Dispatch<React.SetStateAction<Usuario[]>>;
   conversa: ConversaTipos;
   user: Usuario;
+  apagarConversa: (conversa: ConversaTipos) => void;
 }
 
-const InfoConversa: React.FC<InfoGrupoProps> = ({ conversa, setShowInfoConversa, showInfoConversa, user, setMembros, membros }) => {
+const InfoConversa: React.FC<InfoGrupoProps> = ({ conversa, setShowInfoConversa, showInfoConversa, user, setMembros, membros, apagarConversa }) => {
   const [userListaSituacao, setUserListaSituacao] = useState<ListaMembros>();
   const [showAddMembro, setShowAddMembro] = useState(false);
 
@@ -65,7 +65,7 @@ const InfoConversa: React.FC<InfoGrupoProps> = ({ conversa, setShowInfoConversa,
       setMembros(membros.filter((membro) => membro.id !== membroSelecionado.id));
       setShowInfoConversa(false);
 
-      grupoEvent(String(membroSelecionado.id!), conversa.grupo!, 'del');
+      conversaEvent(String(membroSelecionado.id!), conversa, 'del');
     }
   };
 
@@ -83,7 +83,7 @@ const InfoConversa: React.FC<InfoGrupoProps> = ({ conversa, setShowInfoConversa,
       }
 
       setShowInfoConversa(false);
-      grupoEvent(conversa.grupo!.conversa.uuid, conversa.grupo!, 'del-group');
+      conversaEvent(conversa.grupo!.conversa.uuid, conversa, 'del-chat');
     }
   };
 
@@ -101,7 +101,7 @@ const InfoConversa: React.FC<InfoGrupoProps> = ({ conversa, setShowInfoConversa,
       }
 
       setShowInfoConversa(false);
-      grupoEvent(conversa.grupo!.conversa.uuid, conversa.grupo!, 'sair-group', user);
+      conversaEvent(conversa.grupo!.conversa.uuid, conversa, 'sair-chat', user);
     }
   };
 
@@ -117,15 +117,15 @@ const InfoConversa: React.FC<InfoGrupoProps> = ({ conversa, setShowInfoConversa,
         alert(resConversa.message);
         return;
       }
-
-      window.location.href = '/contacts';
+      apagarConversa(resConversa[0]);
+      // window.location.href = '/contacts';
     }
   };
 
   return conversa.grupo ? (
     showAddMembro ? (
       <AddMembro
-        grupo={conversa.grupo!}
+        conversa={conversa}
         userId={user.id!}
         setShowAddMembro={setShowAddMembro}
         showAddMembro={showAddMembro}

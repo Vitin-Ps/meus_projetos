@@ -56,7 +56,9 @@ public class ConversaService {
         return listaDeConversas;
     }
 
-    public void cadastraPrivado(DadosRegistroPrivado dados) {
+    public List<DadosDetalhaConversaTipos> cadastraPrivado(DadosRegistroPrivado dados) {
+
+        List<DadosDetalhaConversaTipos> listaPrivados = new ArrayList<>();
 
         Privado privadoExitente = privadoRepository.getReferenceByUserOneIdAndUserTwoId(dados.user_one_id(), dados.user_two_id());
 
@@ -78,11 +80,17 @@ public class ConversaService {
 
         Privado privado = new Privado(userOne, userTwo, conversa);
 
-        privadoRepository.save(privado);
+        privado = privadoRepository.save(privado);
+
+        listaPrivados.add(new DadosDetalhaConversaTipos(privado));
 
         privado = new Privado(userTwo, userOne, conversa);
 
-        privadoRepository.save(privado);
+        privado = privadoRepository.save(privado);
+
+        listaPrivados.add(new DadosDetalhaConversaTipos(privado));
+
+        return listaPrivados;
     }
 
     public void deletarTodasMensagens() {
@@ -110,7 +118,9 @@ public class ConversaService {
         }
     }
 
-    public void deletarPrivado(DadosInfoPrivado dados) {
+    public  List<DadosDetalhaConversaTipos>  deletarPrivado(DadosInfoPrivado dados) {
+        List<DadosDetalhaConversaTipos> privados = new ArrayList<>();
+
         Privado privadoOne = privadoRepository.getReferenceByUserOneIdAndUserTwoId(dados.user_one_id(), dados.user_two_id());
         Privado privadoTwo = privadoRepository.getReferenceByUserOneIdAndUserTwoId(dados.user_two_id(), dados.user_one_id());
 
@@ -123,5 +133,10 @@ public class ConversaService {
         privadoRepository.delete(privadoTwo);
 
         conversaRepository.delete(privadoOne.getConversa());
+
+        privados.add(new DadosDetalhaConversaTipos(privadoOne));
+        privados.add(new DadosDetalhaConversaTipos(privadoTwo));
+
+        return privados;
     }
 }

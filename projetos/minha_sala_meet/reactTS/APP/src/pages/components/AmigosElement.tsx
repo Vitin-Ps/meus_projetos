@@ -10,6 +10,7 @@ import { Amigo } from '../../interfaces/Amigo';
 import { amigoEvent } from '../../services/wss';
 import { socket } from '../../services/socket';
 import { cadastrarPrivado } from '../../services/ConversaService';
+import { ConversaTipos } from '../../interfaces/Conversa';
 
 interface AmigosElementProps {
   showInfoUser: boolean;
@@ -18,6 +19,7 @@ interface AmigosElementProps {
   countNotificacao: number;
   notificacoes: Solicitacao[];
   setNotificacoes: React.Dispatch<React.SetStateAction<Solicitacao[]>>;
+  comecarConversa: (conversa: ConversaTipos) => void;
 }
 
 const AmigosElement: React.FC<AmigosElementProps> = ({
@@ -27,6 +29,7 @@ const AmigosElement: React.FC<AmigosElementProps> = ({
   countNotificacao,
   notificacoes,
   setNotificacoes,
+  comecarConversa,
 }) => {
   const [showAddAmigo, setShowAddAmigo] = useState(false);
   const [amigos, setAmigos] = useState<Amigo[]>([]);
@@ -129,6 +132,8 @@ const AmigosElement: React.FC<AmigosElementProps> = ({
       alert(resPrivado.message);
       return;
     }
+
+    comecarConversa(resPrivado[0]);
   };
 
   return (

@@ -71,15 +71,15 @@ public class ConversaController {
     @PostMapping("/privateuser")
     @Transactional
     public ResponseEntity cadastrarConversaPrivada(@RequestBody @Valid DadosRegistroPrivado dados) {
-        conversaService.cadastraPrivado(dados);
-        return ResponseEntity.ok().build();
+        List<DadosDetalhaConversaTipos> privados =  conversaService.cadastraPrivado(dados);
+        return ResponseEntity.ok(privados);
     }
 
     @PostMapping("/privateuser/del")
     @Transactional
     public ResponseEntity deletarConversaPrivada(@RequestBody @Valid DadosInfoPrivado dados) {
-        conversaService.deletarPrivado(dados);
-        return ResponseEntity.noContent().build();
+        List<DadosDetalhaConversaTipos> privados = conversaService.deletarPrivado(dados);
+        return ResponseEntity.ok(privados);
     }
 
 
