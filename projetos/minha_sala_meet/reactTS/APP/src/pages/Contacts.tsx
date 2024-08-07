@@ -17,13 +17,13 @@ import { Solicitacao } from '../interfaces/Solicitacao';
 import Input from './components/Input';
 import { removerAcentuacoes } from '../services/FuncionalidadesService';
 import { socket } from '../services/socket';
-import { addMensagem, entrarSala } from '../services/wss';
+import { addMensagem, entrarSalas, recebeConversaEvent, receberMensagem, receberNotificacao } from '../services/wss';
 import { Usuario } from '../interfaces/Usuario';
 import { detalhaConversaPorUserId, listarConversasPorUserId } from '../services/ConversaService';
 import { Conversa, ConversaTipos } from '../interfaces/Conversa';
 
 const Contacts = () => {
-  const [conversaSelecionada, setConversaSelecionada] = useState<ConversaTipos | null>();
+  const [conversaSelecionada, setConversaSelecionada] = useState<ConversaTipos | null>(null);
   const [mensagem, setMensagem] = useState('');
 
   const [conversas, setConversas] = useState<ConversaTipos[]>([]);
@@ -44,47 +44,15 @@ const Contacts = () => {
 
   useEffect(() => {
     socket.emit('conectar', auth.user!.id!);
-
-    // socket.on('teste-chegou', (data) => {
-    //   console.log('Received teste-chegou event:', data);
-    // });
-
-    socket.on('receberMensagem', (mensagem: Mensagem) => {
-      setMensagens((prevConversas) => {
-        if (!prevConversas.includes(mensagem)) {
-          return [...prevConversas, mensagem];
-        }
-        return prevConversas;
-      });
-    });
-    socket.on('receber-notificacao', (notificacao) => {
-      setNotificacoes((prevNotificacoes) => {
-        if (!prevNotificacoes.includes(notificacao)) {
-          return [...prevNotificacoes, notificacao];
-        }
-        return prevNotificacoes;
-      });
-      setCountNotificacao(countNotificacao + 1);
-    });
-
-    socket.on('receber-conversa-event', (data) => {
-      if (data.type === 'add') {
-        setConversas((prevConversas) => {
-          if (!prevConversas.includes(data.conversa)) {
-            return [...prevConversas, data.conversa];
-          }
-          return prevConversas;
-        });
-      } else if (data.user && data.type === 'remover-membro') {
-        setMembros((prevMembros) => prevMembros.filter((membro) => membro.id !== data.user.id!));
-      } else {
-        setConversas((prevConversas) => prevConversas.filter((conversa) => conversa.id !== data.conversa.id));
-        setConversaSelecionada(null);
-      }
-    });
+    // ------------- SOCKETS ---------------------
+    receberMensagem(setMensagens);
+    receberNotificacao(setNotificacoes, setCountNotificacao, countNotificacao);
+    recebeConversaEvent(setConversas, setMembros, setConversaSelecionada);
 
     const carregaDados = async () => {
       const resConversas = await listarConversasPorUserId(auth.user!.id!);
+
+      entrarSalas(resConversas);
 
       if (resConversas.error) {
         alert(resConversas.message);
@@ -98,9 +66,9 @@ const Contacts = () => {
     carregaDados();
   }, []);
 
-  const entrarConversa = async (id: number) => {
+  const entrarConversa = async (conversa: ConversaTipos) => {
     setShowLoading(false);
-    const resConversa = await detalhaConversaPorUserId(auth.user!.id!, id);
+    const resConversa = await detalhaConversaPorUserId(auth.user!.id!, conversa.id!);
 
     if (resConversa.error) {
       alert(resConversa.message);
@@ -116,11 +84,14 @@ const Contacts = () => {
 
     if (resConversa) {
       setConversaSelecionada(resConversa);
-      if (resConversa.tipo === 'GRUPO') {
-        entrarSala(resConversa.grupo.conversa.uuid);
-      } else {
-        entrarSala(resConversa.privado.conversa.uuid);
-      }
+      const entrarConversasEvent: ConversaTipos[] = [];
+      entrarConversasEvent.push(resConversa);
+      entrarSalas(entrarConversasEvent);
+      // if (resConversa.tipo === 'GRUPO') {
+      //   entrarSala(resConversa.grupo.conversa.uuid);
+      // } else {
+      //   entrarSala(resConversa.privado.conversa.uuid);
+      // }
 
       // implementar lógica de mensagens antigas
       setMensagens(res);
@@ -186,7 +157,7 @@ const Contacts = () => {
       }
       return prevConversas;
     });
-    await entrarConversa(conversa.id!);
+    await entrarConversa(conversa);
   };
 
   const apagarConversa = async (conversa: ConversaTipos) => {
@@ -231,8 +202,8 @@ const Contacts = () => {
                   <CardConversa
                     key={conversa.id}
                     entrarConversa={entrarConversa}
+                    conversa={conversa}
                     nome={conversa.grupo ? conversa.grupo.nome! : conversa.privado?.userTwo.nome!}
-                    id={conversa.id!}
                   />
                 ))}
             </div>
@@ -261,10 +232,11 @@ const Contacts = () => {
             )}
             <div className="conteudo_container">
               {showMensagem &&
+                conversaSelecionada &&
                 mensagens.length > 0 &&
                 mensagens.map(
                   (mensagem) =>
-                    mensagem.conversa.id === conversaSelecionada!.id! && (
+                    mensagem.conversa.id === conversaSelecionada.id! && (
                       <div key={mensagem.id} className="card_msg_pai">
                         {mensagem.userRemetente.id === auth.user!.id! ? (
                           <CardMensagem conversa={mensagem} tipoMsg="msg_user" />

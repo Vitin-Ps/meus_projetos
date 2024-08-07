@@ -1,14 +1,15 @@
 import React from 'react';
+import { ConversaTipos } from '../../interfaces/Conversa';
 
 interface CardConversaProps {
-  entrarConversa: (id: number) => void;
+  entrarConversa: (conversa: ConversaTipos) => void;
   nome: string;
-  id: number;
+  conversa: ConversaTipos;
 }
 
-const CardConversa: React.FC<CardConversaProps> = ({entrarConversa, nome, id }) => {
+const CardConversa: React.FC<CardConversaProps> = ({entrarConversa, nome, conversa }) => {
   return (
-    <div className="card_user" onClick={() => entrarConversa(id)}>
+    <div className="card_user" onClick={() => entrarConversa(conversa)}>
       <img src="./images/avatar.jpg" alt="avatar" />
       <h2>{nome}</h2>
     </div>

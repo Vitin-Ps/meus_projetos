@@ -118,6 +118,7 @@ const InfoConversa: React.FC<InfoGrupoProps> = ({ conversa, setShowInfoConversa,
         return;
       }
       apagarConversa(resConversa[0]);
+      conversaEvent(String(resConversa[1].privado!.userOne.id!), resConversa[1], 'sair-chat');
       // window.location.href = '/contacts';
     }
   };

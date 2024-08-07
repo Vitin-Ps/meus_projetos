@@ -1,5 +1,8 @@
+import { Conversa } from './Conversa';
+
 export interface Grupo {
   id?: number;
-  uuid: string;
   nome: string;
+  imagem?: string;
+  conversa: Conversa;
 }

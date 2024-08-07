@@ -7,7 +7,7 @@ import { Usuario } from '../../interfaces/Usuario';
 import { cadastrarAmigo, desfazerAmizade, listarAmigos, listarSolicitacoesPorUserId, rejeitarSolicitacao } from '../../services/AmigosService';
 import { Solicitacao } from '../../interfaces/Solicitacao';
 import { Amigo } from '../../interfaces/Amigo';
-import { amigoEvent } from '../../services/wss';
+import { amigoEvent, conversaEvent } from '../../services/wss';
 import { socket } from '../../services/socket';
 import { cadastrarPrivado } from '../../services/ConversaService';
 import { ConversaTipos } from '../../interfaces/Conversa';
@@ -134,6 +134,7 @@ const AmigosElement: React.FC<AmigosElementProps> = ({
     }
 
     comecarConversa(resPrivado[0]);
+    conversaEvent(String(resPrivado[1].privado!.userOne.id!), resPrivado[1], 'add');
   };
 
   return (
