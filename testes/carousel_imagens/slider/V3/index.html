@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden; /* Oculta a rolagem vertical da página */
+        }
+
+        .slides-container {
+            width: 100vw; /* Usa 100% da largura da tela */
+            height: 100vh; /* Usa 100% da altura da tela */
+            overflow-x: auto; /* Permite rolagem horizontal */
+            overflow-y: hidden; /* Oculta rolagem vertical */
+            white-space: nowrap; /* Mantém os slides em linha única */
+        }
+
+        .slides {
+            display: flex; /* Alinha os slides horizontalmente */
+            height: 100%; /* Ajusta a altura dos slides */
+        }
+
+        .slide {
+            width: 100vw; /* Cada slide ocupa 100% da largura da tela */
+            height: 100vh; /* Cada slide ocupa 100% da altura da tela */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: black; /* Fundo preto para áreas não cobertas pela imagem */
+            flex-shrink: 0; /* Impede que os slides encolham */
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Faz a imagem cobrir completamente o slide */
+        }
+    </style>
+</head>
+<body>
+    <div class="slides-container">
+        <div class="slides">
+            <div class="slide">
+                <img src="https://c.pxhere.com/photos/6c/e0/blue_clouds_day_fluffy_sky_summer_nature-1248502.jpg!d" alt="">
+            </div>
+            <div class="slide">
+                <img src="https://c.pxhere.com/photos/6c/e0/blue_clouds_day_fluffy_sky_summer_nature-1248502.jpg!d" alt="">
+            </div>
+            <div class="slide">
+                <img src="https://c.pxhere.com/photos/6c/e0/blue_clouds_day_fluffy_sky_summer_nature-1248502.jpg!d" alt="">
+            </div>
+            <div class="slide">
+                <img src="https://c.pxhere.com/photos/6c/e0/blue_clouds_day_fluffy_sky_summer_nature-1248502.jpg!d" alt="">
+            </div>
+        </div>
+    </div>
+</body>
+</html>

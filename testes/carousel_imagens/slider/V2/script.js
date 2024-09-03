@@ -39,16 +39,22 @@ var manualNavigation = document.querySelector(".manual-navigation");
 
 var setaDireita = document.querySelector(".seta_direita");
 var setaEsquerda = document.querySelector(".seta_esquerda");
+var tamanhoTela = document.querySelector(".tamanho_tela");
 
 const carregarImagens = () => {
 
     imagens.forEach((imagem) => {
 
         //imagens
+        const slide = document.createElement('div');
+        slide.classList.add('slide');
+
         const img = document.createElement('img');
         img.src = imagem.url;
         img.alt = imagem.alt;
-        slides.appendChild(img);
+
+        slide.appendChild(img);
+        slides.appendChild(slide);
 
 
         //radios
@@ -91,7 +97,32 @@ const selecionarImagem = (id) => {
 
     btnAuto.style.backgroundColor = '#FFF'
 
-    slides.style.transform = `translateX(${-(id -1) * 500}px)`;
+    slides.style.transform = `translateX(${-(id -1) * 100}%)`;
+}
+
+const mudarTelaCheia = () => {
+    const imgs = slides.querySelectorAll('*');
+
+    if(!tamanhoTelaStatus) {
+        imgs.forEach((img) => {
+            img.style = "width: 100%; height: 100%;";
+        })
+    
+        slider.style = "width: 100%; height: 100%; transition: 1s; position: absolute; z-index: 15;";
+        navigationAuto.style = "width: 100%;";
+        manualNavigation.style = "width: 100%;";
+    } else {
+        imgs.forEach((img) => {
+            img.style = "width: 500px; height: 500px;";
+        })
+    
+        slider.style = "width: 500px; height: 500px;";
+        navigationAuto.style = "width: 500px;";
+        manualNavigation.style = "width: 500px;";
+    }
+
+    tamanhoTelaStatus = !tamanhoTelaStatus;
+    
 }
 
 setaDireita.addEventListener('click', () => {
@@ -112,12 +143,16 @@ setaEsquerda.addEventListener('click', () => {
     }
 
     selecionarImagem(imagens[count - 1].id);
-})
+});
 
+tamanhoTela.addEventListener('click', () => {
+    mudarTelaCheia();
+});
 
 carregarImagens();
 
 let count = 1;
+let tamanhoTelaStatus = false;
 
 // document.getElementById("radio1").checked = true;
 

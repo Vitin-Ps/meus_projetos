@@ -26,6 +26,10 @@ body {
   transition: 2s;
 }
 
+.slide {
+  flex-shrink: 0
+}
+
 img {
   object-fit: cover;
   height: 500px;
@@ -84,7 +88,7 @@ img {
 
 .seta {
   position: absolute;
-  background-color: #00000044;
+  background-color: #00000024;
   backdrop-filter: blur(20px);
   top: 40%;
   font-size: 2em;
@@ -108,4 +112,32 @@ img {
 
 .seta_esquerda {
   border-radius: 0px 10px 10px 0px;
+}
+
+.tamanho_tela {
+  position: absolute;
+  background-color: #00000056;
+  backdrop-filter: blur(20px);
+  right: 10px;
+  font-size: 2em;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  border-radius: 50%;
+  top: 10px;
+  justify-content: center;
+  align-items: center;
+  color: #878787;
+  transition: .5s;
+
+  cursor: pointer;
+}
+
+.tamanho_tela:hover {
+  background-color: #ffffff31;
+}
+
+.tamanho_tela span {
+  width: 15px;
+  height: 30px;
 }
