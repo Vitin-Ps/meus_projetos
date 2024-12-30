@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;      
+        }
+
+        body {        
+            background-image: linear-gradient(145deg, #0073ff,#2ca3ff, #8ed2ff);
+            font-size: 1em;
+            font-family: Arial, Helvetica, sans-serif;
+            height: 100vh;
+            width: 100vw;
+            margin: 0;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .fundo_branco {
+            background-color: #FFF;
+            position: relative;
+            min-height: 300px;
+            max-width: 800px;
+            padding: 20px;
+            box-sizing: border-box; 
+            border-radius: 10px;
+            box-shadow: 10px 10px 20px #0000003e;
+            margin: 30px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .campo_enviar_container textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: .5em;
+            font-size: 1.2em;
+        }
+
+        .campo_enviar_container button {
+            background-image: linear-gradient(145deg, #0073ff,#2ca3ff, #8ed2ff);
+            color: #FFF;
+            border: 1px solid transparent;
+            margin: auto;
+            padding: .5em 1em;
+            border-radius: 5px;
+            font-size: 1.2em;
+            transition: .4s;
+        }
+
+        .campo_enviar_container button:hover {
+            background-color: #FFF;
+            background-image: none;
+            color: #006aff;
+            border-color: #006aff;
+        }
+
+        .btn_copiar_resposta {
+            background-color: #ffa500;
+            color: #FFF;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 30px;
+            height: 30px;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px #00000046;
+            transition: .4s;
+            display: none;
+        }
+
+        .btn_copiar_resposta:hover {
+            background-color: #FFF;
+            color: #ffa500;
+            border-color: #ffa500;
+        }
+
+        .txt_resposta {
+            margin-top: 1em;
+            text-align: justify;
+        } 
+    </style>
+
+
+    <div class="campo_enviar_container fundo_branco">
+        <h1>Preencha</h1>
+        <textarea name="" id="txt_campo"></textarea>
+        <button id="btn_enviar">Enviar</button>
+    </div>
+    <div class="area_resposta fundo_branco">
+        <h2>Resposta</h2>
+        <p id="txt_resposta" class="txt_resposta"></p>
+        <button id="btn_copiar_resposta" class="btn_copiar_resposta"><i class="fas fa-clipboard"></i></button>
+    </div>
+
+    <script>
+        var txt_json;
+
+
+        const btn_enviar = document.getElementById('btn_enviar');
+        btn_enviar.addEventListener('click', () => {
+            criarJson()
+        })
+
+        const criarJson = () => {
+            console.log('chegou')
+            const txt_campo = document.getElementById('txt_campo');
+
+            if(txt_campo.value !== "") {
+
+                if (txt_campo.value.includes('{') || txt_campo.value.includes('}')) {
+                    alert("Formato JSON não é permitido");
+                    txt_campo.value = '';
+                    const txt_reposta = document.getElementById('txt_resposta'); 
+                    btn_copiar_resposta.style.display = 'none';
+                    txt_reposta.innerHTML = '';
+                    return;
+                }
+
+                let linhas = txt_campo.value.split('\n');
+                let json = {};
+    
+                linhas.forEach(linha => {
+                let parts = linha.split(/\s+/);
+                json[parts[0]] = "string";
+                });
+    
+                txt_json = JSON.stringify(json, null, 2);
+    
+                if(txt_json) {                                
+                    const txt_reposta = document.getElementById('txt_resposta'); 
+                    txt_reposta.innerHTML = txt_json;
+                    btn_copiar_resposta.style.display = 'block';
+                }
+    
+                console.log(txt_json);
+                txt_campo.value = '';
+            } else {
+                alert('Campo vazio, por favor tente novamente!');
+                const txt_reposta = document.getElementById('txt_resposta'); 
+                btn_copiar_resposta.style.display = 'none';
+                txt_reposta.innerHTML = '';
+
+            }
+        }
+
+        const btn_copiar_resposta = document.getElementById('btn_copiar_resposta');
+        btn_copiar_resposta.addEventListener('click', () => {  
+            const txt_reposta = document.getElementById('txt_resposta'); 
+            navigator.clipboard && navigator.clipboard.writeText(txt_json);
+        });
+    </script>
+</body>
+</html>
